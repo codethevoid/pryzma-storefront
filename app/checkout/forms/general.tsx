@@ -246,6 +246,7 @@ export const GeneralForm = ({
           />
           <div className="group relative" data-empty={!watch("province")}>
             <Select
+              name="state"
               value={watch("province")}
               onValueChange={(value) =>
                 value ? setValue("province", value, { shouldValidate: true }) : ""

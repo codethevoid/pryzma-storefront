@@ -13,7 +13,7 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
 
   return (
     <div className="space-y-2">
-      <div className="relative aspect-[3/2] overflow-hidden rounded-lg border bg-zinc-50 p-[7px] shadow-sm dark:bg-zinc-700/50">
+      <div className="relative aspect-[3/2] overflow-hidden rounded-lg border bg-zinc-50 p-[7px] shadow-sm dark:bg-zinc-800">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedImage}
@@ -41,9 +41,8 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
               key={image.id}
               role="button"
               className={clx(
-                "relative aspect-[3/2] cursor-pointer overflow-hidden rounded-md border border-transparent shadow-sm transition-all",
-                selectedImage === image.url &&
-                  "border-blue-500 ring-4 ring-blue-500/30 dark:border-blue-400 dark:ring-blue-500/30",
+                "relative aspect-[3/2] cursor-pointer overflow-hidden rounded-md shadow-borders-base transition-all",
+                selectedImage === image.url && "shadow-borders-interactive-with-active",
               )}
               onClick={() => setSelectedImage(image.url)}
             >

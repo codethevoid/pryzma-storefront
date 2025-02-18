@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { usStates } from "@/lib/states";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "next-themes";
+import { useRouter } from "next/navigation";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK!);
 const StripePayment = () => {
@@ -94,6 +95,7 @@ export const PaymentForm = () => {
   const [paymentMethod, setPaymentMethod] = useState<string | null>();
   const [billingSameAsShipping, setBillingSameAsShipping] = useState<"same" | "different">("same");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const router = useRouter();
 
   const {
     register,
@@ -195,6 +197,7 @@ export const PaymentForm = () => {
         const { order } = completed;
         console.log(order);
         // redirect to order confirmation page
+        router.push(`/orders/${order.id}`);
         refreshCart();
       } else if (completed.type === "cart" && completed.cart) {
         console.error(completed.error);
@@ -308,7 +311,7 @@ export const PaymentForm = () => {
                   <form onSubmit={handleSubmit(onSubmit)} id="billing-address-form">
                     <div className="space-y-2">
                       <Text weight="plus">Billing address</Text>
-                      <div className="grid grid-cols-2 grid-rows-3 gap-3">
+                      <div className="grid grid-cols-2 grid-rows-3 gap-3 max-[900px]:grid-cols-1">
                         <FloatingLabelInput
                           label="First name"
                           {...register("first_name")}

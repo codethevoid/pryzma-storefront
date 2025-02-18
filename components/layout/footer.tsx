@@ -7,35 +7,35 @@ import { ThemeToggle } from "../ui/theme-toggle";
 const shopLinks = [
   {
     title: "Switches",
-    href: "/switches",
+    href: "/products/switches",
   },
   {
-    title: "Sampler",
-    href: "/products/switch-sampler",
+    title: "Samples",
+    href: "/products/samples",
   },
   {
     title: "Lubricants",
-    href: "/lubricants",
+    href: "/products/lubricants",
   },
   {
     title: "Accessories",
-    href: "/accessories",
+    href: "/products/accessories",
   },
 ];
 
 const companyLinks = [
-  {
-    title: "About",
-    href: "/about",
-  },
+  // {
+  //   title: "About",
+  //   href: "/about",
+  // },
   {
     title: "Contact",
-    href: "/contact",
+    href: "mailto:support@pryzma.io",
   },
-  {
-    title: "Vendors",
-    href: "/vendors",
-  },
+  // {
+  //   title: "Vendors",
+  //   href: "/vendors",
+  // },
   // {
   //   title: "Wholesale",
   //   href: "/wholesale",
@@ -45,27 +45,27 @@ const companyLinks = [
 const legalLinks = [
   {
     title: "Privacy Policy",
-    href: "/privacy",
+    href: "/legal/privacy",
   },
   {
     title: "Terms of Service",
-    href: "/terms",
+    href: "/legal/terms",
   },
   {
     title: "Returns",
-    href: "/returns",
+    href: "/legal/returns",
   },
-  {
-    title: "Shipping",
-    href: "/shipping",
-  },
+  // {
+  //   title: "Shipping",
+  //   href: "/legal/shipping",
+  // },
 ];
 
 export const Footer = () => {
   return (
     <div className="border-t bg-zinc-50 px-4 py-8 dark:bg-zinc-900/50">
       <div className="mx-auto max-w-screen-xl space-y-8">
-        <div className="grid grid-cols-[auto_auto_auto_auto_auto_auto] justify-between">
+        <div className="grid grid-cols-[auto_auto_auto_auto_auto_auto] justify-between max-md:auto-rows-min max-md:grid-cols-1 max-md:grid-rows-[auto_auto_auto_auto] max-md:gap-8">
           <div className="col-span-3 space-y-4">
             <div className="w-fit rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
               <NextLink href="/">
@@ -102,7 +102,7 @@ export const Footer = () => {
               </IconButton>
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 max-md:col-span-3">
             <Text size="small" weight="plus">
               Shop
             </Text>
@@ -111,7 +111,7 @@ export const Footer = () => {
                 <div key={link.href}>
                   <NextLink href={link.href}>
                     <Text
-                      size="small"
+                      size="xsmall"
                       className="text-subtle-foreground hover:text-foreground hover:underline"
                     >
                       {link.title}
@@ -121,7 +121,7 @@ export const Footer = () => {
               ))}
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 max-md:col-span-3">
             <Text size="small" weight="plus">
               Legal
             </Text>
@@ -129,7 +129,7 @@ export const Footer = () => {
               {legalLinks.map((link) => (
                 <NextLink href={link.href} key={link.href}>
                   <Text
-                    size="small"
+                    size="xsmall"
                     className="text-subtle-foreground hover:text-foreground hover:underline"
                   >
                     {link.title}
@@ -138,20 +138,33 @@ export const Footer = () => {
               ))}
             </div>
           </div>
-          <div className="space-y-2">
+          <div className="space-y-2 max-md:col-span-3">
             <Text size="small" weight="plus">
               Company
             </Text>
             <div className="space-y-[1px]">
               {companyLinks.map((link) => (
-                <NextLink href={link.href} key={link.href}>
-                  <Text
-                    size="small"
-                    className="text-subtle-foreground hover:text-foreground hover:underline"
-                  >
-                    {link.title}
-                  </Text>
-                </NextLink>
+                <div key={link.href}>
+                  {link.href.includes("http") || link.href.includes("mailto") ? (
+                    <a href={link.href} target="_blank">
+                      <Text
+                        size="xsmall"
+                        className="text-subtle-foreground hover:text-foreground hover:underline"
+                      >
+                        {link.title}
+                      </Text>
+                    </a>
+                  ) : (
+                    <NextLink href={link.href}>
+                      <Text
+                        size="xsmall"
+                        className="text-subtle-foreground hover:text-foreground hover:underline"
+                      >
+                        {link.title}
+                      </Text>
+                    </NextLink>
+                  )}
+                </div>
               ))}
             </div>
           </div>

@@ -7,6 +7,7 @@ import { formatCurrency } from "@/utils/format-currency";
 import Image from "next/image";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 export const Cart = () => {
   const { cart, isOpen, setIsOpen, updateItem, removeItem } = useCart();
@@ -29,18 +30,20 @@ export const Cart = () => {
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <Drawer.Content>
+      <Drawer.Content className="z-[9999]">
         <Drawer.Header>
-          <Drawer.Title>Your cart</Drawer.Title>
+          <VisuallyHidden>
+            <Drawer.Title>Your cart</Drawer.Title>
+          </VisuallyHidden>
+          <IconBadge className="relative top-[2px]">
+            <ShoppingBag />
+          </IconBadge>
         </Drawer.Header>
         <Drawer.Body className="overflow-y-auto">
           {(cart?.items?.length || 0) > 0 ? (
             <div className="space-y-4">
               {cart?.items?.map((item, index) => (
-                <div
-                  key={item.id}
-                  className={clx("flex gap-4 border-dashed", index !== 0 && "border-t pt-4")}
-                >
+                <div key={item.id} className={clx("flex gap-4", index !== 0 && "border-t pt-4")}>
                   <div className="h-28 w-24 shrink-0 overflow-hidden rounded-md border">
                     <NextLink
                       href={`/products/${item.product_handle}`}
@@ -67,8 +70,7 @@ export const Cart = () => {
                       <Text size="small" className="text-subtle-foreground">
                         {formatCurrency("usd", item.unit_price)}
                       </Text>
-
-                      {(item.product?.variants?.length || 1) > 1 && (
+                      {item.product?.variants?.length && (
                         <div className="space-y-0.5">
                           {item.product?.options?.map((option) => (
                             <Text key={option.id} size="small" weight="plus">
@@ -148,7 +150,7 @@ export const Cart = () => {
             </div>
           ) : (
             <div className="flex h-[200px] w-full items-center justify-center">
-              <div className="space-y-3">
+              <div className="flex flex-col items-center space-y-3">
                 <IconBadge size="large" className="mx-auto">
                   <ShoppingBag />
                 </IconBadge>

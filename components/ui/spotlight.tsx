@@ -24,7 +24,7 @@ export const Spotlight = ({ title, description, href, image, actionText }: Props
             className="aspect-[2/1] object-cover max-sm:aspect-[1/1.5]"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
-          <div className="absolute inset-0 flex items-end justify-start p-8">
+          <div className="absolute inset-0 flex items-end justify-start p-8 max-md:p-6">
             <div className="space-y-4">
               <div>
                 <Text size="xlarge" weight="plus" className="relative z-50 text-white">

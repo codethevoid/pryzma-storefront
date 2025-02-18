@@ -18,13 +18,13 @@ const fetchProducts = async ({
   page,
   pageSize,
 }: {
-  categoryId: string;
+  categoryId?: string | string[];
   filters: ActiveFilter[];
   page: number;
   pageSize: number;
 }): Promise<{ products: StoreProduct[]; count: number }> => {
   const response = await medusa.store.product.list({
-    category_id: categoryId,
+    ...(categoryId && { category_id: categoryId }),
     limit: pageSize,
     offset: page === 1 ? 0 : page * pageSize,
     ...buildTagFilters(filters),
@@ -41,15 +41,17 @@ export const ProductGridShell = ({
   filterCounts,
   categoryId,
   name,
+  quickAdd = false,
 }: {
   initialData: StoreProduct[];
   initialCount: number;
   filterOptions?: Record<string, ActiveFilter[]>;
   filterCounts?: Record<string, number>;
-  categoryId: string;
-  name: string;
+  categoryId?: string | string[];
+  name?: string;
+  quickAdd?: boolean;
 }) => {
-  const pageSize = 25;
+  const pageSize = 20;
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(initialCount);
   const [products, setProducts] = useState(initialData);
@@ -99,38 +101,58 @@ export const ProductGridShell = ({
     <>
       <div className="space-y-4">
         <div className="flex items-center gap-1.5">
-          <div>
-            <IconButton
-              variant="transparent"
-              size="small"
-              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-              className="flex max-lg:hidden"
-            >
-              <SidebarLeft />
-            </IconButton>
-            <IconButton
-              variant="transparent"
-              size="small"
-              onClick={() => setIsDrawerOpen(!isDrawerOpen)}
-              className="hidden max-lg:flex"
-            >
-              <SidebarLeft />
-            </IconButton>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <NextLink href="/">
-              <Text
+          {filterOptions && (
+            <div>
+              <IconButton
+                variant="transparent"
                 size="small"
-                className="text-subtle-foreground transition-colors hover:text-foreground"
+                onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                className="flex max-lg:hidden"
               >
-                Home
+                <SidebarLeft />
+              </IconButton>
+
+              <IconButton
+                variant="transparent"
+                size="small"
+                onClick={() => setIsDrawerOpen(!isDrawerOpen)}
+                className="hidden max-lg:flex"
+              >
+                <SidebarLeft />
+              </IconButton>
+            </div>
+          )}
+          {name ? (
+            <div className="flex items-center gap-1.5">
+              <NextLink href="/products">
+                <Text
+                  size="small"
+                  className="text-subtle-foreground transition-colors hover:text-foreground"
+                >
+                  Products
+                </Text>
+              </NextLink>
+              <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
+              <Text size="small" className="cursor-default text-subtle-foreground">
+                {name}
               </Text>
-            </NextLink>
-            <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
-            <Text size="small" className="cursor-default text-subtle-foreground">
-              {name}
-            </Text>
-          </div>
+            </div>
+          ) : (
+            <div className="flex items-center gap-1.5">
+              <NextLink href="/">
+                <Text
+                  size="small"
+                  className="text-subtle-foreground transition-colors hover:text-foreground"
+                >
+                  Home
+                </Text>
+              </NextLink>
+              <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
+              <Text size="small" className="cursor-default text-subtle-foreground">
+                Products
+              </Text>
+            </div>
+          )}
         </div>
         <div className={clx("flex gap-4")}>
           {filterOptions && filterCounts && (
@@ -147,7 +169,7 @@ export const ProductGridShell = ({
           <div className={clx("w-full", isLoading && "pointer-events-none animate-pulse")}>
             {products.length > 0 ? (
               <div className="space-y-4">
-                <ProductGrid products={products} />
+                <ProductGrid products={products} quickAdd={quickAdd} />
                 {count > pageSize && (
                   <CommandBar open={true}>
                     <CommandBar.Bar>
@@ -177,7 +199,7 @@ export const ProductGridShell = ({
                 )}
               </div>
             ) : (
-              <div className="flex h-full w-full items-center justify-center">
+              <div className="flex h-full min-h-[250px] w-full items-center justify-center">
                 <div className="space-y-3">
                   <IconBadge className="mx-auto" size="large">
                     <Funnel />

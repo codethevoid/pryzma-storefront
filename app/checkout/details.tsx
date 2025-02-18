@@ -14,14 +14,14 @@ type Props = {
 export const CheckoutDetails = ({ setStep, step }: Props) => {
   const { cart } = useCart();
   return (
-    <div className="w-full rounded-md border bg-zinc-50 shadow-sm dark:bg-zinc-900/50">
+    <div className="w-full rounded-md bg-zinc-50 shadow-borders-base dark:bg-zinc-900/50">
       <div className="flex justify-between border-b px-4 py-2.5">
         <div className="flex items-start gap-6">
-          <div className="flex w-20 shrink-0 items-center gap-2">
-            <IconBadge>
+          <div className="flex w-20 shrink-0 items-center gap-2 max-md:w-16">
+            <IconBadge className="max-md:hidden">
               <Envelope />
             </IconBadge>
-            <Text weight="plus" size="small">
+            <Text weight="plus" size="small" className="max-md:relative max-md:top-[3px]">
               Contact
             </Text>
           </div>
@@ -40,11 +40,11 @@ export const CheckoutDetails = ({ setStep, step }: Props) => {
       </div>
       <div className="flex justify-between px-4 py-2.5">
         <div className="flex items-start gap-6">
-          <div className="flex w-20 shrink-0 items-center gap-2">
-            <IconBadge>
+          <div className="flex w-20 shrink-0 items-center gap-2 max-md:w-16">
+            <IconBadge className="max-md:hidden">
               <MapPin />
             </IconBadge>
-            <Text weight="plus" size="small">
+            <Text weight="plus" size="small" className="max-md:relative max-md:top-[3px]">
               Ship to
             </Text>
           </div>
@@ -72,11 +72,11 @@ export const CheckoutDetails = ({ setStep, step }: Props) => {
       {(cart?.shipping_methods?.length || 0) > 0 && step === "payment" && (
         <div className="flex justify-between border-t px-4 py-2.5">
           <div className="flex items-start gap-6">
-            <div className="flex w-20 shrink-0 items-center gap-2">
-              <IconBadge className="shrink-0">
+            <div className="flex w-20 shrink-0 items-center gap-2 max-md:w-16">
+              <IconBadge className="shrink-0 max-md:hidden">
                 <FlyingBox />
               </IconBadge>
-              <Text weight="plus" size="small">
+              <Text weight="plus" size="small" className="max-md:relative max-md:top-[3px]">
                 Shipping
               </Text>
             </div>

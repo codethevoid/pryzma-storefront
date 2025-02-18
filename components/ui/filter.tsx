@@ -76,7 +76,7 @@ export const Filter = ({
       <div className={clx("space-y-4 max-lg:hidden", !isSidebarOpen && "hidden")}>
         <div
           className={clx(
-            "h-fit min-w-[220px] space-y-5 rounded-md border bg-zinc-50 p-4 shadow-sm dark:bg-zinc-900/50",
+            "h-fit min-w-[220px] space-y-5 rounded-md bg-zinc-50 p-4 shadow-borders-base dark:bg-zinc-900/50",
           )}
         >
           {Object.entries(options).map(([key, value]) => (
@@ -116,7 +116,7 @@ export const Filter = ({
           <Drawer.Header>
             <Drawer.Title>Filters</Drawer.Title>
           </Drawer.Header>
-          <Drawer.Body className="space-y-5">
+          <Drawer.Body className="space-y-5 overflow-y-auto">
             {Object.entries(options).map(([key, value]) => (
               <div key={key} className="space-y-1.5">
                 <Text weight="plus" size="small" className="capitalize">

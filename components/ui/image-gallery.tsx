@@ -12,8 +12,8 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
   );
 
   return (
-    <div className="space-y-2">
-      <div className="relative aspect-[3/2] overflow-hidden rounded-lg border bg-zinc-50 p-[7px] shadow-sm dark:bg-zinc-800">
+    <div className="space-y-2.5">
+      <div className="relative aspect-[3/2] overflow-hidden rounded-md bg-zinc-50 p-[7px] shadow-borders-base dark:bg-zinc-800">
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedImage}
@@ -35,7 +35,7 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
         </AnimatePresence>
       </div>
       {(product.images?.length || 1) > 1 && (
-        <div className="grid grid-cols-6 gap-2">
+        <div className="grid grid-cols-6 gap-2.5 max-sm:grid-cols-5">
           {product.images?.map((image) => (
             <div
               key={image.id}

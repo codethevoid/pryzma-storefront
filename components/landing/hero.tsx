@@ -6,12 +6,12 @@ const data = {
   image: "/quinn.jpeg",
   title: "Gateron Quinn",
   description: "Heavy tactile, long pole switches",
-  href: "/products/gateron-quinn",
+  href: "/products/switches/gateron-quinn",
 };
 
 export const Hero = () => {
   return (
-    <div className="relative h-[500px] w-full">
+    <div className="relative h-[600px] w-full">
       <Image
         src={data.image}
         alt={data.title}

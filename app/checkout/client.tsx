@@ -3,7 +3,7 @@
 import { useCart } from "@/components/context/cart";
 import { clx, IconButton, Input } from "@medusajs/ui";
 import NextLink from "next/link";
-import { Text, Button, Badge, Tabs, ProgressTabs, toast } from "@medusajs/ui";
+import { Text, Button, Badge, Tabs, ProgressTabs, toast, IconBadge } from "@medusajs/ui";
 import { formatCurrency } from "@/utils/format-currency";
 import Image from "next/image";
 import { GeneralForm } from "./forms/general";
@@ -12,10 +12,11 @@ import { CheckoutDetails } from "./details";
 import { ShippingForm } from "./forms/shipping";
 import { medusa } from "@/utils/medusa";
 import type { ExtendedStoreCart } from "@/components/context/cart";
-import { X, XMark } from "@medusajs/icons";
+import { X, XMark, Loader, ShoppingBag } from "@medusajs/icons";
 import { PaymentForm } from "./forms/payment";
 import { usePathname } from "next/navigation";
 import { StoreCart } from "@medusajs/types";
+import { SummaryAccordion } from "./summary-accordion";
 
 export const CheckoutClient = () => {
   const { cart, setCart, fields, setIsLoadingClientSecret, isLoadingShipping } = useCart();
@@ -27,23 +28,32 @@ export const CheckoutClient = () => {
 
   if (!cart) {
     return (
-      <div className="flex min-h-[calc(100vh-330.5px)] items-center justify-center">loading...</div>
+      <div className="flex h-[calc(100vh-330.5px)] min-h-[250px] items-center justify-center">
+        <Loader className="animate-spin" />
+      </div>
     );
   }
 
   if (cart.items?.length === 0) {
     return (
-      <div className="flex min-h-[calc(100vh-330.5px)] items-center justify-center">
-        <div className="space-y-4">
-          <Text>Your cart is empty</Text>
-          <Button>Continue shopping</Button>
+      <div className="flex h-[calc(100vh-330.5px)] min-h-[250px] items-center justify-center">
+        <div className="flex flex-col items-center space-y-3">
+          <IconBadge size="large" className="mx-auto">
+            <ShoppingBag />
+          </IconBadge>
+          <Text size="small" className="text-center">
+            Your cart is empty
+          </Text>
+          <Button asChild size="small">
+            <NextLink href="/products">Start shopping</NextLink>
+          </Button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="grid min-h-[calc(100vh-330.5px)] grid-cols-3">
+    <div className="grid grid-cols-3 max-lg:grid-cols-[1fr_1fr_340px] max-md:flex max-md:flex-col-reverse md:min-h-[calc(100vh-330.5px)]">
       <div className="col-span-2 items-end">
         <ProgressTabs
           defaultValue="general"
@@ -51,7 +61,7 @@ export const CheckoutClient = () => {
           onValueChange={(value) => setStep(value as "general" | "shipping" | "payment")}
           activationMode="manual"
         >
-          <ProgressTabs.List>
+          <ProgressTabs.List className="">
             <ProgressTabs.Trigger
               value="general"
               status={cart?.email && cart?.shipping_address ? "completed" : "not-started"}
@@ -84,26 +94,35 @@ export const CheckoutClient = () => {
             <GeneralForm setStep={setStep} step={step} />
           </ProgressTabs.Content>
           <ProgressTabs.Content value="shipping">
-            <div className="space-y-6 p-8 pl-0">
+            <div className="space-y-6 p-8 pl-0 max-md:p-4 max-md:pb-12">
               <CheckoutDetails setStep={setStep} step={step} />
               <ShippingForm setStep={setStep} />
             </div>
           </ProgressTabs.Content>
           <ProgressTabs.Content value="payment">
-            <div className="space-y-6 p-8 pl-0">
+            <div className="space-y-6 p-8 pl-0 max-md:p-4 max-md:pb-12">
               <CheckoutDetails setStep={setStep} step={step} />
               <PaymentForm />
             </div>
           </ProgressTabs.Content>
         </ProgressTabs>
       </div>
-      <div className="col-span-1 space-y-4 border-l p-8 pr-0">
+      <SummaryAccordion
+        promoCode={promoCode}
+        setPromoCode={setPromoCode}
+        isApplyingPromoCode={isApplyingPromoCode}
+        setIsApplyingPromoCode={setIsApplyingPromoCode}
+        isRemovingPromoCode={isRemovingPromoCode}
+        setIsRemovingPromoCode={setIsRemovingPromoCode}
+        step={step}
+      />
+      <div className="col-span-1 space-y-4 border-l p-8 pr-0 max-md:hidden">
         <div className="space-y-5">
           <div className="space-y-3">
             {cart?.items?.map((item) => (
               <div key={item.id} className={clx("flex gap-4")}>
                 <div className="relative">
-                  <div className="relative aspect-[1/1.2] w-14 shrink-0 overflow-hidden rounded-md border">
+                  <div className="relative aspect-[1/1.2] w-12 shrink-0 overflow-hidden rounded-md border">
                     <Image
                       src={item.thumbnail as string}
                       alt={item.product_title as string}
@@ -124,20 +143,10 @@ export const CheckoutClient = () => {
                     <Text weight="plus" size="small">
                       {item.product_title}
                     </Text>
-                    <Text size="small" className="text-subtle-foreground">
-                      {formatCurrency("usd", item.unit_price)}{" "}
-                    </Text>
-                    {(item.product?.variants?.length || 1) > 1 && (
-                      <div className="space-y-0.5">
-                        {item.product?.options?.map((option) => (
-                          <Text key={option.id} size="small" weight="plus">
-                            {option.title}:{" "}
-                            <Text as="span" size="small" className="text-subtle-foreground">
-                              {item.variant?.options?.find((o) => o.option_id === option.id)?.value}
-                            </Text>
-                          </Text>
-                        ))}
-                      </div>
+                    {item.product?.variants?.length && (
+                      <Text size="small" className="text-subtle-foreground">
+                        {item.variant?.options?.map((o) => o.value).join(" · ")}
+                      </Text>
                     )}
                   </div>
                 </div>

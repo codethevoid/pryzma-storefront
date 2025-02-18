@@ -8,13 +8,13 @@ const data = [
     image: `${s3Url}/featured/IMG_1086.JPG`,
     title: "Java switches",
     description: "Hand lubed, long pole switches",
-    href: "/products/pryzma-java-switches",
+    href: "/products/switches/pryzma-java-switches",
   },
   {
     image: `${s3Url}/featured/IMG_3070.JPG`,
     title: "Seafoam switches",
     description: "Heavy long pole switches",
-    href: "/products/pryzma-seafoam-switches",
+    href: "/products/switches/pryzma-seafoam-switches",
   },
 ];
 
@@ -37,7 +37,7 @@ export const Featured = () => {
                 alt={item.title}
                 height={1365}
                 width={2048}
-                className="aspect-[2048/1365] object-cover transition-all duration-300 ease-in-out group-hover:scale-105"
+                className="aspect-[2048/1365] object-cover transition-all duration-300 ease-in-out group-hover:scale-[103%]"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
               <div className="absolute inset-0 flex items-end justify-start p-6">

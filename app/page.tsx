@@ -5,6 +5,7 @@ import { s3Url } from "@/utils/s3";
 import { Carousel } from "@/components/ui/carousel";
 import { StoreProduct } from "@medusajs/types";
 import { medusa } from "@/utils/medusa";
+import { COLLECTION_IDS, CATEGORY_IDS } from "@/lib/identifiers";
 
 const getProducts = async ({
   collectionId,
@@ -25,10 +26,10 @@ const getProducts = async ({
 
 const Home = async () => {
   const [bestSellers, switches, lubricants, accessories] = await Promise.all([
-    getProducts({ collectionId: "pcol_01JK5Y4111NV85V26H8Y90DKNT" }),
-    getProducts({ categoryId: "pcat_01JK430HFRRN0GTZMP9Z38AND6" }),
-    getProducts({ categoryId: "pcat_01JK431P8FYJ5K3VQ4YP970BAA" }),
-    getProducts({ categoryId: "pcat_01JK432BYM1VEPYK9TTPGXQ8FE" }),
+    getProducts({ collectionId: COLLECTION_IDS.BEST_SELLERS }),
+    getProducts({ categoryId: CATEGORY_IDS.SWITCHES }),
+    getProducts({ categoryId: CATEGORY_IDS.LUBRICANTS }),
+    getProducts({ categoryId: CATEGORY_IDS.ACCESSORIES }),
   ]);
 
   return (
@@ -39,7 +40,7 @@ const Home = async () => {
       <Spotlight
         title="Custom Switch Sampler"
         description="Build your own switch sampler"
-        href="/products/switch-sampler"
+        href="/products/samples"
         image={`${s3Url}/featured/IMG_2855.JPG`}
         actionText="Start building"
       />
@@ -49,7 +50,7 @@ const Home = async () => {
       <Spotlight
         title="KTT Strawberry v2 switches"
         description="Linear switches inspired by strawberries"
-        href="/products/ktt-strawberry-v2-switches"
+        href="/products/switches/ktt-strawberry-v2-switches"
         image={`${s3Url}/featured/IMG_3405.JPG`}
       />
     </div>

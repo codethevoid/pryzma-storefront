@@ -48,9 +48,11 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
     <div className="space-y-6">
       <div className="space-y-4">
         <div>
-          <Text size="small" className="text-subtle-foreground">
-            {product.subtitle}
-          </Text>
+          {product.subtitle && (
+            <Text size="small" className="text-subtle-foreground">
+              {product.subtitle}
+            </Text>
+          )}
           <Heading>{product.title}</Heading>
         </div>
         <StatusBadge color={getStatus().color}>{getStatus().label}</StatusBadge>
@@ -102,7 +104,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
               className="w-full"
               isLoading={isLoading}
               onClick={async () => {
-                if (!selectedVariant) return;
+                if (!selectedVariant) return alert("No variant selected");
                 setIsLoading(true);
                 await addItem({
                   variantId: selectedVariant.id,
@@ -116,7 +118,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
           </div>
         </div>
       </div>
-      <ReactMarkdown className="prose prose-sm dark:prose-invert prose-p:mb-2 prose-ul:mt-0 prose-li:my-0 prose-li:text-[13px]">
+      <ReactMarkdown className="prose prose-sm max-w-none dark:prose-invert prose-p:mb-1 prose-strong:font-medium prose-ul:mt-0 prose-li:my-0 prose-li:text-[13px]">
         {product.description}
       </ReactMarkdown>
     </div>

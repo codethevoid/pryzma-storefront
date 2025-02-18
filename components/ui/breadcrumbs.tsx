@@ -4,16 +4,17 @@ import NextLink from "next/link";
 import { TriangleRightMini } from "@medusajs/icons";
 
 const productTypeMappings = {
-  Switch: "switches",
-  Lubricant: "lubricants",
-  Accessory: "accessories",
+  switch: "switches",
+  lubricant: "lubricants",
+  accessory: "accessories",
+  sample: "samples",
 };
 
 export const Breadcrumbs = ({ product }: { product: StoreProduct }) => {
   return (
     <div className="flex items-center gap-1.5">
       <NextLink
-        href={`/${productTypeMappings[product.type?.value as keyof typeof productTypeMappings]}`}
+        href={`/products/${productTypeMappings[product.type?.value as keyof typeof productTypeMappings]}`}
       >
         <Text
           size="small"

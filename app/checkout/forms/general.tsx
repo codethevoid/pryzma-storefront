@@ -186,10 +186,10 @@ export const GeneralForm = ({
   console.log(errors.province);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-8 pl-0">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-8 pl-0 max-md:p-4 max-md:pb-12">
       <div className="space-y-2">
         <Text weight="plus">Contact info</Text>
-        <div className="flex gap-3">
+        <div className="flex gap-3 max-[900px]:flex-col">
           <FloatingLabelInput
             label="Email"
             {...register("email")}
@@ -210,7 +210,7 @@ export const GeneralForm = ({
       </div>
       <div className="space-y-2">
         <Text weight="plus">Shipping address</Text>
-        <div className="grid grid-cols-2 grid-rows-3 gap-3">
+        <div className="grid grid-cols-2 grid-rows-3 gap-3 max-[900px]:grid-cols-1">
           <FloatingLabelInput
             label="First name"
             {...register("first_name")}

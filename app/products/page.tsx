@@ -14,7 +14,7 @@ export const metadata = constructMetadata({
 
 const getProducts = async (): Promise<{ products: StoreProduct[]; count: number }> => {
   const response = await medusa.store.product.list({
-    limit: 20,
+    limit: 24,
     fields: "*variants.calculated_price",
     category_id: [CATEGORY_IDS.SWITCHES, CATEGORY_IDS.LUBRICANTS, CATEGORY_IDS.ACCESSORIES], // omit samples
   });

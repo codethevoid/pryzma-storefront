@@ -42,7 +42,7 @@ export const Featured = () => {
               <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/60"></div>
               <div className="absolute inset-0 flex items-end justify-start p-6">
                 <div>
-                  <Text size="xlarge" weight="plus" className="relative z-50 text-white">
+                  <Text size="xlarge" weight="plus" className="relative z-10 text-white">
                     {item.title}
                   </Text>
                   <Text size="base" className="relative z-10 text-white">

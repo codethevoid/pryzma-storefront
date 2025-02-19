@@ -33,18 +33,17 @@ export const ProductCard = ({
       >
         <div className="flex h-full flex-col justify-between space-y-1">
           <div className="space-y-2">
-            <div className="aspect-square w-full overflow-hidden rounded">
+            <div className="relative aspect-[3/2] w-full overflow-hidden rounded">
               <Image
                 src={product.thumbnail as string}
                 alt={product.title}
                 height={1080}
                 width={1080}
-                className="h-full w-full scale-110 object-cover"
+                className="h-full w-full object-cover"
               />
             </div>
             <Text size="small">{product.title}</Text>
           </div>
-
           <Text size="xsmall" className="text-subtle-foreground">
             {(product?.variants?.length || 0) > 1 && "From "}
             {Intl.NumberFormat("en-us", {

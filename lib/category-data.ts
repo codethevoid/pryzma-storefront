@@ -1,7 +1,5 @@
 import { SWITCH_FILTER_OPTIONS } from "./filter-options";
 import { s3Url } from "@/utils/s3";
-import { CATEGORY_IDS } from "./identifiers";
-import { access } from "fs";
 
 type CategoryData = {
   filters?: Record<string, { category: string; label: string; value: string }[]>;

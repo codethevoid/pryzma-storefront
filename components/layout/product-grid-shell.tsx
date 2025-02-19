@@ -11,8 +11,9 @@ import { buildTagFilters } from "@/lib/helpers/build-tag-filters";
 import type { Filter as ActiveFilter } from "@/types";
 import { useWindowWidth } from "@react-hook/window-size";
 import NextLink from "next/link";
+import { useSearchParams } from "next/navigation";
 
-const fetchProducts = async ({
+export const fetchProducts = async ({
   categoryId,
   filters,
   page,
@@ -26,11 +27,12 @@ const fetchProducts = async ({
   const response = await medusa.store.product.list({
     ...(categoryId && { category_id: categoryId }),
     limit: pageSize,
-    offset: page === 1 ? 0 : page * pageSize,
+    offset: page === 1 ? 0 : (page - 1) * pageSize,
     ...buildTagFilters(filters),
     fields: "*variants.calculated_price",
   });
 
+  console.log("response", response);
   return response;
 };
 
@@ -51,51 +53,53 @@ export const ProductGridShell = ({
   name?: string;
   quickAdd?: boolean;
 }) => {
-  const pageSize = 20;
-  const [page, setPage] = useState(1);
+  const searchParams = useSearchParams();
+  const pageSize = 24;
+  const page = parseInt(searchParams.get("page") || "1", 10);
   const [count, setCount] = useState(initialCount);
   const [products, setProducts] = useState(initialData);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState<ActiveFilter[]>([]);
-  const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  const [clientReady, setClientReady] = useState(false);
   const windowWidth = useWindowWidth();
 
-  useEffect(() => {
-    if (isInitialLoad) {
-      setIsInitialLoad(false);
-      return;
-    }
-    // set page to 0 every time filters change
-    if (filters.length === 0) {
-      // if no filters, set page to 1 and revert to initial data
-      setPage(1);
-      setProducts(initialData);
-      setCount(initialCount);
-      setIsLoading(false);
-      return;
-    }
-
+  const handlePageChange = async (newPage: number) => {
     setIsLoading(true);
-    setPage(1);
-    fetchProducts({ categoryId, filters, page, pageSize })
-      .then((data) => {
-        console.log("fetched data", data);
-        setProducts(data.products);
-        setCount(data.count);
-        setIsLoading(false);
-      })
-      .catch(() => {
-        setIsLoading(false);
-      });
-  }, [filters, page]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    const params = new URLSearchParams(searchParams);
+    params.set("page", newPage.toString());
+    window.history.replaceState(null, "", `?${params.toString()}`);
+    const data = await fetchProducts({ categoryId, filters, page: newPage, pageSize });
+    setProducts(data.products);
+    setCount(data.count);
+    setIsLoading(false);
+  };
+
+  const getFilteredProducts = async (newFilters: ActiveFilter[], newPage?: number) => {
+    setFilters(newFilters);
+    setIsLoading(true);
+    const data = await fetchProducts({
+      categoryId,
+      filters: newFilters,
+      page: newPage || 1,
+      pageSize,
+    });
+    setProducts(data.products);
+    setCount(data.count);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
     if (windowWidth > 1024) {
       setIsDrawerOpen(false);
     }
   }, [windowWidth]);
+
+  useEffect(() => {
+    setClientReady(true);
+  }, []);
 
   return (
     <>
@@ -164,6 +168,7 @@ export const ProductGridShell = ({
               isSidebarOpen={isSidebarOpen}
               isDrawerOpen={isDrawerOpen}
               setIsDrawerOpen={setIsDrawerOpen}
+              getFilteredProducts={getFilteredProducts}
             />
           )}
           <div className={clx("w-full", isLoading && "pointer-events-none animate-pulse")}>
@@ -180,7 +185,7 @@ export const ProductGridShell = ({
                       <CommandBar.Command
                         action={() => {
                           if (page === 1) return;
-                          setPage(page - 1);
+                          handlePageChange(page - 1);
                         }}
                         label="Prev"
                         shortcut="H"
@@ -189,7 +194,7 @@ export const ProductGridShell = ({
                       <CommandBar.Command
                         action={() => {
                           if (page === Math.ceil(count / pageSize)) return;
-                          setPage(page + 1);
+                          handlePageChange(page + 1);
                         }}
                         label="Next"
                         shortcut="L"

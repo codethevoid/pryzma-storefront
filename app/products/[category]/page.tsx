@@ -26,7 +26,7 @@ const getInitialData = async (
 ): Promise<{ products: StoreProduct[]; count: number }> => {
   const response = await medusa.store.product.list({
     category_id: categoryId,
-    limit: 20,
+    limit: 24,
     fields: "*variants.calculated_price",
   });
 

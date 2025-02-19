@@ -12,7 +12,12 @@ export const ProductGrid = ({
   quickAdd?: boolean;
 }) => {
   return (
-    <div className={clx("grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-sm:grid-cols-2", className)}>
+    <div
+      className={clx(
+        "grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:gap-3 max-sm:grid-cols-2",
+        className,
+      )}
+    >
       {products.map((product) => (
         <ProductCard
           key={product.id}

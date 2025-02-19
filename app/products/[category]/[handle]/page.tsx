@@ -29,7 +29,7 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
       product.type?.value === "sample"
         ? product.title
         : ((product.description?.split("\n")[0] || "") as string),
-    image: (product.images?.length || 0) > 1 ? product.images?.[1].url : product.images?.[0].url,
+    image: product.thumbnail ? product.thumbnail : product.images?.[0]?.url,
   });
 };
 
@@ -53,7 +53,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
   ).slice(0, 10);
 
   return (
-    <div className="p-4 pb-12">
+    <div className="min-h-[calc(100vh-330.5px)] p-4 pb-12">
       <div className="mx-auto max-w-screen-xl space-y-4">
         <Breadcrumbs product={data.products[0]} />
         <div className="space-y-16">

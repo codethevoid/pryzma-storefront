@@ -50,7 +50,7 @@ export const FloatingLabelInput = ({
       <Text
         size="small"
         className={clx(
-          "absolute left-3 top-3 origin-top-left transition-all duration-150",
+          "pointer-events-none absolute left-3 top-3 origin-top-left transition-all duration-150",
           // Default state (placeholder)
           "text-ui-fg-muted",
           // Focused or filled state

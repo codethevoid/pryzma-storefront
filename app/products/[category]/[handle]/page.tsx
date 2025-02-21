@@ -66,7 +66,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
           .slice(0, 10)
       : shuffle(relatedProducts.products.filter((p) => p.id !== data.products[0].id)).slice(0, 10);
 
-  // replace all product images with cdn url
+  // replace all product images with cdn
   if (data.products[0]?.thumbnail) {
     data.products[0].thumbnail = data.products[0]?.thumbnail?.replace(s3Url, cdnUrl);
   }

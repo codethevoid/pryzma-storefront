@@ -51,7 +51,7 @@ export const ProductGridShell = ({
   }, [data]);
 
   const handlePageChange = async (newPage: number) => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: "auto" });
     const params = new URLSearchParams(searchParams);
     if (newPage === 1) {
       params.delete("page");

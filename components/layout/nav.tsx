@@ -130,10 +130,10 @@ export const Nav = () => {
             <div className="relative top-[2px] shrink-0 rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
               <NextLink href="/" onClick={() => setIsMobileNavOpen(false)}>
                 <Image
-                  src="/pryzma.png"
+                  src={`${cdnUrl}/logos/pryzma.png`}
                   alt="pryzma logo"
-                  width={20}
-                  height={20}
+                  width={500}
+                  height={500}
                   quality={100}
                   className="rounded"
                 />

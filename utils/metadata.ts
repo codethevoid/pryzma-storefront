@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { s3Url } from "./s3";
+import { cdnUrl } from "./s3";
 
 type Props = {
   title?: string;
@@ -10,7 +10,7 @@ type Props = {
 export const constructMetadata = ({
   title = `Pryzma - Your Premium Source for Mechanical Keyboard Switches`,
   description = `Pryzma is your premium source for mechanical keyboard switches. We offer a wide range of switches, lubricants, switch samples, and accessories.`,
-  image = `/quinn.jpeg`,
+  image = `${cdnUrl}/uploads/IMG_3607-01JMG08DXZ1EH8C6PCECABGKCK.JPG`,
 }: Props): Metadata => {
   return {
     title,

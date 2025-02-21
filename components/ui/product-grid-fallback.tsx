@@ -10,7 +10,7 @@ type Props = {
   initialData: StoreProduct[];
   filterOptions?: Record<string, ActiveFilter[]>;
   filterCounts?: Record<string, number>;
-  name?: string;
+  name: string | undefined;
 };
 
 export const ProductGridFallback = ({ initialData, filterOptions, filterCounts, name }: Props) => {

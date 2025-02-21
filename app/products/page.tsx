@@ -48,6 +48,7 @@ const Products = async () => {
                 initialData={data.products}
                 filterCounts={tagCounts}
                 filterOptions={PRODUCT_FILTER_OPTIONS}
+                name={undefined}
               />
             }
           >

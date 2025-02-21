@@ -83,16 +83,31 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const addItem = async ({ variantId, quantity }: { variantId: string; quantity: number }) => {
     if (!cart) return;
 
+    const getQuantity = () => {
+      if (
+        quantity === 0 ||
+        !quantity ||
+        isNaN(quantity) ||
+        quantity.toString().includes(".") ||
+        quantity.toString().includes("-")
+      ) {
+        return 1;
+      }
+
+      return Number(quantity);
+    };
+
     try {
       const response = await medusa.store.cart.createLineItem(
         cart.id,
-        { variant_id: variantId, quantity },
+        { variant_id: variantId, quantity: getQuantity() },
         { fields },
       );
 
       setCart(response.cart as ExtendedStoreCart);
       setIsOpen(true);
     } catch (e) {
+      console.error(e);
       toast.error("Failed to add item to cart");
     }
   };
@@ -100,18 +115,33 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   const updateItem = async ({ itemId, quantity }: { itemId: string; quantity: number }) => {
     if (!cart) return;
 
+    const getQuantity = () => {
+      if (
+        quantity === 0 ||
+        !quantity ||
+        isNaN(quantity) ||
+        quantity.toString().includes(".") ||
+        quantity.toString().includes("-")
+      ) {
+        return 0;
+      }
+
+      return Number(quantity);
+    };
+
     try {
       const response = await medusa.store.cart.updateLineItem(
         cart.id,
         itemId,
         {
-          quantity,
+          quantity: getQuantity(),
         },
         { fields },
       );
 
       setCart(response.cart as ExtendedStoreCart);
     } catch (e) {
+      console.error(e);
       toast.error("Failed to update item in cart");
     }
   };
@@ -125,6 +155,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
       const response = await medusa.store.cart.retrieve(cart.id, { fields });
       setCart(response.cart as ExtendedStoreCart);
     } catch (e) {
+      console.error(e);
       toast.error("Failed to remove item from cart");
     }
   };

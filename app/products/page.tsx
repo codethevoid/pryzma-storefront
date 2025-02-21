@@ -6,6 +6,8 @@ import { PRODUCT_FILTER_OPTIONS } from "@/lib/filter-options";
 import { getTagCount } from "@/lib/helpers/get-tag-count";
 import { CATEGORY_IDS } from "@/lib/identifiers";
 import { constructMetadata } from "@/utils/metadata";
+import { Suspense } from "react";
+import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
 
 export const metadata = constructMetadata({
   title: "Products - Pryzma",
@@ -32,7 +34,7 @@ const Products = async () => {
   ]);
 
   return (
-    <div>
+    <div className="min-h-[calc(100vh-330.5px)]">
       <CategoryHeader
         title="Products"
         count={data.count}
@@ -40,13 +42,27 @@ const Products = async () => {
       />
       <div className="p-4 pb-12">
         <div className="mx-auto max-w-screen-xl">
-          <ProductGridShell
-            initialData={data.products}
-            initialCount={data.count}
-            filterOptions={PRODUCT_FILTER_OPTIONS}
-            filterCounts={tagCounts}
-            categoryId={[CATEGORY_IDS.SWITCHES, CATEGORY_IDS.LUBRICANTS, CATEGORY_IDS.ACCESSORIES]}
-          />
+          <Suspense
+            fallback={
+              <ProductGridFallback
+                initialData={data.products}
+                filterCounts={tagCounts}
+                filterOptions={PRODUCT_FILTER_OPTIONS}
+              />
+            }
+          >
+            <ProductGridShell
+              initialData={data.products}
+              initialCount={data.count}
+              filterOptions={PRODUCT_FILTER_OPTIONS}
+              filterCounts={tagCounts}
+              categoryId={[
+                CATEGORY_IDS.SWITCHES,
+                CATEGORY_IDS.LUBRICANTS,
+                CATEGORY_IDS.ACCESSORIES,
+              ]}
+            />
+          </Suspense>
         </div>
       </div>
     </div>

@@ -77,9 +77,9 @@ const Terms = () => {
         </p>
         <h3>Liability</h3>
         <p>
-          Our website and the materials on our website are provided on an 'as is' basis. To the
-          extent permitted by law, Pryzma makes no warranties, expressed or implied, and hereby
-          disclaims and negates all other warranties including, without limitation, implied
+          Our website and the materials on our website are provided on an &apos;as is&apos; basis.
+          To the extent permitted by law, Pryzma makes no warranties, expressed or implied, and
+          hereby disclaims and negates all other warranties including, without limitation, implied
           warranties or conditions of merchantability, fitness for a particular purpose, or
           non-infringement of intellectual property, or other violation of rights.
         </p>

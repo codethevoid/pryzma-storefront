@@ -1,13 +1,12 @@
 "use client";
 
-import { StoreProduct, StoreProductOption, StoreProductVariant } from "@medusajs/types";
-import { Heading, Text, Badge, StatusBadge, Button, Input } from "@medusajs/ui";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { StoreProduct, StoreProductVariant } from "@medusajs/types";
+import { Heading, Text, StatusBadge, Button, Input } from "@medusajs/ui";
+import { useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
-import { useSearchParams } from "next/navigation";
 import { useCart } from "../context/cart";
 import ReactMarkdown from "react-markdown";
-import { motion } from "framer-motion";
+import { OptionSelector } from "./option-selector";
 
 export const ProductDetails = ({ product }: { product: StoreProduct }) => {
   const [selectedVariant, setSelectedVariant] = useState<StoreProductVariant>(
@@ -15,7 +14,6 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
   );
   // const [selectedOptions, setSelectedOptions] = useState<StoreProductOption[]>([]);
   const [quantity, setQuantity] = useState(1);
-  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const { addItem } = useCart();
 
@@ -25,24 +23,6 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
     if (inventory > 0) return { color: "orange", label: "Limited stock" };
     return { color: "red", label: "Out of stock" };
   };
-
-  useEffect(() => {
-    const variantId = searchParams.get("variant");
-    if (variantId) {
-      // find the variant in product and set it as selected variant
-      const variant = product.variants?.find((v) => v.id === variantId);
-      if (variant) setSelectedVariant(variant);
-    }
-
-    // make sure the variant is in stock no matter what
-    if (selectedVariant.inventory_quantity === 0) {
-      // check and see if there is any other variant that is in stock
-      const inStockVariant = product.variants?.find((v) => (v.inventory_quantity || 0) > 0);
-      if (inStockVariant) {
-        setSelectedVariant(inStockVariant);
-      } // else we do nothing
-    }
-  }, []);
 
   return (
     <div className="space-y-6">
@@ -59,42 +39,11 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
         <Text size="large" weight="plus">
           {formatCurrency("usd", selectedVariant.calculated_price?.original_amount as number)}
         </Text>
-        {(product?.options?.length || 0) > 0 &&
-          product?.options
-            ?.filter((option) => (option.values?.length || 1) > 1)
-            .map((option) => (
-              <div key={option.id} className="space-y-2">
-                <Text size="small">{option.title}</Text>
-                <div className="flex flex-wrap gap-2">
-                  {option.values?.map((value) => (
-                    <Button
-                      key={value.id}
-                      size="small"
-                      variant={
-                        selectedVariant.options?.find(
-                          (opt) => opt.value === value.value && opt.option_id === option.id,
-                        )
-                          ? "primary"
-                          : "secondary"
-                      }
-                      onClick={() => {
-                        const variant = product.variants?.find((variant) =>
-                          variant?.options?.some(
-                            (opt) => opt.value === value.value && opt.option_id === option.id,
-                          ),
-                        );
-                        if (variant) {
-                          setSelectedVariant(variant);
-                          window.history.replaceState(null, "", `?variant=${variant.id}`);
-                        }
-                      }}
-                    >
-                      {value.value}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            ))}
+        <OptionSelector
+          product={product}
+          selectedVariant={selectedVariant}
+          setSelectedVariant={setSelectedVariant}
+        />
         <div className="space-y-2">
           <Text size="small">Quantity</Text>
           <div className="flex items-center gap-2">

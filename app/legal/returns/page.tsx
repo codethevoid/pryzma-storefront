@@ -14,10 +14,11 @@ const Returns = () => {
           We provide a 30-day return policy for qualifying items that are new and in their original
           packaging. To initiate the return process, reach out to us at{" "}
           <a href="mailto:support@pryzma.io">support@pryzma.io</a>. The customer must pay for the
-          shipping label to send the item back to us. It's important to include the order number and
-          name in the box so we can process the return quickly and efficiently. If we receive the
-          item in its original condition, we will issue a refund to the original payment method. If
-          the item is damaged or missing parts, we will contact you to discuss the next steps.
+          shipping label to send the item back to us. It&apos;s important to include the order
+          number and name in the box so we can process the return quickly and efficiently. If we
+          receive the item in its original condition, we will issue a refund to the original payment
+          method. If the item is damaged or missing parts, we will contact you to discuss the next
+          steps.
         </p>
         <h3>Damaged, Defective, or Incorrect Items</h3>
         <p>

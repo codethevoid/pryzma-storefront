@@ -1,8 +1,8 @@
 "use client";
 
 import { useCart } from "@/components/context/cart";
-import { IconBadge, IconButton, Text } from "@medusajs/ui";
-import { Envelope, Phone, Pencil, MapPin, FlyingBox } from "@medusajs/icons";
+import { IconBadge, Text } from "@medusajs/ui";
+import { Envelope, MapPin, FlyingBox } from "@medusajs/icons";
 import { formatCurrency } from "@/utils/format-currency";
 import { usStates } from "@/lib/states";
 

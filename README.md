@@ -1,1 +1,1 @@
-Pryzmam official website
+Pryzma official website

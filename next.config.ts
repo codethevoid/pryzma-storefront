@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "pryzma-medusa.s3.us-east-1.amazonaws.com",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.pryzma.io",
+      },
     ],
   },
   compiler: {

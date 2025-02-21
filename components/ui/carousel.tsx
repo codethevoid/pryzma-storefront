@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Button, IconButton, Text, clx } from "@medusajs/ui";
-import { ReactNode } from "react";
+import { IconButton, Text, clx } from "@medusajs/ui";
 import { ProductCard } from "./product-card";
 import { StoreProduct } from "@medusajs/types";
 import { ChevronRight, ChevronLeft } from "@medusajs/icons";

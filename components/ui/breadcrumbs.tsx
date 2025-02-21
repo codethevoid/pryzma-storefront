@@ -25,7 +25,7 @@ export const Breadcrumbs = ({ product }: { product: StoreProduct }) => {
       </NextLink>
       <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
       <Text size="small" className="cursor-default capitalize text-subtle-foreground">
-        {product.title}
+        {product.title.replace("Sample", "")}
       </Text>
     </div>
   );

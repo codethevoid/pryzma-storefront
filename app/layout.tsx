@@ -1,11 +1,9 @@
-import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Nav } from "@/components/layout/nav";
 import { Footer } from "@/components/layout/footer";
-import { constructMetadata } from "@/utils/metadata";
-
-export const metadata = constructMetadata({});
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function RootLayout({
   children,
@@ -20,6 +18,8 @@ export default function RootLayout({
           {children}
           <Footer />
         </Providers>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

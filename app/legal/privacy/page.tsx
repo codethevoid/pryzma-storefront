@@ -10,10 +10,10 @@ const Privacy = () => {
       <div className="prose prose-sm mx-auto max-w-screen-md dark:prose-invert">
         <h2>Pryzma Privacy Policy</h2>
         <p>
-          Your privacy is important to us. It is Pryzma's policy to respect your privacy and comply
-          with any applicable law and regulation regarding any personal information we may collect
-          about you, including across our website, <a href="https://pryzma.io">https://pryzma.io</a>
-          , and other sites we own and operate.
+          Your privacy is important to us. It is Pryzma&apos;s policy to respect your privacy and
+          comply with any applicable law and regulation regarding any personal information we may
+          collect about you, including across our website,{" "}
+          <a href="https://pryzma.io">https://pryzma.io</a>, and other sites we own and operate.
         </p>
         <p>
           Personal information is any information about you which can be used to identify you. This
@@ -76,7 +76,7 @@ const Privacy = () => {
           these purposes:
         </p>
         <ul>
-          <li>to provide you with our platform's core features and services</li>
+          <li>to provide you with our platform&apos;s core features and services</li>
           <li>to process any transactional or ongoing payments</li>
         </ul>
         <p>

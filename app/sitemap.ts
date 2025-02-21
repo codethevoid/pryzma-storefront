@@ -36,12 +36,6 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       priority: 1,
     },
     {
-      url: "https://pryzma.io/products",
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
       url: "https://pryzma.io/legal/privacy",
       lastModified: new Date(),
       changeFrequency: "yearly",
@@ -58,6 +52,12 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       lastModified: new Date(),
       changeFrequency: "yearly",
       priority: 0.4,
+    },
+    {
+      url: "https://pryzma.io/products",
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.9,
     },
     ...categoryRoutes,
     ...productRoutes,

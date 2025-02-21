@@ -1,4 +1,4 @@
-import type { StoreProduct, StoreProductImage } from "@medusajs/types";
+import type { StoreProduct } from "@medusajs/types";
 import { ImageGallery } from "../ui/image-gallery";
 import { ProductDetails } from "../ui/product-details";
 

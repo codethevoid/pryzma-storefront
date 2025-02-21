@@ -6,6 +6,8 @@ import { getTagCount } from "@/lib/helpers/get-tag-count";
 import { constructMetadata } from "@/utils/metadata";
 import { Metadata } from "next";
 import { CATEGORY_DATA } from "@/lib/category-data";
+import { Suspense } from "react";
+import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
 
 export const dynamicParams = false;
 type Params = Promise<{ category: keyof typeof CATEGORY_DATA }>; // category is the handle
@@ -62,15 +64,25 @@ const CategoryPage = async ({ params }: { params: Params }) => {
       />
       <div className="p-4 pb-12">
         <div className="mx-auto max-w-screen-xl">
-          <ProductGridShell
-            initialData={data.products}
-            initialCount={data.count}
-            filterOptions={filterOptions}
-            filterCounts={tagCounts}
-            categoryId={categoryId}
-            name={response.product_categories[0].name}
-            quickAdd={categoryData.quickAdd}
-          />
+          <Suspense
+            fallback={
+              <ProductGridFallback
+                initialData={data.products}
+                filterCounts={tagCounts}
+                filterOptions={filterOptions}
+              />
+            }
+          >
+            <ProductGridShell
+              initialData={data.products}
+              initialCount={data.count}
+              filterOptions={filterOptions}
+              filterCounts={tagCounts}
+              categoryId={categoryId}
+              name={response.product_categories[0].name}
+              quickAdd={categoryData.quickAdd}
+            />
+          </Suspense>
         </div>
       </div>
     </div>

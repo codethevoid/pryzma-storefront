@@ -2,12 +2,13 @@
 
 import { StoreProduct } from "@medusajs/types";
 import Image from "next/image";
-import { Text, clx, Button, IconButton } from "@medusajs/ui";
+import { Text, clx, IconButton } from "@medusajs/ui";
 import NextLink from "next/link";
 import { useCart } from "../context/cart";
 import { Plus } from "@medusajs/icons";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { productTypeMappings } from "@/lib/product-types";
+import { cdnUrl, s3Url } from "@/utils/s3";
 
 export const ProductCard = ({
   product,
@@ -35,7 +36,7 @@ export const ProductCard = ({
           <div className="space-y-2">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded">
               <Image
-                src={product.thumbnail as string}
+                src={product.thumbnail?.replace(s3Url, cdnUrl) as string}
                 alt={product.title}
                 height={1080}
                 width={1080}

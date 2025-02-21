@@ -12,7 +12,6 @@ export const Filter = ({
   isSidebarOpen,
   isDrawerOpen,
   setIsDrawerOpen,
-  getFilteredProducts,
 }: {
   options: Record<string, { category: string; label: string; value: string }[]>;
   activeFilters: { category: string; label: string; value: string }[];
@@ -21,10 +20,6 @@ export const Filter = ({
   isSidebarOpen: boolean;
   isDrawerOpen: boolean;
   setIsDrawerOpen: (open: boolean) => void;
-  getFilteredProducts: (
-    filters: { category: string; label: string; value: string }[],
-    newPage?: number,
-  ) => void;
 }) => {
   const searchParams = useSearchParams();
 
@@ -40,7 +35,6 @@ export const Filter = ({
     if (activeFilters.some((filter) => filter.value === value)) {
       const newFilters = activeFilters.filter((filter) => filter.value !== value);
       setActiveFilters(newFilters);
-      getFilteredProducts(newFilters);
       const params = new URLSearchParams(searchParams);
       if (newFilters.length) {
         params.set("filters", newFilters.map((filter) => filter.value).join(","));
@@ -52,7 +46,6 @@ export const Filter = ({
       window.history.replaceState(null, "", `?${params.toString()}`);
     } else {
       setActiveFilters([...activeFilters, { label, value, category }]);
-      getFilteredProducts([...activeFilters, { label, value, category }]);
       const params = new URLSearchParams(searchParams);
       params.set(
         "filters",
@@ -65,7 +58,6 @@ export const Filter = ({
 
   useEffect(() => {
     const urlFilters = searchParams.get("filters")?.split(",") || [];
-    const page = searchParams.get("page") || 1;
     if (urlFilters.length) {
       const initialFilters = urlFilters
         .map((value) => {
@@ -79,9 +71,6 @@ export const Filter = ({
         .filter((f): f is { label: string; value: string; category: string } => f !== null);
 
       setActiveFilters(initialFilters);
-      getFilteredProducts(initialFilters, parseInt(page.toString(), 10));
-    } else if (searchParams.has("page")) {
-      getFilteredProducts([], parseInt(page.toString(), 10));
     }
   }, []);
 
@@ -126,7 +115,7 @@ export const Filter = ({
         </div>
       </div>
       <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
-        <Drawer.Content>
+        <Drawer.Content className="z-[9999]" aria-describedby={undefined}>
           <Drawer.Header>
             <Drawer.Title>Filters</Drawer.Title>
           </Drawer.Header>

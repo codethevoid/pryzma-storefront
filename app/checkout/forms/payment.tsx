@@ -2,7 +2,7 @@
 
 import { ExtendedStoreCart, useCart } from "@/components/context/cart";
 import { Text, RadioGroup, clx, Button, Select, toast } from "@medusajs/ui";
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState } from "react";
 import { medusa } from "@/utils/medusa";
 import { CardElement, Elements, useStripe, useElements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
@@ -12,7 +12,6 @@ import { z } from "zod";
 import { FloatingLabelInput } from "@/components/ui/custom/floating-label-input";
 import { useForm } from "react-hook-form";
 import { usStates } from "@/lib/states";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 

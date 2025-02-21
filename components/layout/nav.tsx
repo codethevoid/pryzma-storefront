@@ -2,15 +2,8 @@
 
 import Image from "next/image";
 import NextLink from "next/link";
-import { Button, Text, IconButton } from "@medusajs/ui";
-import {
-  ShoppingBag,
-  User,
-  MagnifyingGlass,
-  ShoppingCart,
-  BarsThree,
-  ChevronRight,
-} from "@medusajs/icons";
+import { Text, IconButton } from "@medusajs/ui";
+import { ShoppingBag, BarsThree } from "@medusajs/icons";
 import { useCart } from "../context/cart";
 import { Cart } from "../ui/cart";
 import { Drawer } from "@medusajs/ui";
@@ -18,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useWindowWidth } from "@react-hook/window-size";
 import { ThemeToggle } from "../ui/theme-toggle";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { cdnUrl } from "@/utils/s3";
 
 const links = [
   {
@@ -57,12 +51,12 @@ export const Nav = () => {
             <div className="shrink-0 rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
               <NextLink href="/">
                 <Image
-                  src="/pryzma.png"
+                  src={`${cdnUrl}/logos/pryzma.png`}
                   alt="pryzma logo"
-                  width={20}
-                  height={20}
+                  width={500}
+                  height={500}
                   quality={100}
-                  className="rounded"
+                  className="size-5 rounded"
                 />
               </NextLink>
             </div>
@@ -128,7 +122,7 @@ export const Nav = () => {
       </div>
       <Cart />
       <Drawer open={isMobileNavOpen} onOpenChange={setIsMobileNavOpen}>
-        <Drawer.Content className="z-[9999]">
+        <Drawer.Content className="z-[9999]" aria-describedby={undefined}>
           <Drawer.Header>
             <VisuallyHidden>
               <Drawer.Title>Navigation</Drawer.Title>

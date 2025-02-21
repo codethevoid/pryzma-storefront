@@ -1,16 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { medusa } from "@/utils/medusa";
 import { StoreOrder } from "@medusajs/types";
 import { Text } from "@medusajs/ui";
 import { formatCurrency } from "@/utils/format-currency";
-import Image from "next/image";
-import { clx, Badge } from "@medusajs/ui";
 import { OrderSummary } from "./summary";
 import { ProgressAccordion } from "@medusajs/ui";
 import { IconBadge } from "@medusajs/ui";
-import { TruckFast, XCircle, Loader, ShoppingBag, ExclamationCircle } from "@medusajs/icons";
+import { TruckFast, XCircle, Loader, ExclamationCircle } from "@medusajs/icons";
 import type { Card } from "@stripe/stripe-js";
 import NextLink from "next/link";
 import { Button } from "@medusajs/ui";
@@ -122,9 +119,9 @@ export const OrderClient = ({ id }: { id: string }) => {
                     <ProgressAccordion.Content className="pl-[70px]">
                       <div className="pb-6">
                         <Text size="small" className="text-subtle-foreground">
-                          We're getting your order ready to be shipped. We will notify you when it's
-                          on the way. If you need to make any changes, please contact us as soon as
-                          possible. You can contact us about your order at{" "}
+                          We&apos;re getting your order ready to be shipped. We will notify you when
+                          it&apos;s on the way. If you need to make any changes, please contact us
+                          as soon as possible. You can contact us about your order at{" "}
                           <a
                             href="mailto:support@pryzma.io"
                             className="text-blue-500 hover:underline dark:text-blue-400"

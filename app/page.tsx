@@ -1,18 +1,21 @@
 import { Hero } from "@/components/landing/hero";
 import { Featured } from "@/components/landing/featured";
 import { Spotlight } from "@/components/ui/spotlight";
-import { s3Url } from "@/utils/s3";
+import { cdnUrl } from "@/utils/s3";
 import { Carousel } from "@/components/ui/carousel";
 import { StoreProduct } from "@medusajs/types";
 import { medusa } from "@/utils/medusa";
 import { COLLECTION_IDS, CATEGORY_IDS } from "@/lib/identifiers";
+import { constructMetadata } from "@/utils/metadata";
+
+export const metadata = constructMetadata({});
 
 const getProducts = async ({
   collectionId,
   categoryId,
 }: {
   collectionId?: string;
-  categoryId?: string;
+  categoryId?: string | string[];
 }): Promise<StoreProduct[]> => {
   const response = await medusa.store.product.list({
     limit: 10,
@@ -25,11 +28,11 @@ const getProducts = async ({
 };
 
 const Home = async () => {
-  const [bestSellers, switches, lubricants, accessories] = await Promise.all([
+  const [bestSellers, switches, accessories] = await Promise.all([
     getProducts({ collectionId: COLLECTION_IDS.BEST_SELLERS }),
     getProducts({ categoryId: CATEGORY_IDS.SWITCHES }),
-    getProducts({ categoryId: CATEGORY_IDS.LUBRICANTS }),
-    getProducts({ categoryId: CATEGORY_IDS.ACCESSORIES }),
+    // getProducts({ categoryId: CATEGORY_IDS.LUBRICANTS }),
+    getProducts({ categoryId: [CATEGORY_IDS.LUBRICANTS, CATEGORY_IDS.ACCESSORIES] }),
   ]);
 
   return (
@@ -41,17 +44,17 @@ const Home = async () => {
         title="Custom Switch Sampler"
         description="Build your own switch sampler"
         href="/products/samples"
-        image={`${s3Url}/featured/IMG_2855.JPG`}
+        image={`${cdnUrl}/featured/IMG_2855.JPG`}
         actionText="Start building"
       />
       <Carousel data={switches} title="Switches" />
-      <Carousel data={lubricants} title="Lubricants" />
+      {/* <Carousel data={lubricants} title="Lubricants" /> */}
       <Carousel data={accessories} title="Accessories" />
       <Spotlight
         title="KTT Strawberry v2 switches"
         description="Linear switches inspired by strawberries"
         href="/products/switches/ktt-strawberry-v2-switches"
-        image={`${s3Url}/featured/IMG_3405.JPG`}
+        image={`${cdnUrl}/featured/IMG_3405.JPG`}
       />
     </div>
   );

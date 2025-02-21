@@ -8,6 +8,8 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { productTypeMappings } from "@/lib/product-types";
+import { cdnUrl, s3Url } from "@/utils/s3";
 
 export const Cart = () => {
   const { cart, isOpen, setIsOpen, updateItem, removeItem } = useCart();
@@ -30,7 +32,7 @@ export const Cart = () => {
 
   return (
     <Drawer open={isOpen} onOpenChange={setIsOpen}>
-      <Drawer.Content className="z-[9999]">
+      <Drawer.Content className="z-[9999]" aria-describedby={undefined}>
         <Drawer.Header>
           <VisuallyHidden>
             <Drawer.Title>Your cart</Drawer.Title>
@@ -46,11 +48,11 @@ export const Cart = () => {
                 <div key={item.id} className={clx("flex gap-4", index !== 0 && "border-t pt-4")}>
                   <div className="h-28 w-24 shrink-0 overflow-hidden rounded-md border">
                     <NextLink
-                      href={`/products/${item.product_handle}`}
+                      href={`/products/${productTypeMappings[item.product_type as keyof typeof productTypeMappings]}/${item.product_handle}`}
                       onClick={() => setIsOpen(false)}
                     >
                       <Image
-                        src={item.thumbnail as string}
+                        src={item.thumbnail?.replace(s3Url, cdnUrl) as string}
                         alt={item.product_title as string}
                         width={1000}
                         height={1000}
@@ -61,10 +63,12 @@ export const Cart = () => {
                   <div className="flex-1 space-y-2">
                     <div className="space-y-0.5">
                       <NextLink
-                        href={`/products/${item.product_handle}`}
+                        href={`/products/${productTypeMappings[item.product_type as keyof typeof productTypeMappings]}/${item.product_handle}`}
                         onClick={() => setIsOpen(false)}
                       >
-                        <Text weight="plus">{item.product_title}</Text>
+                        <Text weight="plus" size="small">
+                          {item.product_title}
+                        </Text>
                       </NextLink>
 
                       <Text size="small" className="text-subtle-foreground">
@@ -96,7 +100,13 @@ export const Cart = () => {
                         onBlur={async (e) => {
                           const quantity = parseInt(e.target.value);
                           if (quantity === item.quantity) return;
-                          if (quantity === 0 || !quantity || isNaN(quantity)) {
+                          if (
+                            quantity === 0 ||
+                            !quantity ||
+                            isNaN(quantity) ||
+                            quantity.toString().includes(".") ||
+                            quantity.toString().includes("-")
+                          ) {
                             setIsUpdating({ ...isUpdating, [item.id]: true });
                             removeItem(item.id);
                             setIsUpdating({ ...isUpdating, [item.id]: false });
@@ -116,7 +126,13 @@ export const Cart = () => {
                               quantity - ((quantities[item.id] as number) || item.quantity),
                             ) === 1
                           ) {
-                            if (quantity === 0) {
+                            if (
+                              quantity === 0 ||
+                              !quantity ||
+                              isNaN(quantity) ||
+                              quantity.toString().includes(".") ||
+                              quantity.toString().includes("-")
+                            ) {
                               setIsUpdating({ ...isUpdating, [item.id]: true });
                               await removeItem(item.id);
                               setIsUpdating({ ...isUpdating, [item.id]: false });
@@ -142,7 +158,7 @@ export const Cart = () => {
                       </IconButton>
                     </div>
                   </div>
-                  <Text weight="plus">
+                  <Text weight="plus" size="small">
                     {formatCurrency("usd", item.unit_price * item.quantity)}
                   </Text>
                 </div>

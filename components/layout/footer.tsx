@@ -1,8 +1,8 @@
 import NextLink from "next/link";
 import Image from "next/image";
-import { Text, Button, IconButton } from "@medusajs/ui";
-import { Sun, Moon } from "@medusajs/icons";
+import { Text, IconButton } from "@medusajs/ui";
 import { ThemeToggle } from "../ui/theme-toggle";
+import { cdnUrl } from "@/utils/s3";
 
 const shopLinks = [
   {
@@ -70,12 +70,12 @@ export const Footer = () => {
             <div className="w-fit rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
               <NextLink href="/">
                 <Image
-                  src="/pryzma.png"
+                  src={`${cdnUrl}/logos/pryzma.png`}
                   alt="pryzma logo"
-                  width={20}
-                  height={20}
+                  width={500}
+                  height={500}
                   quality={100}
-                  className="rounded"
+                  className="size-5 rounded"
                 />
               </NextLink>
             </div>
@@ -83,7 +83,7 @@ export const Footer = () => {
               Your premium source for mechanical keyboard switches.
             </Text>
             <Text size="small" className="text-subtle-foreground">
-              support@pryzma.io
+              Ohio, USA
             </Text>
             <div className="flex gap-2">
               <IconButton size="small" variant="primary" asChild>

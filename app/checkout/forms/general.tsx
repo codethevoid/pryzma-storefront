@@ -1,7 +1,7 @@
 "use client";
 
 import { FloatingLabelInput } from "@/components/ui/custom/floating-label-input";
-import { Text, Select, Button, clx, Checkbox, Label } from "@medusajs/ui";
+import { Text, Select, Button, clx } from "@medusajs/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";

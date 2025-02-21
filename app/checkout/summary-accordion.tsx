@@ -8,7 +8,8 @@ import { formatCurrency } from "@/utils/format-currency";
 import { medusa } from "@/utils/medusa";
 import type { ExtendedStoreCart } from "@/components/context/cart";
 import { StoreCart } from "@medusajs/types";
-import { XMark, ChevronDown } from "@medusajs/icons";
+import { XMark } from "@medusajs/icons";
+import { cdnUrl, s3Url } from "@/utils/s3";
 
 type Props = {
   promoCode: string;
@@ -73,7 +74,7 @@ export const SummaryAccordion = ({
                   <div className="relative">
                     <div className="relative aspect-[1/1.2] w-12 shrink-0 overflow-hidden rounded-md border">
                       <Image
-                        src={item.thumbnail as string}
+                        src={item.thumbnail?.replace(s3Url, cdnUrl) as string}
                         alt={item.product_title as string}
                         width={1000}
                         height={1000}

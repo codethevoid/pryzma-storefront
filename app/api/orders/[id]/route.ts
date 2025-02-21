@@ -1,6 +1,6 @@
 import { medusa } from "@/utils/medusa";
 import { NextResponse, NextRequest } from "next/server";
-import { AdminOrder, PaymentCollectionDTO } from "@medusajs/types";
+import { AdminOrder } from "@medusajs/types";
 import Stripe from "stripe";
 
 type CustomAdminOrder = AdminOrder & {
@@ -17,9 +17,10 @@ const getPaymentMethod = async (payment_method_id: string) => {
   return paymentMethod?.card;
 };
 
-export const GET = async (req: NextRequest, { params }: { params: { id: string } }) => {
+export const GET = async (req: NextRequest, context: { params: Promise<{ id: string }> }) => {
   try {
-    const { id } = params;
+    const { params } = context;
+    const { id } = await params;
     const [orderRes, adminOrderRes] = await Promise.all([
       medusa.store.order.retrieve(id, {
         fields:

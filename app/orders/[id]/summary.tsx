@@ -6,6 +6,7 @@ import Image from "next/image";
 import { formatCurrency } from "@/utils/format-currency";
 import { Text } from "@medusajs/ui";
 import { useState } from "react";
+import { cdnUrl, s3Url } from "@/utils/s3";
 
 export const OrderSummary = ({ order }: { order: StoreOrder }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,7 +20,7 @@ export const OrderSummary = ({ order }: { order: StoreOrder }) => {
               <div className="relative">
                 <div className="relative aspect-[1/1.2] w-12 shrink-0 overflow-hidden rounded-md border">
                   <Image
-                    src={item.thumbnail as string}
+                    src={item.thumbnail?.replace(s3Url, cdnUrl) as string}
                     alt={item.product_title as string}
                     width={1000}
                     height={1000}

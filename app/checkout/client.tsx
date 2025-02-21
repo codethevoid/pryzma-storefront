@@ -1,9 +1,9 @@
 "use client";
 
 import { useCart } from "@/components/context/cart";
-import { clx, IconButton, Input } from "@medusajs/ui";
+import { clx, Input } from "@medusajs/ui";
 import NextLink from "next/link";
-import { Text, Button, Badge, Tabs, ProgressTabs, toast, IconBadge } from "@medusajs/ui";
+import { Text, Button, Badge, ProgressTabs, toast, IconBadge } from "@medusajs/ui";
 import { formatCurrency } from "@/utils/format-currency";
 import Image from "next/image";
 import { GeneralForm } from "./forms/general";
@@ -12,11 +12,11 @@ import { CheckoutDetails } from "./details";
 import { ShippingForm } from "./forms/shipping";
 import { medusa } from "@/utils/medusa";
 import type { ExtendedStoreCart } from "@/components/context/cart";
-import { X, XMark, Loader, ShoppingBag } from "@medusajs/icons";
+import { XMark, Loader, ShoppingBag } from "@medusajs/icons";
 import { PaymentForm } from "./forms/payment";
-import { usePathname } from "next/navigation";
 import { StoreCart } from "@medusajs/types";
 import { SummaryAccordion } from "./summary-accordion";
+import { cdnUrl, s3Url } from "@/utils/s3";
 
 export const CheckoutClient = () => {
   const { cart, setCart, fields, setIsLoadingClientSecret, isLoadingShipping } = useCart();
@@ -24,7 +24,6 @@ export const CheckoutClient = () => {
   const [promoCode, setPromoCode] = useState("");
   const [isApplyingPromoCode, setIsApplyingPromoCode] = useState(false);
   const [isRemovingPromoCode, setIsRemovingPromoCode] = useState(false);
-  const pathname = usePathname();
 
   if (!cart) {
     return (
@@ -124,7 +123,7 @@ export const CheckoutClient = () => {
                 <div className="relative">
                   <div className="relative aspect-[1/1.2] w-12 shrink-0 overflow-hidden rounded-md border">
                     <Image
-                      src={item.thumbnail as string}
+                      src={item.thumbnail?.replace(s3Url, cdnUrl) as string}
                       alt={item.product_title as string}
                       width={1000}
                       height={1000}

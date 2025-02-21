@@ -1,17 +1,17 @@
 import Image from "next/image";
-import { s3Url } from "@/utils/s3";
+import { cdnUrl } from "@/utils/s3";
 import NextLink from "next/link";
 import { Text } from "@medusajs/ui";
 
 const data = [
   {
-    image: `${s3Url}/featured/IMG_1086.JPG`,
+    image: `${cdnUrl}/featured/IMG_1086.JPG`,
     title: "Java switches",
     description: "Hand lubed, long pole switches",
     href: "/products/switches/pryzma-java-switches",
   },
   {
-    image: `${s3Url}/featured/IMG_3070.JPG`,
+    image: `${cdnUrl}/featured/IMG_3070.JPG`,
     title: "Seafoam switches",
     description: "Heavy long pole switches",
     href: "/products/switches/pryzma-seafoam-switches",

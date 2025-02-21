@@ -14,7 +14,7 @@ export const buildTagFilters = (filters: Filter[]) => {
   );
 
   // Build the $and conditions
-  const conditions = Object.entries(filtersByCategory).map(([_, values], index) => ({
+  const conditions = Object.entries(filtersByCategory).map(([, values], index) => ({
     [`$and[${index}][tag_id]`]: values,
   }));
 

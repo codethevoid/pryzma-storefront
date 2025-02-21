@@ -1,6 +1,6 @@
 "use client";
 
-import { StoreProduct, StoreProductImage } from "@medusajs/types";
+import { StoreProduct } from "@medusajs/types";
 import { clx } from "@medusajs/ui";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";

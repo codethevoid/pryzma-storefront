@@ -7,13 +7,17 @@ import { constructMetadata } from "@/utils/metadata";
 import { shuffle } from "@/lib/helpers/shuffle";
 import { CATEGORY_IDS } from "@/lib/identifiers";
 import { cdnUrl, s3Url } from "@/utils/s3";
+import { productTypeMappings } from "@/lib/product-types";
 
 export const dynamicParams = false;
-type Params = Promise<{ handle: string }>;
+type Params = Promise<{ category: string; handle: string }>;
 
 export const generateStaticParams = async () => {
   const response = await medusa.store.product.list({ limit: 100 });
-  return response.products.map((product) => ({ handle: product.handle }));
+  return response.products.map((product) => ({
+    category: productTypeMappings[product.type?.value as keyof typeof productTypeMappings],
+    handle: product.handle,
+  }));
 };
 
 export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {

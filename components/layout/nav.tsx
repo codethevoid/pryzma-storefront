@@ -135,7 +135,7 @@ export const Nav = () => {
                   width={500}
                   height={500}
                   quality={100}
-                  className="rounded"
+                  className="size-5 rounded"
                 />
               </NextLink>
             </div>

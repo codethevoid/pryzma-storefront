@@ -25,7 +25,7 @@ export const ProductCard = ({
   return (
     <div
       className={clx(
-        "max-md:min-w-auto group relative h-full w-[300px] w-full min-w-[300px] max-w-[300px] rounded-md bg-ui-bg-field p-2.5 shadow-borders-base transition-all hover:bg-ui-bg-field-hover max-md:w-[220px] max-md:max-w-[220px]",
+        "group relative rounded-md bg-ui-bg-field p-2.5 shadow-borders-base transition-all hover:bg-ui-bg-field-hover",
         className,
       )}
     >

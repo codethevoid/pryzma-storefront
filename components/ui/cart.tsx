@@ -180,7 +180,7 @@ export const Cart = () => {
             </div>
           )}
         </Drawer.Body>
-        {cart?.items?.length && (
+        {(cart?.items?.length || 0 > 0) && (
           <Drawer.Footer>
             <div className="w-full space-y-3">
               <Text className="text-center text-subtle-foreground" size="small">

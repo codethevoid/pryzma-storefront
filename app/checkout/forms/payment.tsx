@@ -371,7 +371,7 @@ export const PaymentForm = () => {
                           <Text
                             size="small"
                             className={
-                              "pointer-events-none absolute left-3 top-3 text-ui-fg-muted transition-all group-data-[empty=false]:top-0.5 group-data-[empty=false]:text-[10px] group-data-[empty=false]:text-subtle-foreground"
+                              "pointer-events-none absolute left-3 top-3 origin-top-left text-ui-fg-muted transition-all group-data-[empty=false]:top-1 group-data-[empty=false]:scale-[0.77] group-data-[empty=false]:text-subtle-foreground"
                             }
                           >
                             State
@@ -399,7 +399,7 @@ export const PaymentForm = () => {
                           <Text
                             size="small"
                             className={
-                              "pointer-events-none absolute left-3 top-0.5 text-[10px] text-subtle-foreground transition-all"
+                              "pointer-events-none absolute left-3 top-1 origin-top-left scale-[0.77] text-subtle-foreground transition-all"
                             }
                           >
                             Country

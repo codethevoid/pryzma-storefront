@@ -50,12 +50,12 @@ export const FloatingLabelInput = ({
       <Text
         size="small"
         className={clx(
-          "origin-0 pointer-events-none absolute left-3 top-3 transition-all duration-150",
+          "absolute left-3 top-3 origin-top-left transition-all duration-150",
           // Default state (placeholder)
           "text-ui-fg-muted",
           // Focused or filled state
-          "group-focus-within:top-0.5 group-focus-within:text-[10px] group-focus-within:text-subtle-foreground",
-          "group-data-[empty=false]:top-0.5 group-data-[empty=false]:text-[10px] group-data-[empty=false]:text-subtle-foreground",
+          "group-focus-within:top-1 group-focus-within:scale-[0.77] group-focus-within:text-subtle-foreground",
+          "group-data-[empty=false]:top-1 group-data-[empty=false]:scale-[0.77] group-data-[empty=false]:text-subtle-foreground",
         )}
       >
         {label}

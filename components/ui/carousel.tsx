@@ -64,7 +64,7 @@ export const Carousel = ({
           </div>
           <div
             className={clx(
-              "absolute right-0 top-[-27px] flex gap-1.5",
+              "absolute right-0 top-[-27px] flex gap-1.5 max-sm:hidden",
               isAtEnd && isAtStart && "hidden",
             )}
           >

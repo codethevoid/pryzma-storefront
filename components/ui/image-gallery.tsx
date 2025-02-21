@@ -13,26 +13,28 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
 
   return (
     <div className="space-y-2.5">
-      <div className="relative aspect-[3/2] overflow-hidden rounded-md bg-zinc-50 p-[7px] shadow-borders-base dark:bg-zinc-800">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedImage}
-            initial={{ opacity: 1 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="relative h-full w-full"
-          >
-            <Image
-              src={selectedImage}
-              alt={product.title}
-              height={2000}
-              width={3000}
-              className="h-full w-full rounded-md object-cover"
-              priority
-            />
-          </motion.div>
-        </AnimatePresence>
+      <div className="relative aspect-[3/2] bg-zinc-50 p-[7px] shadow-borders-base dark:bg-zinc-800">
+        <div className="overflow-hidden rounded-md">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={selectedImage}
+              initial={{ opacity: 1 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="relative h-full w-full"
+            >
+              <Image
+                src={selectedImage}
+                alt={product.title}
+                height={2000}
+                width={3000}
+                className="h-full w-full rounded-md object-cover"
+                priority
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
       {(product.images?.length || 1) > 1 && (
         <div className="grid grid-cols-6 gap-2.5 max-sm:grid-cols-5">

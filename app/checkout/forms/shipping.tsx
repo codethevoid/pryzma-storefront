@@ -60,7 +60,10 @@ export const ShippingForm = ({
         </RadioGroup>
       </div>
       <Button
-        onClick={() => setStep("payment")}
+        onClick={() => {
+          setStep("payment");
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
         disabled={!cart?.shipping_methods?.length}
         isLoading={isLoadingShipping}
       >

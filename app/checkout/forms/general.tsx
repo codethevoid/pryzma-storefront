@@ -68,6 +68,7 @@ export const GeneralForm = ({
       cart.shipping_address?.country_code === data.country_code
     ) {
       setStep("shipping");
+      window.scrollTo({ top: 0, behavior: "smooth" });
       return;
     }
 
@@ -104,11 +105,13 @@ export const GeneralForm = ({
         );
         setCart(response.cart as ExtendedStoreCart);
         setStep("shipping");
+        window.scrollTo({ top: 0, behavior: "smooth" });
         return;
       }
 
       setCart(updatedCartResponse.cart as ExtendedStoreCart);
       setStep("shipping");
+      window.scrollTo({ top: 0, behavior: "smooth" });
     } catch (e) {
       console.log(e);
       if (e instanceof Error && e.message.includes("Customer with email")) {
@@ -147,6 +150,7 @@ export const GeneralForm = ({
           localStorage.setItem("cart_id", response.cart.id);
           setCart(response.cart as ExtendedStoreCart);
           setStep("shipping");
+          window.scrollTo({ top: 0, behavior: "smooth" });
         } else {
           // add the first shipping option to the cart
           const response = await medusa.store.cart.addShippingMethod(
@@ -159,6 +163,7 @@ export const GeneralForm = ({
           localStorage.setItem("cart_id", response.cart.id);
           setCart(response.cart as ExtendedStoreCart);
           setStep("shipping");
+          window.scrollTo({ top: 0, behavior: "smooth" });
         }
       }
       toast.error("Error setting general info");

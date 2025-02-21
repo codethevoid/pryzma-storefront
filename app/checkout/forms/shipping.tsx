@@ -62,7 +62,7 @@ export const ShippingForm = ({
       <Button
         onClick={() => {
           setStep("payment");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0 });
         }}
         disabled={!cart?.shipping_methods?.length}
         isLoading={isLoadingShipping}

@@ -36,7 +36,7 @@ export const FloatingLabelInput = ({
   return (
     <div className={clx("group relative", className)} data-empty={isEmpty}>
       <Input
-        className="h-10.5 px-3 pb-1.5 pt-4"
+        className="h-[42px] px-3 pb-1 pt-4"
         size={size}
         {...props}
         onChange={(e) => {
@@ -50,12 +50,12 @@ export const FloatingLabelInput = ({
       <Text
         size="small"
         className={clx(
-          "pointer-events-none absolute left-3 top-1/2 transition-all duration-150",
+          "origin-0 pointer-events-none absolute left-3 top-3 transition-all duration-150",
           // Default state (placeholder)
-          "translate-y-[-50%] text-ui-fg-muted",
+          "text-ui-fg-muted",
           // Focused or filled state
-          "group-focus-within:translate-y-[-103%] group-focus-within:text-[10px] group-focus-within:text-subtle-foreground",
-          "group-data-[empty=false]:translate-y-[-103%] group-data-[empty=false]:text-[10px] group-data-[empty=false]:text-subtle-foreground",
+          "group-focus-within:top-0.5 group-focus-within:text-[10px] group-focus-within:text-subtle-foreground",
+          "group-data-[empty=false]:top-0.5 group-data-[empty=false]:text-[10px] group-data-[empty=false]:text-subtle-foreground",
         )}
       >
         {label}

@@ -68,7 +68,7 @@ export const GeneralForm = ({
       cart.shipping_address?.country_code === data.country_code
     ) {
       setStep("shipping");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0 });
       return;
     }
 
@@ -105,13 +105,13 @@ export const GeneralForm = ({
         );
         setCart(response.cart as ExtendedStoreCart);
         setStep("shipping");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        window.scrollTo({ top: 0 });
         return;
       }
 
       setCart(updatedCartResponse.cart as ExtendedStoreCart);
       setStep("shipping");
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0 });
     } catch (e) {
       console.log(e);
       if (e instanceof Error && e.message.includes("Customer with email")) {
@@ -150,7 +150,7 @@ export const GeneralForm = ({
           localStorage.setItem("cart_id", response.cart.id);
           setCart(response.cart as ExtendedStoreCart);
           setStep("shipping");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0 });
         } else {
           // add the first shipping option to the cart
           const response = await medusa.store.cart.addShippingMethod(
@@ -163,7 +163,7 @@ export const GeneralForm = ({
           localStorage.setItem("cart_id", response.cart.id);
           setCart(response.cart as ExtendedStoreCart);
           setStep("shipping");
-          window.scrollTo({ top: 0, behavior: "smooth" });
+          window.scrollTo({ top: 0 });
         }
       }
       toast.error("Error setting general info");
@@ -259,7 +259,7 @@ export const GeneralForm = ({
             >
               <Select.Trigger
                 className={clx(
-                  "h-[42px] px-3 pb-1.5 pt-4 [&>svg]:relative [&>svg]:top-[-5px]",
+                  "h-[42px] px-3 pb-1 pt-4 [&>svg]:relative [&>svg]:top-[-5px]",
                   errors.province && "shadow-borders-error",
                 )}
               >
@@ -276,7 +276,7 @@ export const GeneralForm = ({
             <Text
               size="small"
               className={
-                "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ui-fg-muted transition-all group-data-[empty=false]:translate-y-[-103%] group-data-[empty=false]:text-[10px] group-data-[empty=false]:text-subtle-foreground"
+                "pointer-events-none absolute left-3 top-3 text-ui-fg-muted transition-all group-data-[empty=false]:top-0.5 group-data-[empty=false]:text-[10px] group-data-[empty=false]:text-subtle-foreground"
               }
             >
               State
@@ -292,7 +292,7 @@ export const GeneralForm = ({
           />
           <div className="relative" aria-invalid={!!errors.country_code}>
             <Select value="us">
-              <Select.Trigger className="h-[42px] px-3 pb-1.5 pt-4 [&>svg]:relative [&>svg]:top-[-5px]">
+              <Select.Trigger className="h-[42px] px-3 pb-1 pt-4 [&>svg]:relative [&>svg]:top-[-5px]">
                 <Select.Value placeholder="Country" />
               </Select.Trigger>
               <Select.Content collisionPadding={16}>
@@ -302,7 +302,7 @@ export const GeneralForm = ({
             <Text
               size="small"
               className={
-                "pointer-events-none absolute left-3 top-1/2 top-[11px] -translate-y-1/2 text-[10px] text-subtle-foreground transition-all"
+                "pointer-events-none absolute left-3 top-0.5 text-[10px] text-subtle-foreground transition-all"
               }
             >
               Country

@@ -14,7 +14,7 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
   return (
     <div className="space-y-2.5">
       <div className="relative aspect-[3/2] bg-zinc-50 p-[7px] shadow-borders-base dark:bg-zinc-800">
-        <div className="overflow-hidden rounded-md">
+        <div className="h-full w-full overflow-hidden rounded-md">
           <AnimatePresence mode="wait">
             <motion.div
               key={selectedImage}
@@ -29,7 +29,7 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
                 alt={product.title}
                 height={2000}
                 width={3000}
-                className="h-full w-full rounded-md object-cover"
+                className="h-full w-full object-cover"
                 priority
               />
             </motion.div>

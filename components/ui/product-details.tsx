@@ -13,7 +13,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
     product.variants?.[0] as StoreProductVariant,
   );
   // const [selectedOptions, setSelectedOptions] = useState<StoreProductOption[]>([]);
-  const [quantity, setQuantity] = useState(1);
+  const [quantity, setQuantity] = useState<number | "">(1);
   const [isLoading, setIsLoading] = useState(false);
   const { addItem } = useCart();
 
@@ -81,14 +81,35 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
             <Input
               name="quantity"
               type="number"
-              min={1}
               max={selectedVariant.inventory_quantity}
               value={quantity}
               onChange={(e) => {
-                if (Number(e.target.value) >= (selectedVariant.inventory_quantity || 0)) {
+                const value = e.target.value;
+                // Handle empty input
+                if (value === "") {
+                  setQuantity("");
+                  return;
+                }
+                const numValue = parseInt(value, 10);
+                // Handle invalid or out of bounds values
+                if (isNaN(numValue) || numValue < 1) {
+                  setQuantity(1);
+                  return;
+                }
+                // Limit to available inventory
+                if (numValue > (selectedVariant.inventory_quantity || 0)) {
                   setQuantity(selectedVariant.inventory_quantity || 0);
-                } else {
-                  setQuantity(Number(e.target.value));
+                  return;
+                }
+                setQuantity(numValue);
+              }}
+              onBlur={(e) => {
+                if (
+                  !e.target.value ||
+                  isNaN(Number(e.target.value)) ||
+                  Number(e.target.value) < 1
+                ) {
+                  setQuantity(1);
                 }
               }}
               disabled={selectedVariant.inventory_quantity === 0}
@@ -104,7 +125,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
                 setIsLoading(true);
                 await addItem({
                   variantId: selectedVariant.id,
-                  quantity,
+                  quantity: quantity === "" ? 1 : quantity,
                 });
                 setIsLoading(false);
               }}

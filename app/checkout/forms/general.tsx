@@ -260,7 +260,7 @@ export const GeneralForm = ({
               >
                 <Select.Value />
               </Select.Trigger>
-              <Select.Content>
+              <Select.Content collisionPadding={16}>
                 {usStates.map((state) => (
                   <Select.Item key={state.abbreviation} value={state.abbreviation}>
                     {state.name}
@@ -271,7 +271,7 @@ export const GeneralForm = ({
             <Text
               size="small"
               className={
-                "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-subtle-foreground transition-all group-data-[empty=false]:top-[11px] group-data-[empty=false]:text-[10px]"
+                "pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-ui-fg-muted transition-all group-data-[empty=false]:translate-y-[-103%] group-data-[empty=false]:text-[10px] group-data-[empty=false]:text-subtle-foreground"
               }
             >
               State
@@ -290,7 +290,7 @@ export const GeneralForm = ({
               <Select.Trigger className="h-[42px] px-3 pb-1.5 pt-4 [&>svg]:relative [&>svg]:top-[-5px]">
                 <Select.Value placeholder="Country" />
               </Select.Trigger>
-              <Select.Content>
+              <Select.Content collisionPadding={16}>
                 <Select.Item value="us">United States</Select.Item>
               </Select.Content>
             </Select>

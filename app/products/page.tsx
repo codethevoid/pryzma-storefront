@@ -8,6 +8,8 @@ import { CATEGORY_IDS } from "@/lib/identifiers";
 import { constructMetadata } from "@/utils/metadata";
 import { Suspense } from "react";
 import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
+import { constructCategoryPageJsonLd } from "@/utils/construct-jsonld";
+import { cdnUrl } from "@/utils/s3";
 
 export const metadata = constructMetadata({
   title: "Products - Pryzma",
@@ -33,40 +35,56 @@ const Products = async () => {
     }),
   ]);
 
+  const jsonLd = constructCategoryPageJsonLd({
+    products: data.products,
+    name: "Products",
+    description: metadata.description as string,
+    url: "https://pryzma.io/products",
+    image: `${cdnUrl}/uploads/IMG_3607-01JMG08DXZ1EH8C6PCECABGKCK.JPG`,
+  });
+
   return (
-    <div className="min-h-[calc(100vh-330.5px)]">
-      <CategoryHeader
-        title="Products"
-        count={data.count}
-        description="Browse switches, lubricants and accessories."
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="p-4 pb-12">
-        <div className="mx-auto max-w-screen-xl">
-          <Suspense
-            fallback={
-              <ProductGridFallback
+      <main className="min-h-[calc(100vh-330.5px)]">
+        <section aria-label="Category header">
+          <CategoryHeader
+            title="Products"
+            count={data.count}
+            description="Browse switches, lubricants and accessories."
+          />
+        </section>
+        <section aria-label="Product grid" className="p-4 pb-12">
+          <div className="mx-auto max-w-screen-xl">
+            <Suspense
+              fallback={
+                <ProductGridFallback
+                  initialData={data.products}
+                  filterCounts={tagCounts}
+                  filterOptions={PRODUCT_FILTER_OPTIONS}
+                  name={undefined}
+                />
+              }
+            >
+              <ProductGridShell
                 initialData={data.products}
-                filterCounts={tagCounts}
+                initialCount={data.count}
                 filterOptions={PRODUCT_FILTER_OPTIONS}
-                name={undefined}
+                filterCounts={tagCounts}
+                categoryId={[
+                  CATEGORY_IDS.SWITCHES,
+                  CATEGORY_IDS.LUBRICANTS,
+                  CATEGORY_IDS.ACCESSORIES,
+                ]}
               />
-            }
-          >
-            <ProductGridShell
-              initialData={data.products}
-              initialCount={data.count}
-              filterOptions={PRODUCT_FILTER_OPTIONS}
-              filterCounts={tagCounts}
-              categoryId={[
-                CATEGORY_IDS.SWITCHES,
-                CATEGORY_IDS.LUBRICANTS,
-                CATEGORY_IDS.ACCESSORIES,
-              ]}
-            />
-          </Suspense>
-        </div>
-      </div>
-    </div>
+            </Suspense>
+          </div>
+        </section>
+      </main>
+    </>
   );
 };
 

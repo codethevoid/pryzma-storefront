@@ -4,7 +4,6 @@ import { useCart } from "@/components/context/cart";
 import { IconBadge, Text } from "@medusajs/ui";
 import { Envelope, MapPin, FlyingBox } from "@medusajs/icons";
 import { formatCurrency } from "@/utils/format-currency";
-import { usStates } from "@/lib/states";
 
 type Props = {
   setStep: (step: "general" | "shipping" | "payment") => void;
@@ -52,12 +51,12 @@ export const CheckoutDetails = ({ setStep, step }: Props) => {
           <Text size="xsmall" className="mt-1 text-subtle-foreground">
             {cart?.shipping_address?.address_1}
             {cart?.shipping_address?.address_2 ? `, ${cart?.shipping_address?.address_2}` : ""}
-            {`, ${cart?.shipping_address?.city}`},{" "}
-            {
+            {`, ${cart?.shipping_address?.city}`}, {cart?.shipping_address?.province}{" "}
+            {/* {
               usStates.find((state) => state.abbreviation === cart?.shipping_address?.province)
                 ?.name
-            }{" "}
-            {cart?.shipping_address?.postal_code}, United States
+            }{" "} */}
+            {cart?.shipping_address?.postal_code}, USA
           </Text>
         </div>
 

@@ -8,6 +8,7 @@ import { Metadata } from "next";
 import { CATEGORY_DATA } from "@/lib/category-data";
 import { Suspense } from "react";
 import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
+import { constructCategoryPageJsonLd } from "@/utils/construct-jsonld";
 
 export const dynamicParams = false;
 type Params = Promise<{ category: keyof typeof CATEGORY_DATA }>; // category is the handle
@@ -55,38 +56,54 @@ const CategoryPage = async ({ params }: { params: Params }) => {
     ? await getTagCount({ options: filterOptions, categoryId })
     : undefined;
 
+  const jsonLd = constructCategoryPageJsonLd({
+    products: data.products,
+    name: response.product_categories[0].name,
+    description: categoryData.description,
+    url: `https://pryzma.io/products/${response.product_categories[0].handle}`,
+    image: categoryData.meta.image,
+  });
+
   return (
-    <div className="min-h-[calc(100vh-330.5px)]">
-      <CategoryHeader
-        title={response.product_categories[0].name}
-        count={data.count}
-        description={categoryData.description}
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <div className="p-4 pb-12">
-        <div className="mx-auto max-w-screen-xl">
-          <Suspense
-            fallback={
-              <ProductGridFallback
+      <main className="min-h-[calc(100vh-330.5px)]">
+        <section aria-label="Category header">
+          <CategoryHeader
+            title={response.product_categories[0].name}
+            count={data.count}
+            description={categoryData.description}
+          />
+        </section>
+        <section aria-label="Product grid" className="p-4 pb-12">
+          <div className="mx-auto max-w-screen-xl">
+            <Suspense
+              fallback={
+                <ProductGridFallback
+                  initialData={data.products}
+                  filterCounts={tagCounts}
+                  filterOptions={filterOptions}
+                  name={response.product_categories[0].name}
+                />
+              }
+            >
+              <ProductGridShell
                 initialData={data.products}
-                filterCounts={tagCounts}
+                initialCount={data.count}
                 filterOptions={filterOptions}
+                filterCounts={tagCounts}
+                categoryId={categoryId}
                 name={response.product_categories[0].name}
+                quickAdd={categoryData.quickAdd}
               />
-            }
-          >
-            <ProductGridShell
-              initialData={data.products}
-              initialCount={data.count}
-              filterOptions={filterOptions}
-              filterCounts={tagCounts}
-              categoryId={categoryId}
-              name={response.product_categories[0].name}
-              quickAdd={categoryData.quickAdd}
-            />
-          </Suspense>
-        </div>
-      </div>
-    </div>
+            </Suspense>
+          </div>
+        </section>
+      </main>
+    </>
   );
 };
 

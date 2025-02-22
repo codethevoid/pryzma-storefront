@@ -24,12 +24,12 @@ const shopLinks = [
 ];
 
 const companyLinks = [
-  // {
-  //   title: "About",
-  //   href: "/about",
-  // },
   {
-    title: "Contact",
+    title: "General inquiries",
+    href: "mailto:hello@pryzma.io",
+  },
+  {
+    title: "Support",
     href: "mailto:support@pryzma.io",
   },
   // {

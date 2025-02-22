@@ -8,6 +8,7 @@ import { shuffle } from "@/lib/helpers/shuffle";
 import { CATEGORY_IDS } from "@/lib/identifiers";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { productTypeMappings } from "@/lib/product-types";
+import { constructProductPageJsonLd } from "@/utils/construct-jsonld";
 
 export const dynamicParams = false;
 type Params = Promise<{ category: string; handle: string }>;
@@ -82,16 +83,29 @@ const ProductPage = async ({ params }: { params: Params }) => {
     });
   }
 
+  const jsonLD = constructProductPageJsonLd(data.products[0]);
+
   return (
-    <div className="min-h-[calc(100vh-330.5px)] p-4 pb-12">
-      <div className="mx-auto max-w-screen-xl space-y-4">
-        <Breadcrumbs product={data.products[0]} />
-        <div className="space-y-16">
-          <ProductShell product={data.products[0]} />
-          <Carousel title="You may also like" data={shuffledRelatedProducts} className="px-0" />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
+      />
+      <main className="min-h-[calc(100vh-330.5px)] p-4 pb-12">
+        <div className="mx-auto max-w-screen-xl space-y-4">
+          <Breadcrumbs product={data.products[0]} />
+          <div className="space-y-16">
+            <section aria-label="Product details">
+              <ProductShell product={data.products[0]} />
+            </section>
+
+            <section aria-label="Related products">
+              <Carousel title="You may also like" data={shuffledRelatedProducts} className="px-0" />
+            </section>
+          </div>
         </div>
-      </div>
-    </div>
+      </main>
+    </>
   );
 };
 

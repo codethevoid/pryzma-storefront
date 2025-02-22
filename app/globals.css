@@ -339,3 +339,18 @@ input[type="search"] {
   -webkit-appearance: none;
   appearance: none;
 }
+
+/*
+.dark .pac-container {
+  margin-top: 8px !important; 
+  border-radius: 8px;
+  filter: grayscale(100%);
+  padding: 12px;
+  box-shadow:
+    0px -1px 0px 0px rgba(255, 255, 255, 0.06),
+    0px 0px 0px 1px rgba(255, 255, 255, 0.06),
+    0px 0px 0px 1px rgba(39, 39, 42, 1),
+    0px 0px 1px 1.5px rgba(0, 0, 0, 0.24),
+    0px 2px 2px 0px rgba(0, 0, 0, 0.24);
+  background: rgba(33, 33, 36, 1);
+} */

@@ -7,6 +7,7 @@ import { StoreProduct } from "@medusajs/types";
 import { medusa } from "@/utils/medusa";
 import { COLLECTION_IDS, CATEGORY_IDS } from "@/lib/identifiers";
 import { constructMetadata } from "@/utils/metadata";
+import { homePageJsonLd } from "@/utils/construct-jsonld";
 
 export const metadata = constructMetadata({});
 
@@ -36,27 +37,52 @@ const Home = async () => {
   ]);
 
   return (
-    <div className="space-y-16 pb-20">
-      <Hero />
-      <Featured />
-      <Carousel data={bestSellers} title="Best sellers" />
-      <Spotlight
-        title="Custom Switch Sampler"
-        description="Build your own switch sampler"
-        href="/products/samples"
-        image={`${cdnUrl}/featured/IMG_2855.JPG`}
-        actionText="Start building"
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
       />
-      <Carousel data={switches} title="Switches" />
-      {/* <Carousel data={lubricants} title="Lubricants" /> */}
-      <Carousel data={accessories} title="Accessories" />
-      <Spotlight
-        title="KTT Strawberry v2 switches"
-        description="Linear switches inspired by strawberries"
-        href="/products/switches/ktt-strawberry-v2-switches"
-        image={`${cdnUrl}/featured/IMG_3405.JPG`}
-      />
-    </div>
+      <main className="space-y-16 pb-20 max-md:space-y-8">
+        <section aria-label="Hero">
+          <Hero />
+        </section>
+
+        <section aria-label="Featured products">
+          <Featured />
+        </section>
+
+        <section aria-label="Best sellers">
+          <Carousel data={bestSellers} title="Best sellers" />
+        </section>
+
+        <section aria-label="Custom switch sampler spotlight">
+          <Spotlight
+            title="Custom Switch Sampler"
+            description="Build your own switch sampler"
+            href="/products/samples"
+            image={`${cdnUrl}/featured/IMG_2855.JPG`}
+            actionText="Start building"
+          />
+        </section>
+
+        <section aria-label="Switches">
+          <Carousel data={switches} title="Switches" />
+        </section>
+
+        <section aria-label="Accessories">
+          <Carousel data={accessories} title="Accessories" />
+        </section>
+
+        <section aria-label="Featured switch spotlight">
+          <Spotlight
+            title="KTT Strawberry v2 switches"
+            description="Linear switches inspired by strawberries"
+            href="/products/switches/ktt-strawberry-v2-switches"
+            image={`${cdnUrl}/featured/IMG_3405.JPG`}
+          />
+        </section>
+      </main>
+    </>
   );
 };
 

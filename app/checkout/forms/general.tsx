@@ -1,7 +1,7 @@
 "use client";
 
 import { FloatingLabelInput } from "@/components/ui/custom/floating-label-input";
-import { Text, Select, Button, clx } from "@medusajs/ui";
+import { Text, Select, Button, clx, Popover } from "@medusajs/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +12,9 @@ import { toast } from "@medusajs/ui";
 import { useEffect, useState } from "react";
 import type { ExtendedStoreCart } from "@/components/context/cart";
 import { shippingOptions } from "@/lib/shipping-options";
+import { useAddressAutocomplete } from "@/hooks/use-address-auto-complete";
+import { setAddressValues } from "@/lib/helpers/set-address-values";
+import { Google } from "@/lib/icons/google";
 
 const schema = z.object({
   email: z.string().email(),
@@ -26,7 +29,7 @@ const schema = z.object({
   country_code: z.string().min(1, { message: "Country is required" }),
 });
 
-type GeneralFormData = z.infer<typeof schema>;
+export type GeneralFormData = z.infer<typeof schema>;
 
 export const GeneralForm = ({
   setStep,
@@ -47,6 +50,15 @@ export const GeneralForm = ({
       country_code: "us",
     },
   });
+
+  const {
+    setValue: setAddressValue,
+    suggestions,
+    ready,
+    handleSelect: handleAddressSelect,
+  } = useAddressAutocomplete();
+  const [isSuggestionsOpen, setIsSuggestionsOpen] = useState(false);
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState<number>(-1);
 
   const [isLoading, setIsLoading] = useState(false);
   const { cart, setCart, fields } = useCart();
@@ -188,10 +200,24 @@ export const GeneralForm = ({
     }
   }, [cart, step]);
 
-  console.log(errors.province);
+  const address1 = watch("address_1");
+  useEffect(() => {
+    if (!ready) return;
+    setAddressValue(address1);
+    setSelectedAddressIndex(-1);
+  }, [address1, ready]);
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 p-8 pl-0 max-md:p-4 max-md:pb-12">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="space-y-6 p-8 pl-0 max-md:p-4 max-md:pb-12"
+      autoComplete="off"
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          e.preventDefault();
+        }
+      }}
+    >
       <div className="space-y-2">
         <Text weight="plus">Contact info</Text>
         <div className="flex gap-3 max-[900px]:flex-col">
@@ -223,6 +249,7 @@ export const GeneralForm = ({
             aria-invalid={!!errors.first_name}
             formValue={watch("first_name")}
           />
+
           <FloatingLabelInput
             label="Last name"
             {...register("last_name")}
@@ -230,13 +257,99 @@ export const GeneralForm = ({
             aria-invalid={!!errors.last_name}
             formValue={watch("last_name")}
           />
-          <FloatingLabelInput
-            label="Address"
-            {...register("address_1")}
-            isRequired
-            aria-invalid={!!errors.address_1}
-            formValue={watch("address_1")}
-          />
+          <Popover open={isSuggestionsOpen} modal={false}>
+            <Popover.Trigger asChild>
+              <div>
+                <FloatingLabelInput
+                  id="address-input"
+                  label="Address"
+                  isRequired
+                  formValue={watch("address_1")}
+                  aria-invalid={!!errors.address_1}
+                  {...register("address_1")}
+                  onFocus={() => setIsSuggestionsOpen(true)}
+                  onBlur={() => setIsSuggestionsOpen(false)}
+                  onKeyDown={async (e) => {
+                    if (!suggestions.data.length) return;
+
+                    switch (e.key) {
+                      case "ArrowDown":
+                        e.preventDefault();
+                        setSelectedAddressIndex((prev) => (prev + 1) % suggestions.data.length);
+                        break;
+                      case "ArrowUp":
+                        e.preventDefault();
+                        setSelectedAddressIndex(
+                          (prev) => (prev - 1 + suggestions.data.length) % suggestions.data.length,
+                        );
+                        break;
+                      case "Enter":
+                        e.preventDefault();
+                        if (selectedAddressIndex > -1) {
+                          const place = await handleAddressSelect(
+                            suggestions.data[selectedAddressIndex].description,
+                          );
+                          setAddressValues({ place, setValue });
+                          setSelectedAddressIndex(-1);
+                          setIsSuggestionsOpen(false);
+                        }
+                    }
+                  }}
+                />
+              </div>
+            </Popover.Trigger>
+            <Popover.Content
+              collisionPadding={16}
+              className={clx(
+                "w-[var(--radix-popover-trigger-width)] bg-ui-bg-component",
+                (suggestions.status !== "OK" || !suggestions.data.length) && "hidden",
+              )}
+              onOpenAutoFocus={(e) => e.preventDefault()}
+            >
+              {suggestions.data.map((suggestion, index) => (
+                <div
+                  role="button"
+                  key={suggestion.place_id}
+                  className={clx(
+                    "flex gap-2 rounded-md px-2 py-1.5 hover:bg-ui-bg-component-hover dark:hover:bg-[#ffffff0a]",
+                    index === selectedAddressIndex &&
+                      "bg-ui-bg-component-hover dark:bg-[#ffffff0a]",
+                  )}
+                  onClick={async () => {
+                    const place = await handleAddressSelect(suggestion.description);
+                    setAddressValues({ place, setValue });
+                    setSelectedAddressIndex(-1);
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    className="relative top-[3px] size-3 text-subtle-foreground"
+                  >
+                    <path d="M12 23.7279L5.63604 17.364C2.12132 13.8492 2.12132 8.15076 5.63604 4.63604C9.15076 1.12132 14.8492 1.12132 18.364 4.63604C21.8787 8.15076 21.8787 13.8492 18.364 17.364L12 23.7279ZM16.9497 15.9497C19.6834 13.2161 19.6834 8.78392 16.9497 6.05025C14.2161 3.31658 9.78392 3.31658 7.05025 6.05025C4.31658 8.78392 4.31658 13.2161 7.05025 15.9497L12 20.8995L16.9497 15.9497ZM12 13C10.8954 13 10 12.1046 10 11C10 9.89543 10.8954 9 12 9C13.1046 9 14 9.89543 14 11C14 12.1046 13.1046 13 12 13Z"></path>
+                  </svg>
+                  <Text size="small">
+                    {`${suggestion.description.split(",")[0]} `}
+                    <Text as="span" size="xsmall" className="text-subtle-foreground">
+                      {`${suggestion.description.split(",")[1]}, `}
+                      {`${suggestion.description.split(",")[2]}, `}
+                      {`${suggestion.description.split(",")[3]}`}
+                      {/* we can hide this since all addresses will be in USA */}
+                    </Text>
+                  </Text>
+                </div>
+              ))}
+              <div className="mt-1 flex items-center justify-end gap-0.5 border-t px-2 pb-0.5 pt-1.5">
+                <Text size="xsmall" className="text-subtle-foreground">
+                  Suggestions powered by
+                </Text>
+                <div className="-mt-1 grayscale">
+                  <Google />
+                </div>
+              </div>
+            </Popover.Content>
+          </Popover>
           <FloatingLabelInput
             label="Apartment, suite, etc."
             {...register("address_2")}
@@ -252,6 +365,7 @@ export const GeneralForm = ({
           <div className="group relative" data-empty={!watch("province")}>
             <Select
               name="state"
+              // open={true}
               value={watch("province")}
               onValueChange={(value) =>
                 value ? setValue("province", value, { shouldValidate: true }) : ""

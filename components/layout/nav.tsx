@@ -106,7 +106,12 @@ export const Nav = () => {
             <IconButton size="small" variant="transparent">
               <User />
             </IconButton> */}
-            <IconButton size="small" variant="transparent" onClick={() => setIsOpen(true)}>
+            <IconButton
+              size="small"
+              variant="transparent"
+              onClick={() => setIsOpen(true)}
+              aria-label="Open shopping cart"
+            >
               <ShoppingBag />
             </IconButton>
             <IconButton
@@ -114,6 +119,7 @@ export const Nav = () => {
               variant="transparent"
               className="hidden max-md:inline-flex"
               onClick={() => setIsMobileNavOpen(true)}
+              aria-label="Open navigation menu"
             >
               <BarsThree />
             </IconButton>

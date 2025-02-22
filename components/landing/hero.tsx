@@ -4,7 +4,7 @@ import NextLink from "next/link";
 import { cdnUrl } from "@/utils/s3";
 
 const data = {
-  image: `${cdnUrl}/uploads/IMG_3607-01JMG08DXZ1EH8C6PCECABGKCK.JPG`,
+  image: `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
   title: "Gateron Quinn",
   description: "Heavy tactile, long pole switches",
   href: "/products/switches/gateron-quinn-switches",

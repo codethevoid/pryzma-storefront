@@ -5,13 +5,13 @@ import { Text } from "@medusajs/ui";
 
 const data = [
   {
-    image: `${cdnUrl}/featured/IMG_1086.JPG`,
+    image: `${cdnUrl}/uploads/IMG_1086-01JMQWGM81N9PDGZ09VX2C0WDC.webp`,
     title: "Java switches",
     description: "Hand lubed, long pole switches",
     href: "/products/switches/pryzma-java-switches",
   },
   {
-    image: `${cdnUrl}/featured/IMG_3070.JPG`,
+    image: `${cdnUrl}/uploads/IMG_3070-01JMQWSABANWX3GJNAFH3MP296.webp`,
     title: "Seafoam switches",
     description: "Heavy long pole switches",
     href: "/products/switches/pryzma-seafoam-switches",

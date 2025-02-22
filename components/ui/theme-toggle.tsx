@@ -9,7 +9,7 @@ export const ThemeToggle = () => {
   return (
     <div className="relative flex h-7 w-[56px] items-center rounded-full border bg-background">
       <IconButton
-        name="theme-toggle-light"
+        aria-label="Toggle light theme"
         size="small"
         className="dark:text-muted-foreground absolute left-[-1px] h-7 w-7 shrink-0 rounded-full border bg-transparent text-foreground shadow-none hover:bg-transparent dark:border-transparent dark:hover:text-foreground"
         onClick={() => setTheme("light")}
@@ -18,7 +18,7 @@ export const ThemeToggle = () => {
       </IconButton>
 
       <IconButton
-        name="theme-toggle-dark"
+        aria-label="Toggle dark theme"
         size="small"
         className="text-muted-foreground absolute right-[-1px] h-7 w-7 shrink-0 rounded-full border border-transparent bg-transparent shadow-none hover:bg-transparent hover:text-foreground dark:border-border dark:text-foreground"
         onClick={() => setTheme("dark")}

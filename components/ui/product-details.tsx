@@ -76,9 +76,16 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
           />
         </Suspense>
         <div className="space-y-2">
-          <Text size="small">Quantity</Text>
+          <div className="w-fit">
+            <label htmlFor="quantity" className="w-fit">
+              <Text size="small" className="w-fit">
+                Quantity
+              </Text>
+            </label>
+          </div>
           <div className="flex items-center gap-2">
             <Input
+              id="quantity"
               name="quantity"
               type="number"
               max={selectedVariant.inventory_quantity}

@@ -68,10 +68,20 @@ export const Carousel = ({
               isAtEnd && isAtStart && "hidden",
             )}
           >
-            <IconButton onClick={() => scroll("left")} disabled={isAtStart} size="small">
+            <IconButton
+              onClick={() => scroll("left")}
+              disabled={isAtStart}
+              size="small"
+              aria-label="Scroll left"
+            >
               <ChevronLeft />
             </IconButton>
-            <IconButton onClick={() => scroll("right")} disabled={isAtEnd} size="small">
+            <IconButton
+              onClick={() => scroll("right")}
+              disabled={isAtEnd}
+              size="small"
+              aria-label="Scroll right"
+            >
               <ChevronRight />
             </IconButton>
           </div>

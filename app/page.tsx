@@ -60,7 +60,7 @@ const Home = async () => {
             title="Custom Switch Sampler"
             description="Build your own switch sampler"
             href="/products/samples"
-            image={`${cdnUrl}/featured/IMG_2855.JPG`}
+            image={`${cdnUrl}/featured/sampler.webp`}
             actionText="Start building"
           />
         </section>
@@ -78,7 +78,7 @@ const Home = async () => {
             title="KTT Strawberry v2 switches"
             description="Linear switches inspired by strawberries"
             href="/products/switches/ktt-strawberry-v2-switches"
-            image={`${cdnUrl}/featured/IMG_3405.JPG`}
+            image={`${cdnUrl}/uploads/IMG_3405-01JMQZ73D13NYF9FMMXCD9WWMM.webp`}
           />
         </section>
       </main>

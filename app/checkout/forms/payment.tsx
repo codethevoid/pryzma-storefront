@@ -399,6 +399,7 @@ export const PaymentForm = () => {
                             </div>
                           </Popover.Trigger>
                           <Popover.Content
+                            avoidCollisions={false}
                             collisionPadding={16}
                             className={clx(
                               "w-[var(--radix-popover-trigger-width)] bg-ui-bg-component",

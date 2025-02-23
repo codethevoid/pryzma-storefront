@@ -1,16 +1,14 @@
 const getVideoSrc = (src: string) => {
-  if (src.includes("embed")) return src;
-
   try {
     const url = new URL(src);
     const id = url.searchParams.get("v");
-    if (!id) return src;
+    if (!id) return src.replace("youtube.com", "youtube-nocookie.com");
 
     // delete only the v param
     url.searchParams.delete("v");
     const searchParamsString = url.searchParams.toString();
 
-    return `https://www.youtube.com/embed/${id}${searchParamsString.length > 0 ? `?${searchParamsString}` : ""}`;
+    return `https://www.youtube-nocookie.com/embed/${id}${searchParamsString.length > 0 ? `?${searchParamsString}` : ""}`;
   } catch (e) {
     console.error(e);
     return src;

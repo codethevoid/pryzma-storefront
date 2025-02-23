@@ -10,7 +10,7 @@ export const CategoryHeader = ({
   count?: number;
 }) => {
   return (
-    <div className="border-b bg-zinc-50 px-4 py-10 dark:bg-zinc-900/50">
+    <div className="border-b bg-zinc-50 px-4 py-10 dark:bg-zinc-900/50 max-md:py-6">
       <div className="mx-auto max-w-screen-xl">
         <div className="flex items-baseline gap-1">
           <Heading>{title}</Heading>

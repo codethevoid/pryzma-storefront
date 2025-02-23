@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { IconButton, Text, clx } from "@medusajs/ui";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { Text, clx, Button } from "@medusajs/ui";
 import { ProductCard } from "./product-card";
 import { StoreProduct } from "@medusajs/types";
 import { ChevronRight, ChevronLeft } from "@medusajs/icons";
@@ -11,10 +11,16 @@ export const Carousel = ({
   data,
   title,
   className,
+  description,
+  action,
+  stack = true,
 }: {
   data: StoreProduct[];
   title: string;
   className?: string;
+  description?: string;
+  action?: ReactNode;
+  stack?: boolean;
 }) => {
   const ref = useRef<HTMLDivElement>(null);
   const [isAtStart, setIsAtStart] = useState(true);
@@ -52,6 +58,14 @@ export const Carousel = ({
         <Text size="xlarge" weight="plus">
           {title}
         </Text>
+        {description && (
+          <Text size="small" className="max-w-[500px] text-subtle-foreground">
+            {description}
+          </Text>
+        )}
+        {action && stack && (
+          <div className="mt-2 flex hidden justify-end max-md:block">{action}</div>
+        )}
         <div className="relative">
           <div
             ref={ref}
@@ -62,29 +76,45 @@ export const Carousel = ({
               <ProductCard product={product} key={product.id} />
             ))}
           </div>
-          <div
+          {action && (
+            <div
+              className={clx(
+                "absolute right-0 top-[-29px] flex gap-1.5",
+                isAtEnd && isAtStart && "hidden",
+                stack && "max-md:hidden",
+              )}
+            >
+              {action}
+            </div>
+          )}
+          <Button
+            onClick={() => scroll("left")}
+            disabled={isAtStart}
+            size="small"
+            aria-label="Scroll left"
+            variant="primary"
             className={clx(
-              "absolute right-0 top-[-27px] flex gap-1.5 max-sm:hidden",
-              isAtEnd && isAtStart && "hidden",
+              "absolute -left-3 top-1/2 size-7 -translate-y-1/2 p-0.5 max-sm:hidden",
+              isAtStart && "pointer-events-none opacity-0",
+              isAtStart && isAtEnd && "hidden",
             )}
           >
-            <IconButton
-              onClick={() => scroll("left")}
-              disabled={isAtStart}
-              size="small"
-              aria-label="Scroll left"
-            >
-              <ChevronLeft />
-            </IconButton>
-            <IconButton
-              onClick={() => scroll("right")}
-              disabled={isAtEnd}
-              size="small"
-              aria-label="Scroll right"
-            >
-              <ChevronRight />
-            </IconButton>
-          </div>
+            <ChevronLeft />
+          </Button>
+          <Button
+            onClick={() => scroll("right")}
+            disabled={isAtEnd}
+            size="small"
+            variant="primary"
+            aria-label="Scroll right"
+            className={clx(
+              "absolute -right-3 top-1/2 size-7 -translate-y-1/2 p-0.5 max-sm:hidden",
+              isAtEnd && "pointer-events-none opacity-0",
+              isAtStart && isAtEnd && "hidden",
+            )}
+          >
+            <ChevronRight />
+          </Button>
         </div>
       </div>
     </div>

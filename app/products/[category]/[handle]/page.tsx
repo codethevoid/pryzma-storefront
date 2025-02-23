@@ -9,7 +9,8 @@ import { CATEGORY_IDS } from "@/lib/identifiers";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { productTypeMappings } from "@/lib/product-types";
 import { constructProductPageJsonLd } from "@/utils/construct-jsonld";
-
+import { Button } from "@medusajs/ui";
+import NextLink from "next/link";
 export const dynamicParams = false;
 type Params = Promise<{ category: string; handle: string }>;
 
@@ -100,7 +101,26 @@ const ProductPage = async ({ params }: { params: Params }) => {
             </section>
 
             <section aria-label="Related products">
-              <Carousel title="You may also like" data={shuffledRelatedProducts} className="px-0" />
+              <Carousel
+                title="You may also like"
+                data={shuffledRelatedProducts}
+                className="px-0"
+                stack={false}
+                action={
+                  <Button size="small" asChild variant="secondary">
+                    <NextLink
+                      href={`/products/${productTypeMappings[data.products[0].type?.value as keyof typeof productTypeMappings]}`}
+                    >
+                      All{" "}
+                      {
+                        productTypeMappings[
+                          data.products[0].type?.value as keyof typeof productTypeMappings
+                        ]
+                      }
+                    </NextLink>
+                  </Button>
+                }
+              />
             </section>
           </div>
         </div>

@@ -8,6 +8,8 @@ import { medusa } from "@/utils/medusa";
 import { COLLECTION_IDS, CATEGORY_IDS } from "@/lib/identifiers";
 import { constructMetadata } from "@/utils/metadata";
 import { homePageJsonLd } from "@/utils/construct-jsonld";
+import { Button } from "@medusajs/ui";
+import NextLink from "next/link";
 
 export const metadata = constructMetadata({});
 
@@ -42,7 +44,7 @@ const Home = async () => {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
       />
-      <main className="space-y-16 pb-20 max-md:space-y-8">
+      <main className="space-y-12 pb-20 max-md:space-y-8">
         <section aria-label="Hero">
           <Hero />
         </section>
@@ -66,11 +68,29 @@ const Home = async () => {
         </section>
 
         <section aria-label="Switches">
-          <Carousel data={switches} title="Switches" />
+          <Carousel
+            data={switches}
+            title="Switches"
+            description="Mechanical keyboard switches come in a variety of styles to match your typing preferences. We offer linear, tactile, clicky, and silent switches."
+            action={
+              <Button variant="secondary" size="small" asChild>
+                <NextLink href="/products/switches">Shop switches</NextLink>
+              </Button>
+            }
+          />
         </section>
 
         <section aria-label="Accessories">
-          <Carousel data={accessories} title="Accessories" />
+          <Carousel
+            data={accessories}
+            title="Accessories"
+            description="We offer a wide range of accessories to enhance your mechanical keyboard experience. Shop for lubricants, tools, stabilizers, and more."
+            action={
+              <Button variant="secondary" size="small" asChild>
+                <NextLink href="/products/accessories">Shop accessories</NextLink>
+              </Button>
+            }
+          />
         </section>
 
         <section aria-label="Featured switch spotlight">

@@ -45,7 +45,7 @@ export const Nav = () => {
 
   return (
     <>
-      <div className="border-b px-4 py-2">
+      <div className="border-b bg-zinc-50 px-4 py-2 dark:bg-zinc-900/50">
         <div className="mx-auto flex max-w-screen-xl items-center justify-between">
           <div className="flex items-center gap-6">
             <div className="shrink-0 rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">

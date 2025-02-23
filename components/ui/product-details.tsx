@@ -2,11 +2,12 @@
 
 import { StoreProduct, StoreProductVariant } from "@medusajs/types";
 import { Heading, Text, StatusBadge, Button, Input } from "@medusajs/ui";
-import { Suspense, useState } from "react";
+import { Suspense, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
 import { useCart } from "../context/cart";
 import ReactMarkdown from "react-markdown";
 import { OptionSelector } from "./option-selector";
+import { Video } from "./video";
 
 export const ProductDetails = ({ product }: { product: StoreProduct }) => {
   const [selectedVariant, setSelectedVariant] = useState<StoreProductVariant>(
@@ -23,6 +24,33 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
     if (inventory > 0) return { color: "orange", label: "Limited stock" };
     return { color: "red", label: "Out of stock" };
   };
+
+  const description = useMemo(
+    () => (
+      <ReactMarkdown
+        className="prose prose-sm max-w-none dark:prose-invert prose-p:mb-1 prose-strong:font-medium prose-ul:mt-0 prose-li:my-0 prose-li:text-[13px]"
+        components={{
+          p: ({ children }) => {
+            // Check if the content is a raw YouTube URL
+            if (typeof children === "string" && children.includes("youtube.com")) {
+              const urls = children.split(",");
+              return (
+                <div className="mt-6 space-y-4">
+                  {urls.map((url) => (
+                    <Video key={url} src={url} />
+                  ))}
+                </div>
+              );
+            }
+            return <p>{children}</p>;
+          },
+        }}
+      >
+        {product.description}
+      </ReactMarkdown>
+    ),
+    [product.description],
+  );
 
   return (
     <div className="space-y-6">
@@ -142,9 +170,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
           </div>
         </div>
       </div>
-      <ReactMarkdown className="prose prose-sm max-w-none dark:prose-invert prose-p:mb-1 prose-strong:font-medium prose-ul:mt-0 prose-li:my-0 prose-li:text-[13px]">
-        {product.description}
-      </ReactMarkdown>
+      {description}
     </div>
   );
 };

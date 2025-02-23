@@ -1,5 +1,5 @@
 import { StoreProduct } from "@medusajs/types";
-import { Text } from "@medusajs/ui";
+import { Text, clx } from "@medusajs/ui";
 import NextLink from "next/link";
 import { TriangleRightMini } from "@medusajs/icons";
 
@@ -10,9 +10,15 @@ const productTypeMappings = {
   sample: "samples",
 };
 
-export const Breadcrumbs = ({ product }: { product: StoreProduct }) => {
+export const Breadcrumbs = ({
+  product,
+  className,
+}: {
+  product: StoreProduct;
+  className?: string;
+}) => {
   return (
-    <div className="flex items-center gap-1.5">
+    <div className={clx("flex items-center gap-1.5", className)}>
       <NextLink
         href={`/products/${productTypeMappings[product.type?.value as keyof typeof productTypeMappings]}`}
       >

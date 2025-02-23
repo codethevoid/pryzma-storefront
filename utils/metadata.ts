@@ -10,7 +10,7 @@ type Props = {
 export const constructMetadata = ({
   title = `Pryzma - Your Premium Source for Mechanical Keyboard Switches`,
   description = `Pryzma is your premium source for mechanical keyboard switches. We offer a wide range of switches, lubricants, switch samples, and accessories.`,
-  image = `${cdnUrl}/uploads/IMG_3607-01JMG08DXZ1EH8C6PCECABGKCK.JPG`,
+  image = `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
 }: Props): Metadata => {
   return {
     title,

@@ -136,7 +136,7 @@ export const homePageJsonLd: WithContext<Omit<WebPage, "@context">> = {
   about: { "@id": "https://pryzma.io/#organization" },
   primaryImageOfPage: {
     "@type": "ImageObject",
-    url: `${cdnUrl}/uploads/IMG_3607-01JMG08DXZ1EH8C6PCECABGKCK.JPG`,
+    url: `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
   },
 };
 

@@ -1,4 +1,3 @@
-import { ShoppingBag } from "@medusajs/icons";
 import { IconBadge, Text, Button } from "@medusajs/ui";
 import { ExclamationCircle } from "@medusajs/icons";
 import NextLink from "next/link";

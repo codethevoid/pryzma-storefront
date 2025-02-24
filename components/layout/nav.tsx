@@ -171,7 +171,7 @@ export const Nav = () => {
               </div>
             ))}
             <div className="flex h-[42px] items-center justify-between border-b px-6">
-              <Text>Theme</Text>
+              <Text size="small">Theme</Text>
               <ThemeToggle />
             </div>
           </Drawer.Body>

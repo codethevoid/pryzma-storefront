@@ -1,8 +1,9 @@
 import NextLink from "next/link";
 import Image from "next/image";
-import { Text, IconButton } from "@medusajs/ui";
+import { Text, IconButton, Button } from "@medusajs/ui";
 import { ThemeToggle } from "../ui/theme-toggle";
 import { cdnUrl } from "@/utils/s3";
+import { ClimateBadge } from "@/lib/icons/climate";
 
 const shopLinks = [
   {
@@ -25,12 +26,16 @@ const shopLinks = [
 
 const companyLinks = [
   {
+    title: "Support",
+    href: "mailto:support@pryzma.io",
+  },
+  {
     title: "General inquiries",
     href: "mailto:hello@pryzma.io",
   },
   {
-    title: "Support",
-    href: "mailto:support@pryzma.io",
+    title: "Carbon removal",
+    href: "https://climate.stripe.com/JXf5a9",
   },
   // {
   //   title: "Vendors",
@@ -82,9 +87,11 @@ export const Footer = () => {
             <Text size="small" className="max-w-[200px]">
               Your premium source for mechanical keyboard switches.
             </Text>
+
             <Text size="small" className="text-subtle-foreground">
-              Ohio, USA
+              Ohio, United States
             </Text>
+
             <div className="flex gap-2">
               <IconButton size="small" variant="primary" asChild>
                 <a
@@ -138,6 +145,19 @@ export const Footer = () => {
                 </a>
               </IconButton>
             </div>
+            <Button variant="secondary" size="small" asChild className="text-subtle-foreground">
+              <a
+                href="https://climate.stripe.com/JXf5a9"
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center space-x-0.5 font-normal"
+              >
+                <ClimateBadge />
+                {/* <Text size="xsmall" className="text-subtle-foreground"> */}
+                Stripe climate member
+                {/* </Text> */}
+              </a>
+            </Button>
           </div>
           <div className="space-y-2 max-md:col-span-3">
             <Text size="small" weight="plus">

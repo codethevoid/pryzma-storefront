@@ -32,13 +32,12 @@ export const ProductCard = ({
         <div className="flex h-full flex-col justify-between space-y-1">
           <div className="space-y-2">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded">
-              <Image
+              <img
                 src={product.thumbnail?.replace(s3Url, cdnUrl) || ""}
                 alt={product.title}
                 height={667}
                 width={1000}
                 className="h-full w-full object-cover"
-                unoptimized
               />
             </div>
             <Text size="small">{product.title}</Text>

@@ -1,7 +1,6 @@
 import useSWR from "swr";
 import { fetcher } from "@/utils/fetcher";
 import { useSearchParams } from "next/navigation";
-import { buildTagFilters } from "@/lib/helpers/build-tag-filters";
 import type { Filter } from "@/types";
 import type { StoreProduct } from "@medusajs/types";
 

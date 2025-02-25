@@ -2,7 +2,7 @@
 
 import { StoreProduct } from "@medusajs/types";
 import { ProductGrid } from "@/components/ui/product-grid";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Filter } from "@/components/ui/filter";
 import { clx, Text, IconBadge, IconButton, CommandBar } from "@medusajs/ui";
 import { Funnel, Loader, SidebarLeft, TriangleRightMini } from "@medusajs/icons";
@@ -48,9 +48,15 @@ export const ProductGridShell = ({
     pageSize,
     filters,
   });
-  const shouldShowInitial = page === 1 && !filters.length;
-  const displayProducts = shouldShowInitial ? initialData : data?.products || [];
-  const displayCount = shouldShowInitial ? initialCount : data?.count || 0;
+
+  const { displayProducts, displayCount, shouldShowInitial } = useMemo(() => {
+    const shouldShowInitial = page === 1 && !filters.length;
+    return {
+      displayProducts: shouldShowInitial ? initialData : data?.products || [],
+      displayCount: shouldShowInitial ? initialCount : data?.count || 0,
+      shouldShowInitial,
+    };
+  }, [data, filters, initialData, initialCount, page, data?.products, data?.count]);
 
   const handlePageChange = async (newPage: number) => {
     window.scrollTo({ top: 0, behavior: "auto" });

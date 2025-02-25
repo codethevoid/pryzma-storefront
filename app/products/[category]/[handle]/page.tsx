@@ -36,7 +36,7 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
       product.type?.value === "sample"
         ? product.title
         : ((product.description?.split("\n")[0] || "") as string),
-    image: product.thumbnail ? product.thumbnail : product.images?.[0]?.url,
+    image: product.images?.[1]?.url || product.images?.[0]?.url,
   });
 };
 

@@ -7,6 +7,7 @@ import NextLink from "next/link";
 import { TriangleRightMini } from "@medusajs/icons";
 import { Text } from "@medusajs/ui";
 import { getThumbnail } from "@/lib/helpers/get-thumbnail";
+import { StoreProductCategory } from "@medusajs/types";
 
 export const metadata = constructMetadata({
   title: "Collections - Pryzma",
@@ -18,8 +19,7 @@ const getCollections = async () => {
   return response.product_categories.filter((cat) => cat.parent_category_id);
 };
 
-const getThumbnails = async () => {
-  const collections = await getCollections();
+const getThumbnails = async (collections: StoreProductCategory[]) => {
   return Promise.all(
     collections.map(async (collection) => {
       const thumbnail = await getThumbnail(collection.id);
@@ -33,7 +33,7 @@ const getThumbnails = async () => {
 
 const Collections = async () => {
   const collections = await getCollections();
-  const thumbnails = await getThumbnails();
+  const thumbnails = await getThumbnails(collections);
 
   return (
     <main className="min-h-[calc(100vh-330.5px)]">

@@ -125,8 +125,8 @@ export const CheckoutClient = () => {
                     <Image
                       src={item.thumbnail?.replace(s3Url, cdnUrl) as string}
                       alt={item.product_title as string}
-                      width={1000}
-                      height={1000}
+                      width={600}
+                      height={600}
                       className="h-full w-full object-cover"
                     />
                   </div>

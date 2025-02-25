@@ -9,10 +9,9 @@ export const getThumbnail = cache(async (categoryId: string) => {
   });
 
   return (
-    response.products[Math.floor(Math.random() * response.products.length)]?.thumbnail?.replace(
-      s3Url,
-      cdnUrl,
-    ) ||
+    response.products[
+      Math.floor(Math.random() * response.products.length)
+    ]?.images?.[1]?.url?.replace(s3Url, cdnUrl) ||
     response.products[
       Math.floor(Math.random() * response.products.length)
     ]?.images?.[0]?.url?.replace(s3Url, cdnUrl) ||

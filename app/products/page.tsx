@@ -61,7 +61,16 @@ const Products = async () => {
         </section>
         <section aria-label="Product grid" className="p-4 pb-12">
           <div className="mx-auto max-w-screen-xl">
-            <Suspense fallback={<div>loading...</div>}>
+            <Suspense
+              fallback={
+                <ProductGridFallback
+                  initialData={data.products.products}
+                  filterCounts={tagCounts}
+                  filterOptions={PRODUCT_FILTER_OPTIONS}
+                  name={undefined}
+                />
+              }
+            >
               <ProductGridShell
                 initialData={data.products.products}
                 initialCount={data.products.count}

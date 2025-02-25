@@ -35,8 +35,8 @@ export const ProductCard = ({
               <Image
                 src={product.thumbnail?.replace(s3Url, cdnUrl) || ""}
                 alt={product.title}
-                height={1080}
-                width={1080}
+                height={667}
+                width={1000}
                 className="h-full w-full object-cover"
               />
             </div>

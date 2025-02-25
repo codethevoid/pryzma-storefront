@@ -27,8 +27,8 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
               <Image
                 src={selectedImage}
                 alt={product.title}
-                height={2000}
-                width={3000}
+                height={1000}
+                width={1500}
                 className="h-full w-full object-cover"
                 priority
               />
@@ -51,8 +51,8 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
               <Image
                 src={image.url}
                 alt={product.title}
-                height={1000}
-                width={1500}
+                height={300}
+                width={450}
                 className={clx("h-full w-full object-cover")}
               />
             </div>

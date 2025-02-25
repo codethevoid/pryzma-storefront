@@ -1,7 +1,7 @@
 "use client";
 
 import { StoreProduct } from "@medusajs/types";
-import Image from "next/image";
+// import Image from "next/image";
 import { Text, clx, IconButton } from "@medusajs/ui";
 import NextLink from "next/link";
 import { useCart } from "../context/cart";
@@ -32,13 +32,12 @@ export const ProductCard = ({
         <div className="flex h-full flex-col justify-between space-y-1">
           <div className="space-y-2">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded">
-              <Image
+              <img
                 src={product.thumbnail?.replace(s3Url, cdnUrl) as string}
                 alt={product.title}
                 height={1080}
                 width={1080}
                 className="h-full w-full object-cover"
-                loading="eager"
               />
             </div>
             <Text size="small">{product.title}</Text>

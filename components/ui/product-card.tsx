@@ -7,7 +7,6 @@ import NextLink from "next/link";
 import { useCart } from "../context/cart";
 import { Plus } from "@medusajs/icons";
 import { useState } from "react";
-import { productTypeMappings } from "@/lib/product-types";
 import { cdnUrl, s3Url } from "@/utils/s3";
 
 export const ProductCard = ({
@@ -29,9 +28,7 @@ export const ProductCard = ({
         className,
       )}
     >
-      <NextLink
-        href={`/products/${productTypeMappings[product.type?.value as keyof typeof productTypeMappings]}/${product.handle}`}
-      >
+      <NextLink href={`/products/${product.collection?.handle}/${product.handle}`}>
         <div className="flex h-full flex-col justify-between space-y-1">
           <div className="space-y-2">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded">
@@ -41,6 +38,7 @@ export const ProductCard = ({
                 height={1080}
                 width={1080}
                 className="h-full w-full object-cover"
+                loading="eager"
               />
             </div>
             <Text size="small">{product.title}</Text>

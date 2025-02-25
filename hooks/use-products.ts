@@ -17,11 +17,13 @@ export const useProducts = ({
   collectionId,
   filters,
   pageSize,
+  handle,
 }: {
   categoryId?: string | string[];
   collectionId?: string | string[];
   filters: Filter[];
   pageSize: number;
+  handle?: string | string[];
 }) => {
   const searchParams = useSearchParams();
   const page = parseInt(searchParams.get("page") || "1", 10);

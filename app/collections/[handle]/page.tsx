@@ -1,4 +1,3 @@
-import { CATEGORY_DATA } from "@/lib/category-data";
 import { medusa } from "@/utils/medusa";
 import { getTagCount } from "@/lib/helpers/get-tag-count";
 import { constructCategoryPageJsonLd } from "@/utils/construct-jsonld";
@@ -7,13 +6,28 @@ import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
 import { ProductGridShell } from "@/components/layout/product-grid-shell";
 import { Suspense } from "react";
 import { constructMetadata } from "@/utils/metadata";
+import { FILTERS } from "@/lib/filter-options";
+import { getThumbnail } from "@/lib/helpers/get-thumbnail";
+
+/**
+ * This page is used to display what we call "collections" on the website.
+ * The difference is that these are called categories in Medusa.
+ * These are essentially categories that we have created to group products together.
+ *
+ * We use this page to display the products in a grid and to display the category header.
+ *
+ * We also use this page to generate the JSON-LD for the category.
+ *
+ */
 
 export const dynamicParams = false;
 type Params = Promise<{ handle: string }>;
 
 export const generateStaticParams = async () => {
   const response = await medusa.store.category.list();
-  return response.product_categories.map((category) => ({ handle: category.handle }));
+  return response.product_categories
+    .filter((cat) => cat.parent_category_id)
+    .map((category) => ({ handle: category.handle }));
 };
 
 export const generateMetadata = async ({ params }: { params: Params }) => {
@@ -23,10 +37,15 @@ export const generateMetadata = async ({ params }: { params: Params }) => {
     limit: 1,
   });
 
-  const data = CATEGORY_DATA[handle];
-  return constructMetadata(
-    data?.meta || { title: `${response.product_categories[0].name} - Pryzma` },
-  );
+  const thumbnail = await getThumbnail(response.product_categories[0].id);
+
+  return constructMetadata({
+    title: `${response.product_categories[0].name} - Pryzma`,
+    description:
+      response.product_categories[0].description ||
+      `Shop the ${response.product_categories[0].name} collection.`,
+    image: thumbnail,
+  });
 };
 
 const getInitialData = async (categoryId: string) => {
@@ -52,10 +71,9 @@ const CategoryPage = async ({ params }: { params: Params }) => {
 
   // fetch initial products for category
   const data = await getInitialData(categoryId);
-  console.log(data);
 
   // get filter options and tag counts
-  const filterOptions = CATEGORY_DATA[handle]?.filters || undefined;
+  const filterOptions = FILTERS[handle as keyof typeof FILTERS] || undefined;
   const tagCounts = filterOptions
     ? await getTagCount({ options: filterOptions, categoryId })
     : undefined;
@@ -63,9 +81,11 @@ const CategoryPage = async ({ params }: { params: Params }) => {
   const jsonLd = constructCategoryPageJsonLd({
     products: data.products,
     name: response.product_categories[0].name,
-    description: CATEGORY_DATA[handle]?.description || "",
+    description:
+      response.product_categories[0].description ||
+      `Shop the ${response.product_categories[0].name} collection.`,
     url: `https://pryzma.io/collections/${response.product_categories[0].handle}`,
-    image: CATEGORY_DATA[handle]?.meta.image || "",
+    image: await getThumbnail(categoryId),
   });
 
   return (
@@ -79,7 +99,10 @@ const CategoryPage = async ({ params }: { params: Params }) => {
           <CategoryHeader
             title={response.product_categories[0].name}
             count={data.count}
-            description={CATEGORY_DATA[handle]?.description || ""}
+            description={
+              response.product_categories[0].description ||
+              `Shop the ${response.product_categories[0].name} collection.`
+            }
           />
         </section>
         <section aria-label="Product grid" className="p-4 pb-12">
@@ -102,7 +125,7 @@ const CategoryPage = async ({ params }: { params: Params }) => {
                 categoryId={categoryId}
                 isCollection
                 name={response.product_categories[0].name}
-                quickAdd={CATEGORY_DATA[handle]?.quickAdd || false}
+                quickAdd={response.product_categories[0].handle === "samples"}
               />
             </Suspense>
           </div>

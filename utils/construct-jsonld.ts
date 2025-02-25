@@ -8,7 +8,6 @@ import type {
   WebPage,
 } from "schema-dts";
 import { s3Url, cdnUrl } from "./s3";
-import { productTypeMappings } from "@/lib/product-types";
 
 const sortImages = (product: StoreProduct) => {
   const images =
@@ -50,7 +49,7 @@ export const constructProductPageJsonLd = (product: StoreProduct): WithContext<P
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
     },
-    url: `https://pryzma.io/products/${productTypeMappings[product.type?.value as keyof typeof productTypeMappings]}/${product.handle}`,
+    url: `https://pryzma.io/products/${product.collection?.handle}/${product.handle}`,
   };
 };
 
@@ -82,7 +81,7 @@ export const constructCategoryPageJsonLd = ({
         description: product.description?.split("\n")[0],
         image: sortImages(product),
         position: index + 1,
-        url: `https://pryzma.io/products/${productTypeMappings[product.type?.value as keyof typeof productTypeMappings]}/${product.handle}`,
+        url: `https://pryzma.io/products/${product.collection?.handle}/${product.handle}`,
       })),
     },
   };

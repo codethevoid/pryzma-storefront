@@ -5,7 +5,6 @@ import { cdnUrl } from "@/utils/s3";
 import { Carousel } from "@/components/ui/carousel";
 import { StoreProduct } from "@medusajs/types";
 import { medusa } from "@/utils/medusa";
-import { COLLECTION_IDS, CATEGORY_IDS } from "@/lib/identifiers";
 import { constructMetadata } from "@/utils/metadata";
 import { homePageJsonLd } from "@/utils/construct-jsonld";
 import { Button } from "@medusajs/ui";
@@ -14,17 +13,32 @@ import NextLink from "next/link";
 export const metadata = constructMetadata({});
 
 const getProducts = async ({
-  collectionId,
-  categoryId,
+  handle,
+  limit = 10,
 }: {
-  collectionId?: string | string[];
-  categoryId?: string | string[];
+  handle: string | string[];
+  limit?: number;
 }): Promise<StoreProduct[]> => {
+  const ids: string[] = [];
+  if (typeof handle === "string") {
+    const categoryResponse = await medusa.store.category.list({
+      handle,
+      limit: 1,
+    });
+    ids.push(categoryResponse.product_categories[0].id);
+  } else {
+    for (const i of handle) {
+      const categoryResponse = await medusa.store.category.list({
+        handle: i,
+        limit: 1,
+      });
+      ids.push(categoryResponse.product_categories[0].id);
+    }
+  }
   const response = await medusa.store.product.list({
-    limit: 10,
+    limit,
     fields: "*variants.calculated_price",
-    ...(collectionId && { collection_id: collectionId }),
-    ...(categoryId && { category_id: categoryId }),
+    category_id: ids,
   });
 
   return response.products || [];
@@ -32,10 +46,9 @@ const getProducts = async ({
 
 const Home = async () => {
   const [bestSellers, switches, accessories] = await Promise.all([
-    getProducts({ categoryId: CATEGORY_IDS.BEST_SELLERS }),
-    getProducts({ collectionId: COLLECTION_IDS.SWITCHES }),
-    // getProducts({ categoryId: CATEGORY_IDS.LUBRICANTS }),
-    getProducts({ collectionId: [COLLECTION_IDS.LUBRICANTS, COLLECTION_IDS.ACCESSORIES] }),
+    getProducts({ handle: "best-sellers" }),
+    getProducts({ handle: "switches" }),
+    getProducts({ handle: ["lubricants", "accessories"] }),
   ]);
 
   return (

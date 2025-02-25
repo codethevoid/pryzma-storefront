@@ -1,10 +1,8 @@
 import { CategoryHeader } from "@/components/ui/category-header";
 import { medusa } from "@/utils/medusa";
-import { StoreProduct } from "@medusajs/types";
 import { ProductGridShell } from "@/components/layout/product-grid-shell";
 import { PRODUCT_FILTER_OPTIONS } from "@/lib/filter-options";
 import { getTagCount } from "@/lib/helpers/get-tag-count";
-import { COLLECTION_IDS } from "@/lib/identifiers";
 import { constructMetadata } from "@/utils/metadata";
 import { Suspense } from "react";
 import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
@@ -16,14 +14,18 @@ export const metadata = constructMetadata({
   description: "Shop our collection of keyboard switches, lubricants, and accessories.",
 });
 
-const getProducts = async (): Promise<{ products: StoreProduct[]; count: number }> => {
-  const response = await medusa.store.product.list({
+const getProducts = async () => {
+  const categories = await medusa.store.category.list({});
+  const ids = categories.product_categories
+    .filter((cat) => !cat.parent_category_id && cat.handle !== "samples")
+    .map((category) => category.id);
+  const products = await medusa.store.product.list({
+    category_id: ids,
     limit: 24,
     fields: "*variants.calculated_price",
-    collection_id: [COLLECTION_IDS.SWITCHES, COLLECTION_IDS.LUBRICANTS, COLLECTION_IDS.ACCESSORIES],
   });
 
-  return response;
+  return { products, ids };
 };
 
 const Products = async () => {
@@ -31,16 +33,12 @@ const Products = async () => {
     getProducts(),
     getTagCount({
       options: PRODUCT_FILTER_OPTIONS,
-      collectionId: [
-        COLLECTION_IDS.SWITCHES,
-        COLLECTION_IDS.LUBRICANTS,
-        COLLECTION_IDS.ACCESSORIES,
-      ],
+      handle: ["switches", "lubricants", "accessories"],
     }),
   ]);
 
   const jsonLd = constructCategoryPageJsonLd({
-    products: data.products,
+    products: data.products.products,
     name: "Products",
     description: metadata.description as string,
     url: "https://pryzma.io/products",
@@ -57,7 +55,7 @@ const Products = async () => {
         <section aria-label="Category header">
           <CategoryHeader
             title="Products"
-            count={data.count}
+            count={data.products.count}
             description="Browse switches, lubricants and accessories."
           />
         </section>
@@ -66,7 +64,7 @@ const Products = async () => {
             <Suspense
               fallback={
                 <ProductGridFallback
-                  initialData={data.products}
+                  initialData={data.products.products}
                   filterCounts={tagCounts}
                   filterOptions={PRODUCT_FILTER_OPTIONS}
                   name={undefined}
@@ -74,15 +72,11 @@ const Products = async () => {
               }
             >
               <ProductGridShell
-                initialData={data.products}
-                initialCount={data.count}
+                initialData={data.products.products}
+                initialCount={data.products.count}
                 filterOptions={PRODUCT_FILTER_OPTIONS}
                 filterCounts={tagCounts}
-                collectionId={[
-                  COLLECTION_IDS.SWITCHES,
-                  COLLECTION_IDS.LUBRICANTS,
-                  COLLECTION_IDS.ACCESSORIES,
-                ]}
+                categoryId={data.ids}
               />
             </Suspense>
           </div>

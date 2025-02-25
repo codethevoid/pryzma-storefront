@@ -5,30 +5,46 @@ import { ProductGridShell } from "@/components/layout/product-grid-shell";
 import { getTagCount } from "@/lib/helpers/get-tag-count";
 import { constructMetadata } from "@/utils/metadata";
 import { Metadata } from "next";
-import { COLLECTION_DATA } from "@/lib/category-data";
+import { FILTERS } from "@/lib/filter-options";
 import { Suspense } from "react";
 import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
 import { constructCategoryPageJsonLd } from "@/utils/construct-jsonld";
+import { getThumbnail } from "@/lib/helpers/get-thumbnail";
 
 export const dynamicParams = false;
-type Params = Promise<{ collection: string }>;
+type Params = Promise<{ category: string }>;
 
 export const generateStaticParams = async () => {
-  const response = await medusa.store.collection.list();
-  return response.collections.map((collection) => ({ collection: collection.handle }));
+  const response = await medusa.store.category.list();
+  return response.product_categories
+    .filter((cat) => !cat.parent_category_id)
+    .map((category) => ({ category: category.handle }));
 };
 
 export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
-  const { collection } = await params;
-  const collectionData = COLLECTION_DATA[collection];
-  return constructMetadata(collectionData.meta);
+  const { category: handle } = await params;
+  const response = await medusa.store.category.list({
+    handle,
+    limit: 1,
+  });
+  const thumbnail = await getThumbnail(response.product_categories[0].id);
+  return constructMetadata({
+    title: `${response.product_categories[0].name} - Pryzma`,
+    description:
+      response.product_categories[0].description ||
+      `Shop the ${response.product_categories[0].name} collection.`,
+    image:
+      response.product_categories[0].handle === "samples"
+        ? "https://cdn.pryzma.io/featured/IMG_2855.JPG"
+        : thumbnail,
+  });
 };
 
 const getInitialData = async (
-  collectionId: string,
+  categoryId: string,
 ): Promise<{ products: StoreProduct[]; count: number }> => {
   const response = await medusa.store.product.list({
-    collection_id: collectionId,
+    category_id: categoryId,
     limit: 24,
     fields: "*variants.calculated_price",
   });
@@ -37,31 +53,35 @@ const getInitialData = async (
 };
 
 const CollectionPage = async ({ params }: { params: Params }) => {
-  const { collection } = await params;
-  const collectionData = COLLECTION_DATA[collection];
+  const { category: handle } = await params;
 
   // fetch data for category
-  const response = await medusa.store.collection.list({
-    handle: collection,
+  const response = await medusa.store.category.list({
+    handle,
     limit: 1,
   });
-  const collectionId = response.collections[0].id;
+  const categoryId = response.product_categories[0].id;
 
   // fetch initial products for category
-  const data = await getInitialData(collectionId);
+  const data = await getInitialData(categoryId);
 
   // fetch filter options and tag counts
-  const filterOptions = collectionData.filters || undefined;
+  const filterOptions = FILTERS[handle as keyof typeof FILTERS] || undefined;
   const tagCounts = filterOptions
-    ? await getTagCount({ options: filterOptions, collectionId })
+    ? await getTagCount({ options: filterOptions, categoryId })
     : undefined;
 
   const jsonLd = constructCategoryPageJsonLd({
     products: data.products,
-    name: response.collections[0].title,
-    description: collectionData.description,
-    url: `https://pryzma.io/products/${response.collections[0].handle}`,
-    image: collectionData.meta.image,
+    name: response.product_categories[0].name,
+    description:
+      response.product_categories[0].description ||
+      `Shop the ${response.product_categories[0].name} collection.`,
+    url: `https://pryzma.io/products/${response.product_categories[0].handle}`,
+    image:
+      response.product_categories[0].handle === "samples"
+        ? "https://cdn.pryzma.io/featured/IMG_2855.JPG"
+        : await getThumbnail(categoryId),
   });
 
   return (
@@ -73,9 +93,12 @@ const CollectionPage = async ({ params }: { params: Params }) => {
       <main className="min-h-[calc(100vh-330.5px)]">
         <section aria-label="Category header">
           <CategoryHeader
-            title={response.collections[0].title}
+            title={response.product_categories[0].name}
             count={data.count}
-            description={collectionData.description}
+            description={
+              response.product_categories[0].description ||
+              `Shop the ${response.product_categories[0].name} collection.`
+            }
           />
         </section>
         <section aria-label="Product grid" className="p-4 pb-12">
@@ -86,7 +109,7 @@ const CollectionPage = async ({ params }: { params: Params }) => {
                   initialData={data.products}
                   filterCounts={tagCounts}
                   filterOptions={filterOptions}
-                  name={response.collections[0].title}
+                  name={response.product_categories[0].name}
                 />
               }
             >
@@ -95,9 +118,9 @@ const CollectionPage = async ({ params }: { params: Params }) => {
                 initialCount={data.count}
                 filterOptions={filterOptions}
                 filterCounts={tagCounts}
-                collectionId={collectionId}
-                name={response.collections[0].title}
-                quickAdd={collectionData.quickAdd}
+                categoryId={categoryId}
+                name={response.product_categories[0].name}
+                quickAdd={handle === "samples"}
               />
             </Suspense>
           </div>

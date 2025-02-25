@@ -8,7 +8,7 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { useEffect, useState } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { productTypeMappings } from "@/lib/product-types";
+// import { productTypeMappings } from "@/lib/product-types";
 import { cdnUrl, s3Url } from "@/utils/s3";
 
 export const Cart = () => {
@@ -48,7 +48,7 @@ export const Cart = () => {
                 <div key={item.id} className={clx("flex gap-4", index !== 0 && "border-t pt-4")}>
                   <div className="h-28 w-24 shrink-0 overflow-hidden rounded-md border">
                     <NextLink
-                      href={`/products/${productTypeMappings[item.product_type as keyof typeof productTypeMappings]}/${item.product_handle}`}
+                      href={`/products/${item.product?.collection?.handle}/${item.product_handle}`}
                       onClick={() => setIsOpen(false)}
                     >
                       <Image
@@ -63,7 +63,7 @@ export const Cart = () => {
                   <div className="flex-1 space-y-2">
                     <div className="space-y-0.5">
                       <NextLink
-                        href={`/products/${productTypeMappings[item.product_type as keyof typeof productTypeMappings]}/${item.product_handle}`}
+                        href={`/products/${item.product?.collection?.handle}/${item.product_handle}`}
                         onClick={() => setIsOpen(false)}
                       >
                         <Text weight="plus" size="small">

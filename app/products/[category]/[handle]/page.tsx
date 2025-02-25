@@ -5,9 +5,7 @@ import { Metadata } from "next";
 import { Carousel } from "@/components/ui/carousel";
 import { constructMetadata } from "@/utils/metadata";
 import { shuffle } from "@/lib/helpers/shuffle";
-import { COLLECTION_IDS } from "@/lib/identifiers";
 import { cdnUrl, s3Url } from "@/utils/s3";
-import { productTypeMappings } from "@/lib/product-types";
 import { constructProductPageJsonLd } from "@/utils/construct-jsonld";
 import { Button } from "@medusajs/ui";
 import NextLink from "next/link";
@@ -18,7 +16,7 @@ type Params = Promise<{ category: string; handle: string }>;
 export const generateStaticParams = async () => {
   const response = await medusa.store.product.list({ limit: 100 });
   return response.products.map((product) => ({
-    collection: productTypeMappings[product.type?.value as keyof typeof productTypeMappings],
+    category: product.collection?.handle,
     handle: product.handle,
   }));
 };
@@ -55,10 +53,12 @@ const ProductPage = async ({ params }: { params: Params }) => {
     limit: 100,
     fields: "*variants.calculated_price,+variants.inventory_quantity",
     ...(data.products[0].type?.value !== "lubricant" &&
-      data.products[0]?.type?.value !== "accessory" && { type_id: data.products[0].type?.id }),
+      data.products[0]?.type?.value !== "accessory" && {
+        collection_id: data.products[0].collection?.id,
+      }),
     ...((data.products[0]?.type?.value === "lubricant" ||
       data.products[0]?.type?.value === "accessory") && {
-      collection_id: [COLLECTION_IDS.LUBRICANTS, COLLECTION_IDS.ACCESSORIES],
+      collection_id: ["pcol_01JMXFFRX913AH8KQH9PF7K34P", "pcol_01JMXFGE959XSPYRAK22F987S4"], // lubricants and accessories, can eventually make this dynamic once we have more products in these collections
     }),
   });
 
@@ -109,15 +109,8 @@ const ProductPage = async ({ params }: { params: Params }) => {
                 stack={false}
                 action={
                   <Button size="small" asChild variant="secondary">
-                    <NextLink
-                      href={`/products/${productTypeMappings[data.products[0].type?.value as keyof typeof productTypeMappings]}`}
-                    >
-                      All{" "}
-                      {
-                        productTypeMappings[
-                          data.products[0].type?.value as keyof typeof productTypeMappings
-                        ]
-                      }
+                    <NextLink href={`/products/${data.products[0].collection?.handle}`}>
+                      All {data.products[0].collection?.title?.toLowerCase()}
                     </NextLink>
                   </Button>
                 }

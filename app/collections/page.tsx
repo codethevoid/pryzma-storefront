@@ -1,11 +1,12 @@
 import { medusa } from "@/utils/medusa";
 import { CategoryHeader } from "@/components/ui/category-header";
-import { CATEGORY_DATA } from "@/lib/category-data";
+import { s3Url, cdnUrl } from "@/utils/s3";
 import { CollectionCard } from "@/components/ui/collection-card";
 import { constructMetadata } from "@/utils/metadata";
 import NextLink from "next/link";
 import { TriangleRightMini } from "@medusajs/icons";
 import { Text } from "@medusajs/ui";
+import { getThumbnail } from "@/lib/helpers/get-thumbnail";
 
 export const metadata = constructMetadata({
   title: "Collections - Pryzma",
@@ -14,11 +15,25 @@ export const metadata = constructMetadata({
 
 const getCollections = async () => {
   const response = await medusa.store.category.list();
-  return response.product_categories;
+  return response.product_categories.filter((cat) => cat.parent_category_id);
+};
+
+const getThumbnails = async () => {
+  const collections = await getCollections();
+  return Promise.all(
+    collections.map(async (collection) => {
+      const thumbnail = await getThumbnail(collection.id);
+      return {
+        handle: collection.handle,
+        thumbnail,
+      };
+    }),
+  );
 };
 
 const Collections = async () => {
   const collections = await getCollections();
+  const thumbnails = await getThumbnails();
 
   return (
     <main className="min-h-[calc(100vh-330.5px)]">
@@ -26,7 +41,7 @@ const Collections = async () => {
         <CategoryHeader
           title="Collections"
           description="Select a collection to view products."
-          count={collections.filter((c) => CATEGORY_DATA[c.handle]).length}
+          count={collections.length}
           hideCountDescription
         />
       </section>
@@ -49,17 +64,19 @@ const Collections = async () => {
           <div
             className={"grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:gap-3 max-sm:grid-cols-2"}
           >
-            {collections
-              .filter((c) => CATEGORY_DATA[c.handle])
-              .map((collection) => (
-                <CollectionCard
-                  key={collection.id}
-                  title={collection.name}
-                  image={CATEGORY_DATA[collection.handle]?.meta.image}
-                  handle={collection.handle}
-                  className="w-auto min-w-fit max-w-none max-md:w-auto max-md:min-w-fit max-md:max-w-none"
-                />
-              ))}
+            {collections.map((collection) => (
+              <CollectionCard
+                key={collection.id}
+                title={collection.name}
+                image={
+                  thumbnails
+                    .find((t) => t.handle === collection.handle)
+                    ?.thumbnail?.replace(s3Url, cdnUrl) || ""
+                }
+                handle={collection.handle}
+                className="w-auto min-w-fit max-w-none max-md:w-auto max-md:min-w-fit max-md:max-w-none"
+              />
+            ))}
           </div>
         </div>
       </section>

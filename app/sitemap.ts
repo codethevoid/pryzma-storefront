@@ -1,21 +1,15 @@
 import type { MetadataRoute } from "next";
 import { medusa } from "@/utils/medusa";
-import { productTypeMappings } from "@/lib/product-types";
 
 const getCollectionRoutes = async (): Promise<MetadataRoute.Sitemap> => {
-  const response = await medusa.store.collection.list();
-  return response.collections.map((collection) => ({
-    url: `https://pryzma.io/products/${collection.handle}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
-};
-
-const getCategoryRoutes = async (): Promise<MetadataRoute.Sitemap> => {
   const response = await medusa.store.category.list();
   return response.product_categories.map((category) => ({
-    url: `https://pryzma.io/collections/${category.handle}`,
+    // check if category is a parent or child
+    // if parent, then nest in /products
+    // if child, then nest in /collections (it is subset of parent)
+    url: !category.parent_category_id
+      ? `https://pryzma.io/products/${category.handle}`
+      : `https://pryzma.io/collections/${category.handle}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.8,
@@ -25,7 +19,7 @@ const getCategoryRoutes = async (): Promise<MetadataRoute.Sitemap> => {
 const getProductRoutes = async (): Promise<MetadataRoute.Sitemap> => {
   const response = await medusa.store.product.list({ limit: 100 });
   return response.products.map((product) => ({
-    url: `https://pryzma.io/products/${productTypeMappings[product.type?.value as keyof typeof productTypeMappings]}/${product.handle}`,
+    url: `https://pryzma.io/products/${product.collection?.handle}/${product.handle}`,
     lastModified: new Date(),
     changeFrequency: "weekly",
     priority: 0.6,
@@ -33,9 +27,8 @@ const getProductRoutes = async (): Promise<MetadataRoute.Sitemap> => {
 };
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
-  const [collectionRoutes, categoryRoutes, productRoutes] = await Promise.all([
+  const [collectionRoutes, productRoutes] = await Promise.all([
     getCollectionRoutes(),
-    getCategoryRoutes(),
     getProductRoutes(),
   ]);
 
@@ -71,7 +64,6 @@ const sitemap = async (): Promise<MetadataRoute.Sitemap> => {
       priority: 0.9,
     },
     ...collectionRoutes,
-    ...categoryRoutes,
     ...productRoutes,
   ];
 };

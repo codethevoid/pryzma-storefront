@@ -44,7 +44,7 @@ type CartContextType = {
 };
 
 const fields =
-  "*items.variant,*items.variant.options,*items.product.options,*items.product.variants,*shipping_methods";
+  "*items.variant,*items.variant.options,*items.product.options,*items.product.variants,*shipping_methods,*items.product.collection";
 
 const CartContext = createContext<CartContextType | null>(null);
 

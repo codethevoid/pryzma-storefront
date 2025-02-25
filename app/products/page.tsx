@@ -4,7 +4,7 @@ import { StoreProduct } from "@medusajs/types";
 import { ProductGridShell } from "@/components/layout/product-grid-shell";
 import { PRODUCT_FILTER_OPTIONS } from "@/lib/filter-options";
 import { getTagCount } from "@/lib/helpers/get-tag-count";
-import { CATEGORY_IDS } from "@/lib/identifiers";
+import { COLLECTION_IDS } from "@/lib/identifiers";
 import { constructMetadata } from "@/utils/metadata";
 import { Suspense } from "react";
 import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
@@ -20,7 +20,7 @@ const getProducts = async (): Promise<{ products: StoreProduct[]; count: number 
   const response = await medusa.store.product.list({
     limit: 24,
     fields: "*variants.calculated_price",
-    category_id: [CATEGORY_IDS.SWITCHES, CATEGORY_IDS.LUBRICANTS, CATEGORY_IDS.ACCESSORIES], // omit samples
+    collection_id: [COLLECTION_IDS.SWITCHES, COLLECTION_IDS.LUBRICANTS, COLLECTION_IDS.ACCESSORIES],
   });
 
   return response;
@@ -31,7 +31,11 @@ const Products = async () => {
     getProducts(),
     getTagCount({
       options: PRODUCT_FILTER_OPTIONS,
-      categoryId: [CATEGORY_IDS.SWITCHES, CATEGORY_IDS.LUBRICANTS, CATEGORY_IDS.ACCESSORIES], // omit samples
+      collectionId: [
+        COLLECTION_IDS.SWITCHES,
+        COLLECTION_IDS.LUBRICANTS,
+        COLLECTION_IDS.ACCESSORIES,
+      ],
     }),
   ]);
 
@@ -74,10 +78,10 @@ const Products = async () => {
                 initialCount={data.count}
                 filterOptions={PRODUCT_FILTER_OPTIONS}
                 filterCounts={tagCounts}
-                categoryId={[
-                  CATEGORY_IDS.SWITCHES,
-                  CATEGORY_IDS.LUBRICANTS,
-                  CATEGORY_IDS.ACCESSORIES,
+                collectionId={[
+                  COLLECTION_IDS.SWITCHES,
+                  COLLECTION_IDS.LUBRICANTS,
+                  COLLECTION_IDS.ACCESSORIES,
                 ]}
               />
             </Suspense>

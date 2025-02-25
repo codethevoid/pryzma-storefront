@@ -5,30 +5,30 @@ import { ProductGridShell } from "@/components/layout/product-grid-shell";
 import { getTagCount } from "@/lib/helpers/get-tag-count";
 import { constructMetadata } from "@/utils/metadata";
 import { Metadata } from "next";
-import { CATEGORY_DATA } from "@/lib/category-data";
+import { COLLECTION_DATA } from "@/lib/category-data";
 import { Suspense } from "react";
 import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
 import { constructCategoryPageJsonLd } from "@/utils/construct-jsonld";
 
 export const dynamicParams = false;
-type Params = Promise<{ category: keyof typeof CATEGORY_DATA }>; // category is the handle
+type Params = Promise<{ collection: string }>;
 
 export const generateStaticParams = async () => {
-  const response = await medusa.store.category.list();
-  return response.product_categories.map((category) => ({ category: category.handle }));
+  const response = await medusa.store.collection.list();
+  return response.collections.map((collection) => ({ collection: collection.handle }));
 };
 
 export const generateMetadata = async ({ params }: { params: Params }): Promise<Metadata> => {
-  const { category } = await params;
-  const categoryData = CATEGORY_DATA[category];
-  return constructMetadata(categoryData.meta);
+  const { collection } = await params;
+  const collectionData = COLLECTION_DATA[collection];
+  return constructMetadata(collectionData.meta);
 };
 
 const getInitialData = async (
-  categoryId: string,
+  collectionId: string,
 ): Promise<{ products: StoreProduct[]; count: number }> => {
   const response = await medusa.store.product.list({
-    category_id: categoryId,
+    collection_id: collectionId,
     limit: 24,
     fields: "*variants.calculated_price",
   });
@@ -36,32 +36,32 @@ const getInitialData = async (
   return response;
 };
 
-const CategoryPage = async ({ params }: { params: Params }) => {
-  const { category } = await params;
-  const categoryData = CATEGORY_DATA[category];
+const CollectionPage = async ({ params }: { params: Params }) => {
+  const { collection } = await params;
+  const collectionData = COLLECTION_DATA[collection];
 
   // fetch data for category
-  const response = await medusa.store.category.list({
-    handle: category,
+  const response = await medusa.store.collection.list({
+    handle: collection,
     limit: 1,
   });
-  const categoryId = response.product_categories[0].id;
+  const collectionId = response.collections[0].id;
 
   // fetch initial products for category
-  const data = await getInitialData(categoryId);
+  const data = await getInitialData(collectionId);
 
   // fetch filter options and tag counts
-  const filterOptions = categoryData.filters || undefined;
+  const filterOptions = collectionData.filters || undefined;
   const tagCounts = filterOptions
-    ? await getTagCount({ options: filterOptions, categoryId })
+    ? await getTagCount({ options: filterOptions, collectionId })
     : undefined;
 
   const jsonLd = constructCategoryPageJsonLd({
     products: data.products,
-    name: response.product_categories[0].name,
-    description: categoryData.description,
-    url: `https://pryzma.io/products/${response.product_categories[0].handle}`,
-    image: categoryData.meta.image,
+    name: response.collections[0].title,
+    description: collectionData.description,
+    url: `https://pryzma.io/products/${response.collections[0].handle}`,
+    image: collectionData.meta.image,
   });
 
   return (
@@ -73,9 +73,9 @@ const CategoryPage = async ({ params }: { params: Params }) => {
       <main className="min-h-[calc(100vh-330.5px)]">
         <section aria-label="Category header">
           <CategoryHeader
-            title={response.product_categories[0].name}
+            title={response.collections[0].title}
             count={data.count}
-            description={categoryData.description}
+            description={collectionData.description}
           />
         </section>
         <section aria-label="Product grid" className="p-4 pb-12">
@@ -86,7 +86,7 @@ const CategoryPage = async ({ params }: { params: Params }) => {
                   initialData={data.products}
                   filterCounts={tagCounts}
                   filterOptions={filterOptions}
-                  name={response.product_categories[0].name}
+                  name={response.collections[0].title}
                 />
               }
             >
@@ -95,9 +95,9 @@ const CategoryPage = async ({ params }: { params: Params }) => {
                 initialCount={data.count}
                 filterOptions={filterOptions}
                 filterCounts={tagCounts}
-                categoryId={categoryId}
-                name={response.product_categories[0].name}
-                quickAdd={categoryData.quickAdd}
+                collectionId={collectionId}
+                name={response.collections[0].title}
+                quickAdd={collectionData.quickAdd}
               />
             </Suspense>
           </div>
@@ -107,4 +107,4 @@ const CategoryPage = async ({ params }: { params: Params }) => {
   );
 };
 
-export default CategoryPage;
+export default CollectionPage;

@@ -13,6 +13,33 @@ type CategoryData = {
 };
 
 export const CATEGORY_DATA: Record<string, CategoryData> = {
+  "gateron-switches": {
+    description: "Shop Gateron switches from linear and tactile.",
+    meta: {
+      title: "Gateron Switches - Pryzma",
+      description: "Shop the most popular Gateron switches.",
+      image: `${cdnUrl}/uploads/IMG_2422-01JMQY5869MKBB3MPFP7ZHKPH1.webp`,
+    },
+  },
+  "linear-switches": {
+    description: "Shop linear switches from Gateron, KTT, and more.",
+    meta: {
+      title: "Linear Switches - Pryzma",
+      description: "Shop linear switches from Gateron, KTT, and more.",
+      image: `${cdnUrl}/uploads/IMG_2995-01JMQWGM80DER0FV9MAVY0YJ6A.webp`,
+    },
+  },
+  "best-sellers": {
+    description: "Shop the best selling products.",
+    meta: {
+      title: "Best Sellers - Pryzma",
+      description: "Shop the best selling products.",
+      image: `${cdnUrl}/uploads/IMG_3405-01JMQZ73D13NYF9FMMXCD9WWMM.webp`,
+    },
+  },
+};
+
+export const COLLECTION_DATA: Record<string, CategoryData> = {
   switches: {
     filters: SWITCH_FILTER_OPTIONS,
     description: "Shop mechanical keyboard switches.",

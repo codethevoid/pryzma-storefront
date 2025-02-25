@@ -6,12 +6,18 @@ export const GET = async (req: NextRequest) => {
   try {
     const url = req.nextUrl;
     const categoryId = url.searchParams.get("category_id") || "";
+    const collectionId = url.searchParams.get("collection_id") || "";
     const filters = url.searchParams.get("filters") || "[]";
     const page = parseInt(url.searchParams.get("page") || "1", 10);
     const pageSize = parseInt(url.searchParams.get("page_size") || "24", 10);
 
     const response = await medusa.store.product.list({
-      category_id: categoryId?.includes(",") ? categoryId.split(",") : categoryId,
+      ...(categoryId && {
+        category_id: categoryId?.includes(",") ? categoryId.split(",") : categoryId,
+      }),
+      ...(collectionId && {
+        collection_id: collectionId?.includes(",") ? collectionId.split(",") : collectionId,
+      }),
       limit: pageSize,
       offset: page === 1 ? 0 : (page - 1) * pageSize,
       ...buildTagFilters(JSON.parse(filters)),

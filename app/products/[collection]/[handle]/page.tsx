@@ -5,19 +5,20 @@ import { Metadata } from "next";
 import { Carousel } from "@/components/ui/carousel";
 import { constructMetadata } from "@/utils/metadata";
 import { shuffle } from "@/lib/helpers/shuffle";
-import { CATEGORY_IDS } from "@/lib/identifiers";
+import { COLLECTION_IDS } from "@/lib/identifiers";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { productTypeMappings } from "@/lib/product-types";
 import { constructProductPageJsonLd } from "@/utils/construct-jsonld";
 import { Button } from "@medusajs/ui";
 import NextLink from "next/link";
+
 export const dynamicParams = false;
 type Params = Promise<{ category: string; handle: string }>;
 
 export const generateStaticParams = async () => {
   const response = await medusa.store.product.list({ limit: 100 });
   return response.products.map((product) => ({
-    category: productTypeMappings[product.type?.value as keyof typeof productTypeMappings],
+    collection: productTypeMappings[product.type?.value as keyof typeof productTypeMappings],
     handle: product.handle,
   }));
 };
@@ -57,7 +58,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
       data.products[0]?.type?.value !== "accessory" && { type_id: data.products[0].type?.id }),
     ...((data.products[0]?.type?.value === "lubricant" ||
       data.products[0]?.type?.value === "accessory") && {
-      category_id: [CATEGORY_IDS.LUBRICANTS, CATEGORY_IDS.ACCESSORIES],
+      collection_id: [COLLECTION_IDS.LUBRICANTS, COLLECTION_IDS.ACCESSORIES],
     }),
   });
 

@@ -45,6 +45,7 @@ export const ProductCard = ({
             </div>
             <Text size="small">{product.title}</Text>
           </div>
+
           <Text size="xsmall" className="text-subtle-foreground">
             {(product?.variants?.length || 0) > 1 && "From "}
             {Intl.NumberFormat("en-us", {

@@ -18,16 +18,20 @@ export const ProductGridShell = ({
   filterOptions,
   filterCounts,
   categoryId,
+  collectionId,
   name,
+  isCollection = false,
   quickAdd = false,
 }: {
   initialData: StoreProduct[];
   initialCount: number;
   filterOptions?: Record<string, ActiveFilter[]>;
   filterCounts?: Record<string, number>;
-  categoryId: string | string[];
+  categoryId?: string | string[];
+  collectionId?: string | string[];
   name?: string;
   quickAdd?: boolean;
+  isCollection?: boolean;
 }) => {
   const searchParams = useSearchParams();
   const pageSize = 24;
@@ -39,7 +43,12 @@ export const ProductGridShell = ({
   const [staleProducts, setStaleProducts] = useState<StoreProduct[]>([]);
   const windowWidth = useWindowWidth();
 
-  const { data, isLoading, error } = useProducts({ categoryId, pageSize, filters });
+  const { data, isLoading, error } = useProducts({
+    ...(categoryId && { categoryId }),
+    ...(collectionId && { collectionId }),
+    pageSize,
+    filters,
+  });
   const shouldShowInitial = page === 1 && !filters.length;
   const displayProducts = shouldShowInitial ? initialData : data?.products || staleProducts;
   const displayCount = shouldShowInitial ? initialCount : data?.count || 0;
@@ -100,7 +109,22 @@ export const ProductGridShell = ({
               </IconButton>
             </div>
           )}
-          {name ? (
+          {isCollection && name ? (
+            <div className="flex items-center gap-1.5">
+              <NextLink href="/collections">
+                <Text
+                  size="small"
+                  className="text-subtle-foreground transition-colors hover:text-foreground"
+                >
+                  Collections
+                </Text>
+              </NextLink>
+              <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
+              <Text size="small" className="cursor-default text-subtle-foreground">
+                {name}
+              </Text>
+            </div>
+          ) : name ? (
             <div className="flex items-center gap-1.5">
               <NextLink href="/products">
                 <Text

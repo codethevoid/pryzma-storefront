@@ -154,7 +154,7 @@ export const Footer = () => {
               >
                 <ClimateBadge />
                 {/* <Text size="xsmall" className="text-subtle-foreground"> */}
-                Stripe climate member
+                Stripe Climate member
                 {/* </Text> */}
               </a>
             </Button>

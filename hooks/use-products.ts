@@ -14,10 +14,12 @@ type UseProductsResponse = {
 
 export const useProducts = ({
   categoryId,
+  collectionId,
   filters,
   pageSize,
 }: {
-  categoryId: string | string[];
+  categoryId?: string | string[];
+  collectionId?: string | string[];
   filters: Filter[];
   pageSize: number;
 }) => {
@@ -26,7 +28,15 @@ export const useProducts = ({
 
   const params = new URLSearchParams();
   if (filters?.length) params.set("filters", JSON.stringify(filters));
-  params.set("category_id", Array.isArray(categoryId) ? categoryId.join(",") : categoryId);
+  if (categoryId) {
+    params.set("category_id", Array.isArray(categoryId) ? categoryId.join(",") : categoryId);
+  }
+  if (collectionId) {
+    params.set(
+      "collection_id",
+      Array.isArray(collectionId) ? collectionId.join(",") : collectionId,
+    );
+  }
   params.set("page_size", pageSize.toString());
   params.set("page", (page || 1).toString());
 

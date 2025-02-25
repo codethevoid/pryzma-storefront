@@ -17,7 +17,7 @@ const getProducts = async ({
   collectionId,
   categoryId,
 }: {
-  collectionId?: string;
+  collectionId?: string | string[];
   categoryId?: string | string[];
 }): Promise<StoreProduct[]> => {
   const response = await medusa.store.product.list({
@@ -32,10 +32,10 @@ const getProducts = async ({
 
 const Home = async () => {
   const [bestSellers, switches, accessories] = await Promise.all([
-    getProducts({ collectionId: COLLECTION_IDS.BEST_SELLERS }),
-    getProducts({ categoryId: CATEGORY_IDS.SWITCHES }),
+    getProducts({ categoryId: CATEGORY_IDS.BEST_SELLERS }),
+    getProducts({ collectionId: COLLECTION_IDS.SWITCHES }),
     // getProducts({ categoryId: CATEGORY_IDS.LUBRICANTS }),
-    getProducts({ categoryId: [CATEGORY_IDS.LUBRICANTS, CATEGORY_IDS.ACCESSORIES] }),
+    getProducts({ collectionId: [COLLECTION_IDS.LUBRICANTS, COLLECTION_IDS.ACCESSORIES] }),
   ]);
 
   return (

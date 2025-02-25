@@ -4,10 +4,12 @@ export const CategoryHeader = ({
   title,
   description,
   count,
+  hideCountDescription = false,
 }: {
   title: string;
   description: string;
   count?: number;
+  hideCountDescription?: boolean;
 }) => {
   return (
     <div className="border-b bg-zinc-50 px-4 py-10 dark:bg-zinc-900/50 max-md:py-6">
@@ -16,7 +18,7 @@ export const CategoryHeader = ({
           <Heading>{title}</Heading>
           {count && (
             <Text size="xsmall" className="text-subtle-foreground">
-              ({count} products)
+              ({count} {hideCountDescription ? "items" : "products"})
             </Text>
           )}
         </div>

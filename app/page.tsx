@@ -59,7 +59,12 @@ const Home = async () => {
       />
       <main className="space-y-12 pb-20 max-md:space-y-8">
         <section aria-label="Hero">
-          <Hero />
+          <Hero
+            image={`${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`}
+            title="Gateron Quinn"
+            description="Heavy tactile, long pole switches"
+            href="/products/switches/gateron-quinn-switches"
+          />
         </section>
 
         <section aria-label="Featured products">
@@ -75,7 +80,7 @@ const Home = async () => {
             title="Custom Switch Sampler"
             description="Build your own switch sampler"
             href="/products/samples"
-            image={`${cdnUrl}/featured/sampler.webp`}
+            image={`${cdnUrl}/featured/IMG_2855.webp`}
             actionText="Start building"
           />
         </section>

@@ -1,23 +1,22 @@
 import Image from "next/image";
 import { Button, Text } from "@medusajs/ui";
 import NextLink from "next/link";
-import { cdnUrl } from "@/utils/s3";
 
-const data = {
-  image: `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
-  title: "Gateron Quinn",
-  description: "Heavy tactile, long pole switches",
-  href: "/products/switches/gateron-quinn-switches",
+type Props = {
+  image: string;
+  title: string;
+  description: string;
+  href: string;
 };
 
-export const Hero = () => {
+export const Hero = ({ image, title, description, href }: Props) => {
   return (
     <div className="relative h-[600px] w-full">
       <Image
-        src={data.image}
-        alt={data.title}
-        height={2560}
-        width={3840}
+        src={image}
+        alt={title}
+        height={2000}
+        width={3000}
         className="absolute inset-0 h-full w-full object-cover"
         priority
       />
@@ -28,15 +27,15 @@ export const Hero = () => {
             <div className="space-y-4">
               <div>
                 <Text size="xlarge" weight="plus" className="relative z-50 text-white">
-                  {data.title}
+                  {title}
                 </Text>
                 <Text size="base" className="relative z-10 text-white">
-                  {data.description}
+                  {description}
                 </Text>
               </div>
               <div className="flex justify-start">
                 <Button variant="primary" className="w-full max-w-[160px]" asChild>
-                  <NextLink href={data.href}>Shop now</NextLink>
+                  <NextLink href={href}>Shop now</NextLink>
                 </Button>
               </div>
             </div>

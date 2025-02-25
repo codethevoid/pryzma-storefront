@@ -38,6 +38,7 @@ export const ProductCard = ({
                 height={667}
                 width={1000}
                 className="h-full w-full object-cover"
+                unoptimized
               />
             </div>
             <Text size="small">{product.title}</Text>

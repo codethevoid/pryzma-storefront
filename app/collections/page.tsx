@@ -5,7 +5,7 @@ import { CollectionCard } from "@/components/ui/collection-card";
 import { constructMetadata } from "@/utils/metadata";
 import NextLink from "next/link";
 import { TriangleRightMini } from "@medusajs/icons";
-import { Text } from "@medusajs/ui";
+import { Text, clx } from "@medusajs/ui";
 import { getThumbnail } from "@/lib/helpers/get-thumbnail";
 import { StoreProductCategory } from "@medusajs/types";
 
@@ -45,9 +45,12 @@ const Collections = async () => {
           hideCountDescription
         />
       </section>
-      <section aria-label="Collections grid" className="p-4 pb-12">
-        <div className="mx-auto max-w-screen-xl space-y-4">
-          <div className="flex items-center gap-1.5">
+      <section
+        aria-label="Collections grid"
+        className="p-4 pb-12 max-sm:px-0 max-sm:pb-0 max-sm:pt-2"
+      >
+        <div className="mx-auto max-w-screen-xl space-y-4 max-sm:space-y-2">
+          <div className="flex items-center gap-1.5 max-sm:px-4">
             <NextLink href="/">
               <Text
                 size="small"
@@ -62,9 +65,11 @@ const Collections = async () => {
             </Text>
           </div>
           <div
-            className={"grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:gap-3 max-sm:grid-cols-2"}
+            className={
+              "grid grid-cols-4 gap-4 max-lg:grid-cols-3 max-md:gap-3 max-sm:grid-cols-2 max-sm:gap-0 max-sm:border-t"
+            }
           >
-            {collections.map((collection) => (
+            {collections.map((collection, i) => (
               <CollectionCard
                 key={collection.id}
                 title={collection.name}
@@ -74,7 +79,12 @@ const Collections = async () => {
                     ?.thumbnail?.replace(s3Url, cdnUrl) || ""
                 }
                 handle={collection.handle}
-                className="w-auto min-w-fit max-w-none max-md:w-auto max-md:min-w-fit max-md:max-w-none"
+                className={clx(
+                  "w-auto min-w-fit max-w-none last:border-b-0 max-md:w-auto max-md:min-w-fit max-md:max-w-none max-sm:rounded-none max-sm:border-b max-sm:bg-transparent max-sm:p-3 max-sm:shadow-none max-sm:odd:border-r",
+                  collections.length % 2 === 0 &&
+                    i === collections.length - 2 &&
+                    "max-sm:border-b-0",
+                )}
               />
             ))}
           </div>

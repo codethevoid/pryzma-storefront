@@ -59,7 +59,10 @@ const Products = async () => {
             description="Browse switches, lubricants and accessories."
           />
         </section>
-        <section aria-label="Product grid" className="p-4 pb-12">
+        <section
+          aria-label="Product grid"
+          className="p-4 pb-12 max-sm:px-0 max-sm:pb-0 max-sm:pt-2"
+        >
           <div className="mx-auto max-w-screen-xl">
             <Suspense
               fallback={

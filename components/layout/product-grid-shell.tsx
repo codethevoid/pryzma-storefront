@@ -82,8 +82,8 @@ export const ProductGridShell = ({
 
   return (
     <>
-      <div className="space-y-4">
-        <div className="flex items-center gap-1.5">
+      <div className="space-y-4 max-sm:space-y-2">
+        <div className="flex items-center gap-1.5 max-sm:px-4">
           {filterOptions && (
             <div>
               <IconButton

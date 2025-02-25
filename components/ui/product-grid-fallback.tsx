@@ -65,7 +65,7 @@ export const ProductGridFallback = ({ initialData, filterOptions, filterCounts, 
           {filterOptions && filterCounts && (
             <div
               className={clx(
-                "h-fit min-w-[220px] space-y-5 rounded-md bg-zinc-50 p-4 shadow-borders-base dark:bg-zinc-900/50",
+                "h-fit min-w-[220px] space-y-5 rounded-md bg-zinc-50 p-4 shadow-borders-base dark:bg-zinc-900/50 max-lg:hidden",
               )}
             >
               {Object.entries(filterOptions).map(([key, value]) => (

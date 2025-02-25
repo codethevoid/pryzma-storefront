@@ -176,7 +176,7 @@ export const ProductGridShell = ({
             )}
           >
             {!clientReady ? (
-              <div className="invisible">
+              <div className="opacity-0 pointer-events-none">
                 <ProductGrid products={initialData} quickAdd={quickAdd} />
               </div>
             ) : displayProducts.length > 0 ? (

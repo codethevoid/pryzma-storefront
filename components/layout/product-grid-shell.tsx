@@ -56,7 +56,7 @@ export const ProductGridShell = ({
       displayCount: shouldShowInitial ? initialCount : data?.count || 0,
       shouldShowInitial,
     };
-  }, [data, filters, initialData, initialCount, page, data?.products, data?.count]);
+  }, [data, filters, initialData, initialCount, page]);
 
   const handlePageChange = async (newPage: number) => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -74,10 +74,6 @@ export const ProductGridShell = ({
     if (windowWidth > 1024) {
       setIsDrawerOpen(false);
     }
-
-    return () => {
-      setClientReady(false);
-    };
   }, [windowWidth]);
 
   if (error) {
@@ -176,7 +172,7 @@ export const ProductGridShell = ({
             )}
           >
             {!clientReady ? (
-              <div className="opacity-0 pointer-events-none">
+              <div className="invisible">
                 <ProductGrid products={initialData} quickAdd={quickAdd} />
               </div>
             ) : displayProducts.length > 0 ? (

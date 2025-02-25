@@ -45,6 +45,12 @@ export const useProducts = ({
   const { data, isLoading, error } = useSWR<UseProductsResponse>(
     `/api/products?${params.toString()}`,
     fetcher,
+    {
+      keepPreviousData: true,
+      revalidateOnFocus: false,
+      dedupingInterval: 5000,
+      shouldRetryOnError: false,
+    },
   );
   return { data, isLoading, error };
 };

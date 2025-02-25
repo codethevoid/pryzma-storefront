@@ -40,7 +40,6 @@ export const ProductGridShell = ({
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [clientReady, setClientReady] = useState(false);
-  const [staleProducts, setStaleProducts] = useState<StoreProduct[]>([]);
   const windowWidth = useWindowWidth();
 
   const { data, isLoading, error } = useProducts({
@@ -50,14 +49,8 @@ export const ProductGridShell = ({
     filters,
   });
   const shouldShowInitial = page === 1 && !filters.length;
-  const displayProducts = shouldShowInitial ? initialData : data?.products || staleProducts;
+  const displayProducts = shouldShowInitial ? initialData : data?.products || [];
   const displayCount = shouldShowInitial ? initialCount : data?.count || 0;
-
-  useEffect(() => {
-    if (data?.products) {
-      setStaleProducts(data.products);
-    }
-  }, [data]);
 
   const handlePageChange = async (newPage: number) => {
     window.scrollTo({ top: 0, behavior: "auto" });
@@ -71,14 +64,15 @@ export const ProductGridShell = ({
   };
 
   useEffect(() => {
+    setClientReady(true);
     if (windowWidth > 1024) {
       setIsDrawerOpen(false);
     }
-  }, [windowWidth]);
 
-  useEffect(() => {
-    setClientReady(true);
-  }, []);
+    return () => {
+      setClientReady(false);
+    };
+  }, [windowWidth]);
 
   if (error) {
     return <div>Error loading products</div>;
@@ -218,7 +212,6 @@ export const ProductGridShell = ({
                   <IconBadge className="mx-auto" size="large">
                     <Funnel />
                   </IconBadge>
-
                   <Text size="small" className="text-subtle-foreground">
                     No products found
                   </Text>

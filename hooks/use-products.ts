@@ -47,7 +47,6 @@ export const useProducts = ({
     {
       keepPreviousData: true,
       revalidateOnFocus: false,
-      dedupingInterval: 5000,
       shouldRetryOnError: false,
     },
   );

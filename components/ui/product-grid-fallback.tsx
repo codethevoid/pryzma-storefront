@@ -17,7 +17,7 @@ export const ProductGridFallback = ({ initialData, filterOptions, filterCounts, 
   return (
     <>
       <div className="space-y-4">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 max-sm:px-4">
           {filterOptions && (
             <div>
               <IconButton variant="transparent" size="small" className="flex max-lg:hidden">

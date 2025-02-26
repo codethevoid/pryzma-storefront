@@ -23,8 +23,9 @@ export const ProductGrid = ({
           key={product.id}
           product={product}
           className={clx(
-            "w-auto min-w-fit max-w-none last:border-b-0 max-md:w-auto max-md:min-w-fit max-md:max-w-none max-sm:rounded-none max-sm:border-b max-sm:bg-transparent max-sm:p-3 max-sm:shadow-none max-sm:odd:border-r",
+            "w-auto min-w-fit max-w-none last:border-b-0 max-md:w-auto max-md:min-w-fit max-md:max-w-none max-sm:rounded-none max-sm:border-b max-sm:bg-transparent max-sm:p-3 max-sm:shadow-none max-sm:odd:border-r max-sm:hover:bg-transparent",
             products.length % 2 === 0 && i === products.length - 2 && "max-sm:border-b-0",
+            i === 0 && products.length === 1 && "max-sm:!border-b",
           )}
           quickAdd={quickAdd}
           eager={true}

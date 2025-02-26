@@ -27,6 +27,7 @@ export const ProductGrid = ({
             products.length % 2 === 0 && i === products.length - 2 && "max-sm:border-b-0",
           )}
           quickAdd={quickAdd}
+          eager={true}
         />
       ))}
     </div>

@@ -11,9 +11,16 @@ type Props = {
   filterOptions?: Record<string, ActiveFilter[]>;
   filterCounts?: Record<string, number>;
   name: string | undefined;
+  isCollection?: boolean;
 };
 
-export const ProductGridFallback = ({ initialData, filterOptions, filterCounts, name }: Props) => {
+export const ProductGridFallback = ({
+  initialData,
+  filterOptions,
+  filterCounts,
+  name,
+  isCollection = false,
+}: Props) => {
   return (
     <>
       <div className="space-y-4">
@@ -36,7 +43,7 @@ export const ProductGridFallback = ({ initialData, filterOptions, filterCounts, 
                   size="small"
                   className="text-subtle-foreground transition-colors hover:text-foreground"
                 >
-                  Products
+                  {isCollection ? "Collections" : "Products"}
                 </Text>
               </NextLink>
               <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
@@ -56,7 +63,7 @@ export const ProductGridFallback = ({ initialData, filterOptions, filterCounts, 
               </NextLink>
               <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
               <Text size="small" className="cursor-default text-subtle-foreground">
-                Products
+                {isCollection ? "Collections" : "Products"}
               </Text>
             </div>
           )}

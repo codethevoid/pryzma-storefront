@@ -85,6 +85,7 @@ const Collections = async () => {
                     i === collections.length - 2 &&
                     "max-sm:border-b-0",
                   i === 0 && collections.length === 1 && "max-sm:!border-b",
+                  collections.length === 2 && "max-sm:!border-b",
                 )}
               />
             ))}

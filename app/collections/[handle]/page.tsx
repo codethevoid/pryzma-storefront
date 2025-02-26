@@ -117,6 +117,7 @@ const CategoryPage = async ({ params }: { params: Params }) => {
                   filterCounts={tagCounts}
                   filterOptions={filterOptions}
                   name={response.product_categories[0].name}
+                  isCollection
                 />
               }
             >

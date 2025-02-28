@@ -8,11 +8,38 @@ import Image from "next/image";
 import NextLink from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import debounce from "lodash.debounce";
 // import { productTypeMappings } from "@/lib/product-types";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { medusa } from "@/utils/medusa";
 import type { ExtendedStoreCart } from "../context/cart";
+import { useRef } from "react";
+
+const useDebounce = (callback: Function, delay: number) => {
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+    };
+  }, []);
+
+  const debouncedCallback = useCallback(
+    (...args: any[]) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    },
+    [callback, delay],
+  );
+
+  return debouncedCallback;
+};
 
 export const Cart = () => {
   const { cart, setCart, isOpen, setIsOpen, updateItem, removeItem, fields } = useCart();
@@ -20,26 +47,25 @@ export const Cart = () => {
   const [isUpdating, setIsUpdating] = useState<Record<string, boolean>>({});
   const [quantities, setQuantities] = useState<Record<string, number | string>>({});
 
-  const debouncedUpdateItem = useCallback(
-    debounce(async (itemId: string, newQuantity: number) => {
-      setIsUpdating({ ...isUpdating, [itemId]: true });
-      if (newQuantity === 0) {
-        await removeItem(itemId);
-      } else {
-        const response = await updateItem({ itemId, quantity: newQuantity });
-        if (response?.error) {
-          // revert back to previous quantity
-          // must fetch new cart to get the correct quantity
-          // this will trigger a re-render of the cart and useEffect will update the quantities
-          medusa.store.cart.retrieve(cart?.id as string, { fields }).then(({ cart }) => {
-            setCart(cart as ExtendedStoreCart);
-          });
-        }
+  const debouncedUpdateItem = useDebounce(async (itemId: string, newQuantity: number) => {
+    setIsUpdating((prev) => ({ ...prev, [itemId]: true }));
+
+    if (newQuantity === 0) {
+      await removeItem(itemId);
+    } else {
+      const response = await updateItem({ itemId, quantity: newQuantity });
+      if (response?.error) {
+        // revert back to previous quantity
+        // must fetch new cart to get the correct quantity
+        // this will trigger a re-render of the cart and useEffect will update the quantities
+        medusa.store.cart.retrieve(cart?.id as string, { fields }).then(({ cart }) => {
+          setCart(cart as ExtendedStoreCart);
+        });
       }
-      setIsUpdating({ ...isUpdating, [itemId]: false });
-    }, 500),
-    [],
-  );
+    }
+
+    setIsUpdating((prev) => ({ ...prev, [itemId]: false }));
+  }, 500);
 
   useEffect(() => {
     if (cart?.items) {

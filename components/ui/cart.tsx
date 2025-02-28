@@ -14,7 +14,10 @@ import { medusa } from "@/utils/medusa";
 import type { ExtendedStoreCart } from "../context/cart";
 import { useRef } from "react";
 
-const useDebounce = (callback: Function, delay: number) => {
+const useDebounce = (
+  callback: (itemId: string, newQuantity: number) => Promise<void>,
+  delay: number,
+) => {
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -26,13 +29,13 @@ const useDebounce = (callback: Function, delay: number) => {
   }, []);
 
   const debouncedCallback = useCallback(
-    (...args: any[]) => {
+    (itemId: string, newQuantity: number) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
 
       timeoutRef.current = setTimeout(() => {
-        callback(...args);
+        callback(itemId, newQuantity);
       }, delay);
     },
     [callback, delay],

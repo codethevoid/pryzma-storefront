@@ -1,7 +1,8 @@
 "use client";
 
 import { StoreProduct, StoreProductVariant } from "@medusajs/types";
-import { Heading, Text, StatusBadge, Button, Input } from "@medusajs/ui";
+import { Heading, Text, StatusBadge, Button, Input, IconButton } from "@medusajs/ui";
+import { Minus, Plus } from "@medusajs/icons";
 import { Suspense, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
 import { useCart } from "../context/cart";
@@ -28,7 +29,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
   const description = useMemo(
     () => (
       <ReactMarkdown
-        className="prose prose-sm max-w-none dark:prose-invert prose-p:mb-1 prose-strong:font-medium prose-ul:mt-0 prose-li:my-0 prose-li:font-mono prose-li:text-[11.5px] prose-li:tracking-tight"
+        className="prose prose-sm max-w-none dark:prose-invert prose-p:mb-1 prose-strong:font-medium prose-ul:mt-0 prose-li:my-0 prose-li:text-[13px]"
         components={{
           p: ({ children }) => {
             // Check if the content is a raw YouTube URL
@@ -112,45 +113,65 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
             </label>
           </div>
           <div className="flex items-center gap-2">
-            <Input
-              id="quantity"
-              name="quantity"
-              type="number"
-              max={selectedVariant.inventory_quantity}
-              value={quantity}
-              onChange={(e) => {
-                const value = e.target.value;
-                // Handle empty input
-                if (value === "") {
-                  setQuantity("");
-                  return;
-                }
-                const numValue = parseInt(value, 10);
-                // Handle invalid or out of bounds values
-                if (isNaN(numValue) || numValue < 1) {
-                  setQuantity(1);
-                  return;
-                }
-                // Limit to available inventory
-                if (numValue > (selectedVariant.inventory_quantity || 0)) {
-                  setQuantity(selectedVariant.inventory_quantity || 0);
-                  return;
-                }
-                setQuantity(numValue);
-              }}
-              onBlur={(e) => {
-                if (
-                  !e.target.value ||
-                  isNaN(Number(e.target.value)) ||
-                  Number(e.target.value) < 1
-                ) {
-                  setQuantity(1);
-                }
-              }}
-              disabled={selectedVariant.inventory_quantity === 0}
-              className="w-28"
-              autoComplete="off"
-            />
+            <div className="flex items-center rounded-md shadow-borders-base">
+              <IconButton
+                className="rounded-r-none bg-ui-bg-field !shadow-none"
+                onClick={() => {
+                  if (quantity === 1) return;
+                  setQuantity(Number(quantity) - 1);
+                }}
+              >
+                <Minus />
+              </IconButton>
+              <Input
+                id="quantity"
+                name="quantity"
+                type="number"
+                max={selectedVariant.inventory_quantity}
+                value={quantity}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Handle empty input
+                  if (value === "") {
+                    setQuantity("");
+                    return;
+                  }
+                  const numValue = parseInt(value, 10);
+                  // Handle invalid or out of bounds values
+                  if (isNaN(numValue) || numValue < 1) {
+                    setQuantity(1);
+                    return;
+                  }
+                  // Limit to available inventory
+                  if (numValue > (selectedVariant.inventory_quantity || 0)) {
+                    setQuantity(selectedVariant.inventory_quantity || 0);
+                    return;
+                  }
+                  setQuantity(numValue);
+                }}
+                onBlur={(e) => {
+                  if (
+                    !e.target.value ||
+                    isNaN(Number(e.target.value)) ||
+                    Number(e.target.value) < 1
+                  ) {
+                    setQuantity(1);
+                  }
+                }}
+                disabled={selectedVariant.inventory_quantity === 0}
+                className="w-12 rounded-none text-center shadow-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                autoComplete="off"
+              />
+              <IconButton
+                className="rounded-l-none bg-ui-bg-field !shadow-none"
+                onClick={() => {
+                  if (Number(quantity) >= (selectedVariant.inventory_quantity || 0)) return;
+                  setQuantity(Number(quantity) + 1);
+                }}
+              >
+                <Plus />
+              </IconButton>
+            </div>
             <Button
               disabled={selectedVariant.inventory_quantity === 0}
               className="w-full"

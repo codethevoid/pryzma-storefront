@@ -6,16 +6,40 @@ import { Minus, Plus, ShoppingBag, Spinner, Trash } from "@medusajs/icons";
 import { formatCurrency } from "@/utils/format-currency";
 import Image from "next/image";
 import NextLink from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import debounce from "lodash.debounce";
 // import { productTypeMappings } from "@/lib/product-types";
 import { cdnUrl, s3Url } from "@/utils/s3";
+import { medusa } from "@/utils/medusa";
+import type { ExtendedStoreCart } from "../context/cart";
 
 export const Cart = () => {
-  const { cart, isOpen, setIsOpen, updateItem, removeItem } = useCart();
+  const { cart, setCart, isOpen, setIsOpen, updateItem, removeItem, fields } = useCart();
   const [isRemoving, setIsRemoving] = useState<Record<string, boolean>>({});
   const [isUpdating, setIsUpdating] = useState<Record<string, boolean>>({});
   const [quantities, setQuantities] = useState<Record<string, number | string>>({});
+
+  const debouncedUpdateItem = useCallback(
+    debounce(async (itemId: string, newQuantity: number) => {
+      setIsUpdating({ ...isUpdating, [itemId]: true });
+      if (newQuantity === 0) {
+        await removeItem(itemId);
+      } else {
+        const response = await updateItem({ itemId, quantity: newQuantity });
+        if (response?.error) {
+          // revert back to previous quantity
+          // must fetch new cart to get the correct quantity
+          // this will trigger a re-render of the cart and useEffect will update the quantities
+          medusa.store.cart.retrieve(cart?.id as string, { fields }).then(({ cart }) => {
+            setCart(cart as ExtendedStoreCart);
+          });
+        }
+      }
+      setIsUpdating({ ...isUpdating, [itemId]: false });
+    }, 500),
+    [],
+  );
 
   useEffect(() => {
     if (cart?.items) {
@@ -91,26 +115,22 @@ export const Cart = () => {
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex items-center">
+                      <div className="flex items-center rounded-md shadow-borders-base">
                         <IconButton
-                          disabled={isUpdating[item.id]}
+                          disabled={isUpdating[item.id] || quantities[item.id] === 0}
                           size="small"
-                          className="rounded-r-none"
+                          className="rounded-r-none bg-ui-bg-field !shadow-none"
                           onClick={async () => {
                             const quantity = quantities[item.id] as number;
                             if (quantity === 1) {
                               setQuantities({ ...quantities, [item.id]: 0 });
-                              setIsUpdating({ ...isUpdating, [item.id]: true });
-                              await removeItem(item.id);
-                              setIsUpdating({ ...isUpdating, [item.id]: false });
+                              debouncedUpdateItem(item.id, 0);
                             } else {
                               setQuantities({
                                 ...quantities,
                                 [item.id]: quantity - 1,
                               });
-                              setIsUpdating({ ...isUpdating, [item.id]: true });
-                              await updateItem({ itemId: item.id, quantity: quantity - 1 });
-                              setIsUpdating({ ...isUpdating, [item.id]: false });
+                              debouncedUpdateItem(item.id, quantity - 1);
                             }
                           }}
                         >
@@ -119,7 +139,7 @@ export const Cart = () => {
                         <Input
                           size="small"
                           type="number"
-                          className="w-16 rounded-none"
+                          className="w-10 rounded-none text-center shadow-none [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                           value={quantities[item.id]}
                           disabled={isUpdating[item.id]}
                           onBlur={async (e) => {
@@ -132,53 +152,24 @@ export const Cart = () => {
                               quantity.toString().includes(".") ||
                               quantity.toString().includes("-")
                             ) {
-                              setIsUpdating({ ...isUpdating, [item.id]: true });
-                              removeItem(item.id);
-                              setIsUpdating({ ...isUpdating, [item.id]: false });
+                              debouncedUpdateItem(item.id, 0);
                             } else {
-                              setIsUpdating({ ...isUpdating, [item.id]: true });
-                              await updateItem({ itemId: item.id, quantity });
-                              setIsUpdating({ ...isUpdating, [item.id]: false });
+                              debouncedUpdateItem(item.id, quantity);
                             }
                           }}
                           onChange={async (e) => {
                             const quantity = e.target.value === "" ? "" : parseInt(e.target.value);
                             setQuantities({ ...quantities, [item.id]: quantity });
-                            if (quantity === "") return;
-
-                            if (
-                              Math.abs(
-                                quantity - ((quantities[item.id] as number) || item.quantity),
-                              ) === 1
-                            ) {
-                              if (
-                                quantity === 0 ||
-                                !quantity ||
-                                isNaN(quantity) ||
-                                quantity.toString().includes(".") ||
-                                quantity.toString().includes("-")
-                              ) {
-                                setIsUpdating({ ...isUpdating, [item.id]: true });
-                                await removeItem(item.id);
-                                setIsUpdating({ ...isUpdating, [item.id]: false });
-                              } else {
-                                setIsUpdating({ ...isUpdating, [item.id]: true });
-                                await updateItem({ itemId: item.id, quantity });
-                                setIsUpdating({ ...isUpdating, [item.id]: false });
-                              }
-                            }
                           }}
                         />
                         <IconButton
                           disabled={isUpdating[item.id]}
                           size="small"
-                          className="rounded-l-none"
+                          className="rounded-l-none bg-ui-bg-field !shadow-none"
                           onClick={async () => {
                             const quantity = quantities[item.id] as number;
                             setQuantities({ ...quantities, [item.id]: quantity + 1 });
-                            setIsUpdating({ ...isUpdating, [item.id]: true });
-                            await updateItem({ itemId: item.id, quantity: quantity + 1 });
-                            setIsUpdating({ ...isUpdating, [item.id]: false });
+                            await debouncedUpdateItem(item.id, quantity + 1);
                           }}
                         >
                           <Plus />

@@ -5,7 +5,7 @@ import { Footer } from "@/components/layout/footer";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Viewport } from "next";
-import { constructedLayoutJsonLd } from "@/utils/construct-jsonld";
+import { layoutJsonLd } from "@/utils/construct-jsonld";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={`antialiased`}>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(constructedLayoutJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(layoutJsonLd) }}
         />
         <Providers>
           <Nav />

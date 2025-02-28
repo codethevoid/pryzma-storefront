@@ -87,62 +87,53 @@ export const constructCategoryPageJsonLd = ({
   };
 };
 
-export const websiteJsonLd: WithContext<WebSite> = {
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "@id": "https://pryzma.io/#website",
-  url: "https://pryzma.io",
-  name: "Pryzma - Your Premium Source for Mechanical Keyboard Switches",
-  description:
-    "Pryzma is your premium source for mechanical keyboard switches. We offer a wide range of switches, lubricants, switch samples, and accessories.",
-  inLanguage: "en-US",
-};
-
-export const organizationJsonLd: WithContext<Organization> = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  "@id": "https://pryzma.io/#organization",
-  name: "Pryzma",
-  url: "https://pryzma.io",
-  logo: `${cdnUrl}/logos/pryzma.png`,
-  sameAs: [
-    "https://x.com/pryzmadotio",
-    "https://www.instagram.com/pryzma.io",
-    "https://www.youtube.com/@pryzma_io",
-    "https://www.threads.net/@pryzma.io",
-  ],
-  contactPoint: {
-    "@type": "ContactPoint",
-    contactType: "customer service",
-    email: "support@pryzma.io",
-    availableLanguage: ["English"],
-  },
-  location: {
-    "@type": "Place",
-    name: "Ohio, USA",
-  },
-};
-
-export const homePageJsonLd: WithContext<Omit<WebPage, "@context">> = {
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "@id": "https://pryzma.io/#homepage",
-  url: "https://pryzma.io",
-  name: "Pryzma - Home",
-  description:
-    "Discover high quality mechanical keyboard switches, lubricants, and accessories at Pryzma.",
-  isPartOf: { "@id": "https://pryzma.io/#website" },
-  about: { "@id": "https://pryzma.io/#organization" },
-  primaryImageOfPage: {
-    "@type": "ImageObject",
-    url: `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
-  },
-};
-
-export const constructedLayoutJsonLd = {
+export const layoutJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
-    { ...websiteJsonLd, "@context": undefined },
-    { ...organizationJsonLd, "@context": undefined },
+    {
+      "@type": "WebSite",
+      "@id": "https://pryzma.io/#website",
+      url: "https://pryzma.io",
+      name: "Pryzma - Your Premium Source for Mechanical Keyboard Switches",
+      description:
+        "Pryzma is your premium source for mechanical keyboard switches. We offer a wide range of switches, lubricants, switch samples, and accessories.",
+      inLanguage: "en-US",
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://pryzma.io/#organization",
+      name: "Pryzma",
+      description:
+        "Pryzma is your premium source for mechanical keyboard switches. We offer a wide range of switches, lubricants, switch samples, and accessories.",
+      email: "hello@pryzma.io",
+      url: "https://pryzma.io",
+      logo: `${cdnUrl}/logos/pryzma.png`,
+      sameAs: [
+        "https://x.com/pryzmadotio",
+        "https://www.instagram.com/pryzma.io",
+        "https://www.youtube.com/@pryzma_io",
+        "https://www.threads.net/@pryzma.io",
+      ],
+      location: {
+        "@type": "Place",
+        name: "Ohio, USA",
+      },
+    },
   ],
 };
+
+// export const homePageJsonLd: WithContext<Omit<WebPage, "@context">> = {
+//   "@context": "https://schema.org",
+//   "@type": "WebPage",
+//   "@id": "https://pryzma.io/#homepage",
+//   url: "https://pryzma.io",
+//   name: "Pryzma - Home",
+//   description:
+//     "Discover high quality mechanical keyboard switches, lubricants, and accessories at Pryzma.",
+//   isPartOf: { "@id": "https://pryzma.io/#website" },
+//   about: { "@id": "https://pryzma.io/#organization" },
+//   primaryImageOfPage: {
+//     "@type": "ImageObject",
+//     url: `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
+//   },
+// };

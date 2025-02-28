@@ -2,7 +2,6 @@ Add products
 
 Gateron
 
-- luciola
 - yellow pro
 - smoothie
 - grayish

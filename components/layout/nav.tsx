@@ -14,6 +14,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cdnUrl } from "@/utils/s3";
 import { NavDropdown } from "./nav-dropdown";
 import { navItems } from "@/lib/nav-items";
+// import { Search } from "../ui/search";
 
 export const Nav = () => {
   const { setIsOpen } = useCart();
@@ -118,6 +119,7 @@ export const Nav = () => {
             <IconButton size="small" variant="transparent">
               <User />
             </IconButton> */}
+            {/* <Search /> */}
             <IconButton
               size="small"
               variant="transparent"

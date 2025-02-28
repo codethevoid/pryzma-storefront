@@ -31,7 +31,13 @@ type CartContextType = {
   isOpen: boolean;
   setIsOpen: Dispatch<SetStateAction<boolean>>;
   addItem: ({ variantId, quantity }: { variantId: string; quantity: number }) => Promise<void>;
-  updateItem: ({ itemId, quantity }: { itemId: string; quantity: number }) => Promise<void>;
+  updateItem: ({
+    itemId,
+    quantity,
+  }: {
+    itemId: string;
+    quantity: number;
+  }) => Promise<{ error: boolean } | undefined>;
   removeItem: (itemId: string) => Promise<void>;
   fields: string;
   isLoadingClientSecret: boolean;
@@ -143,6 +149,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     } catch (e) {
       console.error(e);
       toast.error("Failed to update item in cart");
+      return { error: true };
     }
   };
 

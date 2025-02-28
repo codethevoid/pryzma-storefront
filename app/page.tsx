@@ -6,7 +6,7 @@ import { Carousel } from "@/components/ui/carousel";
 import { StoreProduct } from "@medusajs/types";
 import { medusa } from "@/utils/medusa";
 import { constructMetadata } from "@/utils/metadata";
-import { homePageJsonLd } from "@/utils/construct-jsonld";
+// import { homePageJsonLd } from "@/utils/construct-jsonld";
 import { Button } from "@medusajs/ui";
 import NextLink from "next/link";
 
@@ -53,10 +53,10 @@ const Home = async () => {
 
   return (
     <>
-      <script
+      {/* <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
-      />
+      /> */}
       <main className="space-y-12 pb-20 max-md:space-y-8">
         <section aria-label="Hero">
           <Hero

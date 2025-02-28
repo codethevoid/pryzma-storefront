@@ -18,7 +18,7 @@ export const CategoryHeader = ({
           <Heading>{title}</Heading>
           {count && (
             <Text size="xsmall" className="text-subtle-foreground">
-              ({count} {hideCountDescription ? "items" : "products"})
+              ({count} {hideCountDescription ? "items" : `Product${count === 1 ? "" : "s"}`})
             </Text>
           )}
         </div>

@@ -2,7 +2,6 @@ Add products
 
 Gateron
 
-- melodic
 - luciola
 - yellow pro
 - smoothie

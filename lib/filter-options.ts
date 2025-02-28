@@ -41,6 +41,7 @@ export const FILTERS = {
     type: [
       { category: "type", label: "linear", value: TAG_IDS.LINEAR },
       { category: "type", label: "tactile", value: TAG_IDS.TACTILE },
+      { category: "type", label: "clicky", value: TAG_IDS.CLICKY },
     ],
   },
   "linear-switches": {

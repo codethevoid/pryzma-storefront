@@ -28,7 +28,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
   const description = useMemo(
     () => (
       <ReactMarkdown
-        className="prose prose-sm max-w-none dark:prose-invert prose-p:mb-1 prose-strong:font-medium prose-ul:mt-0 prose-li:my-0 prose-li:text-[13px]"
+        className="prose prose-sm max-w-none dark:prose-invert prose-p:mb-1 prose-strong:font-medium prose-ul:mt-0 prose-li:my-0 prose-li:font-mono prose-li:text-[11.5px] prose-li:tracking-tight"
         components={{
           p: ({ children }) => {
             // Check if the content is a raw YouTube URL
@@ -64,7 +64,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
           <Heading>{product.title}</Heading>
         </div>
         <StatusBadge color={getStatus().color}>{getStatus().label}</StatusBadge>
-        <Text size="large" weight="plus">
+        <Text size="large" weight="plus" className="font-mono">
           {formatCurrency("usd", selectedVariant.calculated_price?.original_amount as number)}
         </Text>
         <Suspense

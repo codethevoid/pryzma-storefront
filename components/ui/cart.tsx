@@ -2,7 +2,7 @@
 
 import { Drawer, Text, Button, clx, IconButton, Input, IconBadge } from "@medusajs/ui";
 import { useCart } from "../context/cart";
-import { ShoppingBag, Spinner, Trash } from "@medusajs/icons";
+import { Minus, Plus, ShoppingBag, Spinner, Trash } from "@medusajs/icons";
 import { formatCurrency } from "@/utils/format-currency";
 import Image from "next/image";
 import NextLink from "next/link";
@@ -91,41 +91,40 @@ export const Cart = () => {
                       )}
                     </div>
                     <div className="flex items-center gap-2">
-                      <Input
-                        size="small"
-                        type="number"
-                        className="w-28"
-                        value={quantities[item.id]}
-                        disabled={isUpdating[item.id]}
-                        onBlur={async (e) => {
-                          const quantity = parseInt(e.target.value);
-                          if (quantity === item.quantity) return;
-                          if (
-                            quantity === 0 ||
-                            !quantity ||
-                            isNaN(quantity) ||
-                            quantity.toString().includes(".") ||
-                            quantity.toString().includes("-")
-                          ) {
-                            setIsUpdating({ ...isUpdating, [item.id]: true });
-                            removeItem(item.id);
-                            setIsUpdating({ ...isUpdating, [item.id]: false });
-                          } else {
-                            setIsUpdating({ ...isUpdating, [item.id]: true });
-                            await updateItem({ itemId: item.id, quantity });
-                            setIsUpdating({ ...isUpdating, [item.id]: false });
-                          }
-                        }}
-                        onChange={async (e) => {
-                          const quantity = e.target.value === "" ? "" : parseInt(e.target.value);
-                          setQuantities({ ...quantities, [item.id]: quantity });
-                          if (quantity === "") return;
-
-                          if (
-                            Math.abs(
-                              quantity - ((quantities[item.id] as number) || item.quantity),
-                            ) === 1
-                          ) {
+                      <div className="flex items-center">
+                        <IconButton
+                          disabled={isUpdating[item.id]}
+                          size="small"
+                          className="rounded-r-none"
+                          onClick={async () => {
+                            const quantity = quantities[item.id] as number;
+                            if (quantity === 1) {
+                              setQuantities({ ...quantities, [item.id]: 0 });
+                              setIsUpdating({ ...isUpdating, [item.id]: true });
+                              await removeItem(item.id);
+                              setIsUpdating({ ...isUpdating, [item.id]: false });
+                            } else {
+                              setQuantities({
+                                ...quantities,
+                                [item.id]: quantity - 1,
+                              });
+                              setIsUpdating({ ...isUpdating, [item.id]: true });
+                              await updateItem({ itemId: item.id, quantity: quantity - 1 });
+                              setIsUpdating({ ...isUpdating, [item.id]: false });
+                            }
+                          }}
+                        >
+                          <Minus />
+                        </IconButton>
+                        <Input
+                          size="small"
+                          type="number"
+                          className="w-16 rounded-none"
+                          value={quantities[item.id]}
+                          disabled={isUpdating[item.id]}
+                          onBlur={async (e) => {
+                            const quantity = parseInt(e.target.value);
+                            if (quantity === item.quantity) return;
                             if (
                               quantity === 0 ||
                               !quantity ||
@@ -134,16 +133,57 @@ export const Cart = () => {
                               quantity.toString().includes("-")
                             ) {
                               setIsUpdating({ ...isUpdating, [item.id]: true });
-                              await removeItem(item.id);
+                              removeItem(item.id);
                               setIsUpdating({ ...isUpdating, [item.id]: false });
                             } else {
                               setIsUpdating({ ...isUpdating, [item.id]: true });
                               await updateItem({ itemId: item.id, quantity });
                               setIsUpdating({ ...isUpdating, [item.id]: false });
                             }
-                          }
-                        }}
-                      />
+                          }}
+                          onChange={async (e) => {
+                            const quantity = e.target.value === "" ? "" : parseInt(e.target.value);
+                            setQuantities({ ...quantities, [item.id]: quantity });
+                            if (quantity === "") return;
+
+                            if (
+                              Math.abs(
+                                quantity - ((quantities[item.id] as number) || item.quantity),
+                              ) === 1
+                            ) {
+                              if (
+                                quantity === 0 ||
+                                !quantity ||
+                                isNaN(quantity) ||
+                                quantity.toString().includes(".") ||
+                                quantity.toString().includes("-")
+                              ) {
+                                setIsUpdating({ ...isUpdating, [item.id]: true });
+                                await removeItem(item.id);
+                                setIsUpdating({ ...isUpdating, [item.id]: false });
+                              } else {
+                                setIsUpdating({ ...isUpdating, [item.id]: true });
+                                await updateItem({ itemId: item.id, quantity });
+                                setIsUpdating({ ...isUpdating, [item.id]: false });
+                              }
+                            }
+                          }}
+                        />
+                        <IconButton
+                          disabled={isUpdating[item.id]}
+                          size="small"
+                          className="rounded-l-none"
+                          onClick={async () => {
+                            const quantity = quantities[item.id] as number;
+                            setQuantities({ ...quantities, [item.id]: quantity + 1 });
+                            setIsUpdating({ ...isUpdating, [item.id]: true });
+                            await updateItem({ itemId: item.id, quantity: quantity + 1 });
+                            setIsUpdating({ ...isUpdating, [item.id]: false });
+                          }}
+                        >
+                          <Plus />
+                        </IconButton>
+                      </div>
                       <IconButton
                         variant="transparent"
                         size="small"

@@ -59,7 +59,27 @@ export const ProductGridShell = ({
   }, [data, filters, initialData, initialCount, page]);
 
   const handlePageChange = async (newPage: number) => {
-    window.scrollTo({ top: 0, behavior: "auto" });
+    const scrollPromise = new Promise<void>((resolve) => {
+      const checkIfScrolled = () => {
+        if (window.scrollY === 0) {
+          resolve();
+        } else {
+          requestAnimationFrame(checkIfScrolled);
+        }
+      };
+
+      // Fallback timeout in case scroll is interrupted
+      const timeoutId = setTimeout(() => resolve(), 1000);
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      checkIfScrolled();
+
+      // Clean up timeout if scroll completes normally
+      return () => clearTimeout(timeoutId);
+    });
+
+    await scrollPromise;
+
     const params = new URLSearchParams(searchParams);
     if (newPage === 1) {
       params.delete("page");

@@ -120,6 +120,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
                   if (quantity === 1) return;
                   setQuantity(Number(quantity) - 1);
                 }}
+                disabled={selectedVariant.inventory_quantity === 0}
               >
                 <Minus />
               </IconButton>
@@ -168,6 +169,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
                   if (Number(quantity) >= (selectedVariant.inventory_quantity || 0)) return;
                   setQuantity(Number(quantity) + 1);
                 }}
+                disabled={selectedVariant.inventory_quantity === 0}
               >
                 <Plus />
               </IconButton>

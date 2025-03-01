@@ -7,6 +7,8 @@ export const GET = async (req: NextRequest) => {
     const url = req.nextUrl;
     const query = url.searchParams.get("q") || "";
 
+    if (query?.trim() === "") return NextResponse.json([]);
+
     const response: StoreProductListResponse = await medusa.store.product.list({
       q: query,
       limit: 10,

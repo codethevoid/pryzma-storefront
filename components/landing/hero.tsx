@@ -20,7 +20,7 @@ export const Hero = ({ image, title, description, href }: Props) => {
         className="absolute inset-0 h-full w-full object-cover"
         priority
       />
-      <div className="absolute inset-0 bg-black/45"></div>
+      <div className="absolute inset-0 bg-black/35"></div>
       <div className="h-full w-full p-8 pb-12">
         <div className="mx-auto h-full max-w-screen-xl">
           <div className="flex h-full w-full items-end">

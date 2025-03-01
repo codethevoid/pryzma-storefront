@@ -60,10 +60,10 @@ const Home = async () => {
       <main className="space-y-12 pb-20 max-md:space-y-8">
         <section aria-label="Hero">
           <Hero
-            image={`${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`}
-            title="Gateron Quinn"
-            description="Heavy tactile, long pole switches"
-            href="/products/switches/gateron-quinn-switches"
+            image={`${cdnUrl}/uploads/gateron-melodic-clicky-switches-01JN6B3VJQAE2DSXBW3VD27P3S.webp`}
+            title="Gateron Melodic"
+            description="Clicky switches with a unique sound"
+            href="/products/switches/gateron-melodic-switches"
           />
         </section>
 

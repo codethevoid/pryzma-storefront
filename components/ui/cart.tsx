@@ -68,7 +68,7 @@ export const Cart = () => {
             <div className="space-y-4">
               {cart?.items?.map((item, index) => (
                 <div key={item.id} className={clx("flex gap-4", index !== 0 && "border-t pt-4")}>
-                  <div className="h-28 w-24 shrink-0 overflow-hidden rounded-md border">
+                  <div className="aspect-[1/1.2] h-fit w-[84px] shrink-0 overflow-hidden rounded-md border">
                     <NextLink
                       href={`/products/${item.product?.collection?.handle}/${item.product_handle}`}
                       onClick={() => setIsOpen(false)}

@@ -33,7 +33,7 @@ export const NavDropdown = ({
     <>
       <div
         className={clx(
-          "pointer-events-none fixed inset-0 top-[45px] z-[9998] bg-black/50 opacity-0 transition-opacity duration-200 dark:bg-black/30",
+          "pointer-events-none fixed inset-0 top-[45px] z-[9998] bg-black/60 opacity-0 transition-opacity duration-200 dark:bg-black/30",
           shouldShowDropdown && "pointer-events-auto opacity-100",
         )}
       />

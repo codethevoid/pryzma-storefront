@@ -68,21 +68,21 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
         </div>
         <StatusBadge color={getStatus().color}>{getStatus().label}</StatusBadge>
         <div className="flex items-center gap-2">
-          <Text
-            size="large"
-            weight="plus"
-            className={clx(
-              selectedVariant.calculated_price?.calculated_price?.price_list_type === "sale" &&
-                "line-through",
-            )}
-          >
-            {formatCurrency("usd", selectedVariant.calculated_price?.original_amount as number)}
-          </Text>
           {selectedVariant.calculated_price?.calculated_price?.price_list_type === "sale" && (
             <Text size="large" weight="plus" className="text-rose-600 dark:text-rose-400">
               {formatCurrency("usd", selectedVariant.calculated_price?.calculated_amount as number)}
             </Text>
           )}
+          <Text
+            size="large"
+            weight="plus"
+            className={clx(
+              selectedVariant.calculated_price?.calculated_price?.price_list_type === "sale" &&
+                "font-normal text-subtle-foreground line-through",
+            )}
+          >
+            {formatCurrency("usd", selectedVariant.calculated_price?.original_amount as number)}
+          </Text>
         </div>
         <Suspense
           fallback={

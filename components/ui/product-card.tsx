@@ -56,15 +56,7 @@ export const ProductCard = ({
             <Text size="small">{product.title}</Text>
           </div>
           <div className="flex items-center gap-1.5">
-            <Text
-              size="xsmall"
-              className={clx(
-                "text-subtle-foreground",
-                product.variants?.some(
-                  (v) => v.calculated_price?.calculated_price?.price_list_type === "sale",
-                ) && "line-through",
-              )}
-            >
+            <Text size="xsmall" className={clx("text-subtle-foreground")}>
               {product.variants &&
                 product.variants.length > 1 &&
                 product.variants.some(
@@ -73,29 +65,39 @@ export const ProductCard = ({
                     product?.variants?.[0].calculated_price?.original_amount,
                 ) &&
                 "From "}
-              {formatCurrency(
-                "usd",
-                product.variants?.sort(
-                  (a, b) =>
-                    (a.calculated_price?.original_amount as number) -
-                    (b.calculated_price?.original_amount as number),
-                )[0].calculated_price?.original_amount || 0,
+              {product.variants?.some(
+                (v) => v.calculated_price?.calculated_price?.price_list_type === "sale",
+              ) && (
+                <Text as="span" size="xsmall" className="text-rose-600 dark:text-rose-400">
+                  {formatCurrency(
+                    "usd",
+                    product.variants?.sort(
+                      (a, b) =>
+                        (a.calculated_price?.calculated_amount as number) -
+                        (b.calculated_price?.calculated_amount as number),
+                    )[0].calculated_price?.calculated_amount || 0,
+                  )}{" "}
+                </Text>
               )}
-            </Text>
-            {product.variants?.some(
-              (v) => v.calculated_price?.calculated_price?.price_list_type === "sale",
-            ) && (
-              <Text size="xsmall" className="text-rose-600 dark:text-rose-400">
+              <Text
+                as="span"
+                size="xsmall"
+                className={clx(
+                  product.variants?.some(
+                    (v) => v.calculated_price?.calculated_price?.price_list_type === "sale",
+                  ) && "line-through",
+                )}
+              >
                 {formatCurrency(
                   "usd",
                   product.variants?.sort(
                     (a, b) =>
-                      (a.calculated_price?.calculated_amount as number) -
-                      (b.calculated_price?.calculated_amount as number),
-                  )[0].calculated_price?.calculated_amount || 0,
+                      (a.calculated_price?.original_amount as number) -
+                      (b.calculated_price?.original_amount as number),
+                  )[0].calculated_price?.original_amount || 0,
                 )}
               </Text>
-            )}
+            </Text>
           </div>
         </div>
       </NextLink>

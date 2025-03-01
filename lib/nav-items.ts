@@ -57,4 +57,9 @@ export const navItems: NavItem[] = [
     value: "accessories",
     href: "/products/accessories",
   },
+  {
+    label: "Sale",
+    value: "sale",
+    href: "/collections/clearance-sale",
+  },
 ];

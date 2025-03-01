@@ -1,7 +1,7 @@
 "use client";
 
 import { StoreProduct, StoreProductVariant } from "@medusajs/types";
-import { Heading, Text, StatusBadge, Button, Input, IconButton } from "@medusajs/ui";
+import { Heading, Text, StatusBadge, Button, Input, IconButton, clx } from "@medusajs/ui";
 import { Minus, Plus } from "@medusajs/icons";
 import { Suspense, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
@@ -53,6 +53,8 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
     [product.description],
   );
 
+  console.log(product);
+
   return (
     <div className="space-y-6">
       <div className="space-y-4">
@@ -65,9 +67,23 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
           <Heading>{product.title}</Heading>
         </div>
         <StatusBadge color={getStatus().color}>{getStatus().label}</StatusBadge>
-        <Text size="large" weight="plus" className="font-mono">
-          {formatCurrency("usd", selectedVariant.calculated_price?.original_amount as number)}
-        </Text>
+        <div className="flex items-center gap-2">
+          <Text
+            size="large"
+            weight="plus"
+            className={clx(
+              selectedVariant.calculated_price?.calculated_price?.price_list_type === "sale" &&
+                "line-through",
+            )}
+          >
+            {formatCurrency("usd", selectedVariant.calculated_price?.original_amount as number)}
+          </Text>
+          {selectedVariant.calculated_price?.calculated_price?.price_list_type === "sale" && (
+            <Text size="large" weight="plus" className="text-rose-600 dark:text-rose-400">
+              {formatCurrency("usd", selectedVariant.calculated_price?.calculated_amount as number)}
+            </Text>
+          )}
+        </div>
         <Suspense
           fallback={
             <>

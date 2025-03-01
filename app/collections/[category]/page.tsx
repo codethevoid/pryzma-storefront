@@ -21,19 +21,19 @@ import { getThumbnail } from "@/lib/helpers/get-thumbnail";
  */
 
 export const dynamicParams = false;
-type Params = Promise<{ handle: string }>;
+type Params = Promise<{ category: string }>;
 
 export const generateStaticParams = async () => {
   const response = await medusa.store.category.list();
   return response.product_categories
     .filter((cat) => cat.parent_category_id)
-    .map((category) => ({ handle: category.handle }));
+    .map((category) => ({ category: category.handle }));
 };
 
 export const generateMetadata = async ({ params }: { params: Params }) => {
-  const { handle } = await params;
+  const { category } = await params;
   const response = await medusa.store.category.list({
-    handle,
+    handle: category,
     limit: 1,
   });
 
@@ -59,11 +59,11 @@ const getInitialData = async (categoryId: string) => {
 };
 
 const CategoryPage = async ({ params }: { params: Params }) => {
-  const { handle } = await params;
+  const { category } = await params;
 
   // fetch data for category
   const response = await medusa.store.category.list({
-    handle,
+    handle: category,
     limit: 1,
   });
 
@@ -73,7 +73,7 @@ const CategoryPage = async ({ params }: { params: Params }) => {
   const data = await getInitialData(categoryId);
 
   // get filter options and tag counts
-  const filterOptions = FILTERS[handle as keyof typeof FILTERS] || undefined;
+  const filterOptions = FILTERS[category as keyof typeof FILTERS] || undefined;
   const tagCounts = filterOptions
     ? await getTagCount({ options: filterOptions, categoryId })
     : undefined;
@@ -117,6 +117,7 @@ const CategoryPage = async ({ params }: { params: Params }) => {
                   filterCounts={tagCounts}
                   filterOptions={filterOptions}
                   name={response.product_categories[0].name}
+                  categoryHandle={category}
                   isCollection
                 />
               }
@@ -127,6 +128,7 @@ const CategoryPage = async ({ params }: { params: Params }) => {
                 filterOptions={filterOptions}
                 filterCounts={tagCounts}
                 categoryId={categoryId}
+                categoryHandle={category}
                 isCollection
                 name={response.product_categories[0].name}
                 quickAdd={response.product_categories[0].handle === "samples"}

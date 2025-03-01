@@ -6,10 +6,12 @@ export const ProductGrid = ({
   products,
   className,
   quickAdd = false,
+  categoryHandle,
 }: {
   products: StoreProduct[];
   className?: string;
   quickAdd?: boolean;
+  categoryHandle?: string;
 }) => {
   return (
     <div
@@ -22,6 +24,7 @@ export const ProductGrid = ({
         <ProductCard
           key={product.id}
           product={product}
+          categoryHandle={categoryHandle}
           className={clx(
             "w-auto min-w-fit max-w-none last:border-b-0 max-md:w-auto max-md:min-w-fit max-md:max-w-none max-sm:rounded-none max-sm:border-b max-sm:bg-transparent max-sm:p-3 max-sm:shadow-none max-sm:odd:border-r max-sm:hover:bg-transparent",
             products.length % 2 === 0 && i === products.length - 2 && "max-sm:border-b-0",

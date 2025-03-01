@@ -6,6 +6,9 @@ type Props = {
   description?: string;
   image?: string;
   other?: Record<string, string>;
+  alternates?: {
+    canonical?: string;
+  };
 };
 
 export const constructMetadata = ({
@@ -13,6 +16,7 @@ export const constructMetadata = ({
   description = `Pryzma is your premium source for mechanical keyboard switches. We offer a wide range of switches, lubricants, switch samples, and accessories.`,
   image = `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
   other = {},
+  alternates,
 }: Props): Metadata => {
   return {
     title,
@@ -58,6 +62,7 @@ export const constructMetadata = ({
         url: `${cdnUrl}/logos/favicons/favicon-16x16.png`,
       },
     ],
+    ...(alternates && { alternates }),
     metadataBase: new URL("https://pryzma.io"),
   };
 };

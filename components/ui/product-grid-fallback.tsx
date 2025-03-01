@@ -12,6 +12,7 @@ type Props = {
   filterCounts?: Record<string, number>;
   name: string | undefined;
   isCollection?: boolean;
+  categoryHandle?: string;
 };
 
 export const ProductGridFallback = ({
@@ -20,6 +21,7 @@ export const ProductGridFallback = ({
   filterCounts,
   name,
   isCollection = false,
+  categoryHandle,
 }: Props) => {
   return (
     <>
@@ -105,7 +107,7 @@ export const ProductGridFallback = ({
           )}
           <div className="w-full">
             <div className="invisible">
-              <ProductGrid products={initialData} />
+              <ProductGrid products={initialData} categoryHandle={categoryHandle} />
             </div>
           </div>
         </div>

@@ -22,6 +22,7 @@ export const ProductGridShell = ({
   name,
   isCollection = false,
   quickAdd = false,
+  categoryHandle,
 }: {
   initialData: StoreProduct[];
   initialCount: number;
@@ -32,6 +33,7 @@ export const ProductGridShell = ({
   name?: string;
   quickAdd?: boolean;
   isCollection?: boolean;
+  categoryHandle?: string;
 }) => {
   const searchParams = useSearchParams();
   const pageSize = 24;
@@ -193,11 +195,19 @@ export const ProductGridShell = ({
           >
             {!clientReady ? (
               <div className="pointer-events-none opacity-0">
-                <ProductGrid products={initialData} quickAdd={quickAdd} />
+                <ProductGrid
+                  products={initialData}
+                  quickAdd={quickAdd}
+                  categoryHandle={categoryHandle}
+                />
               </div>
             ) : displayProducts.length > 0 ? (
               <div>
-                <ProductGrid products={displayProducts} quickAdd={quickAdd} />
+                <ProductGrid
+                  products={displayProducts}
+                  quickAdd={quickAdd}
+                  categoryHandle={categoryHandle}
+                />
                 <CommandBar open={displayCount > pageSize}>
                   <CommandBar.Bar className="dark:shadow-borders-base">
                     <CommandBar.Value>

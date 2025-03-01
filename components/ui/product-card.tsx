@@ -15,11 +15,14 @@ export const ProductCard = ({
   className,
   quickAdd = false,
   eager = false,
+  categoryHandle,
 }: {
   product: StoreProduct;
   className?: string;
   quickAdd?: boolean;
   eager?: boolean;
+  href?: string;
+  categoryHandle?: string;
 }) => {
   const [isAdding, setIsAdding] = useState(false);
   const { addItem } = useCart();
@@ -31,7 +34,13 @@ export const ProductCard = ({
         className,
       )}
     >
-      <NextLink href={`/products/${product.collection?.handle}/${product.handle}`}>
+      <NextLink
+        href={
+          categoryHandle
+            ? `/collections/${categoryHandle}/${product.handle}`
+            : `/products/${product.collection?.handle}/${product.handle}`
+        }
+      >
         <div className="flex h-full flex-col justify-between space-y-1">
           <div className="space-y-2">
             <div className="relative aspect-[3/2] w-full overflow-hidden rounded">

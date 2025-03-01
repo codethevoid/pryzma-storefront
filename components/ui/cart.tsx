@@ -6,43 +6,12 @@ import { Minus, Plus, ShoppingBag, Spinner, Trash } from "@medusajs/icons";
 import { formatCurrency } from "@/utils/format-currency";
 import Image from "next/image";
 import NextLink from "next/link";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-// import { productTypeMappings } from "@/lib/product-types";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { medusa } from "@/utils/medusa";
 import type { ExtendedStoreCart } from "../context/cart";
-import { useRef } from "react";
-
-const useDebounce = (
-  callback: (itemId: string, newQuantity: number) => Promise<void>,
-  delay: number,
-) => {
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    return () => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-    };
-  }, []);
-
-  const debouncedCallback = useCallback(
-    (itemId: string, newQuantity: number) => {
-      if (timeoutRef.current) {
-        clearTimeout(timeoutRef.current);
-      }
-
-      timeoutRef.current = setTimeout(() => {
-        callback(itemId, newQuantity);
-      }, delay);
-    },
-    [callback, delay],
-  );
-
-  return debouncedCallback;
-};
+import { useDebounceCallback } from "@/hooks/utils/use-debounce-callback";
 
 export const Cart = () => {
   const { cart, setCart, isOpen, setIsOpen, updateItem, removeItem, fields } = useCart();
@@ -50,7 +19,7 @@ export const Cart = () => {
   const [isUpdating, setIsUpdating] = useState<Record<string, boolean>>({});
   const [quantities, setQuantities] = useState<Record<string, number | string>>({});
 
-  const debouncedUpdateItem = useDebounce(async (itemId: string, newQuantity: number) => {
+  const debouncedUpdateItem = useDebounceCallback(async (itemId: string, newQuantity: number) => {
     setIsUpdating((prev) => ({ ...prev, [itemId]: true }));
 
     if (newQuantity === 0) {

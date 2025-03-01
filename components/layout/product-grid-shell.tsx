@@ -10,7 +10,7 @@ import type { Filter as ActiveFilter } from "@/types";
 import { useWindowWidth } from "@react-hook/window-size";
 import NextLink from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useProducts } from "@/hooks/use-products";
+import { useProducts } from "@/hooks/swr/use-products";
 
 export const ProductGridShell = ({
   initialData,

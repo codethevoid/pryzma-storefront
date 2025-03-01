@@ -8,6 +8,7 @@ import { useCart } from "../context/cart";
 import { Plus } from "@medusajs/icons";
 import { useState } from "react";
 import { cdnUrl, s3Url } from "@/utils/s3";
+import { formatCurrency } from "@/utils/format-currency";
 
 export const ProductCard = ({
   product,
@@ -47,11 +48,16 @@ export const ProductCard = ({
           </div>
 
           <Text size="xsmall" className="text-subtle-foreground">
-            {(product?.variants?.length || 0) > 1 && "From "}
-            {Intl.NumberFormat("en-us", {
-              style: "currency",
-              currency: "USD",
-            }).format(
+            {product.variants &&
+              product.variants.length > 1 &&
+              product.variants.some(
+                (v) =>
+                  v.calculated_price?.original_amount !==
+                  product?.variants?.[0].calculated_price?.original_amount,
+              ) &&
+              "From "}
+            {formatCurrency(
+              "usd",
               product.variants?.sort(
                 (a, b) =>
                   (a.calculated_price?.original_amount as number) -

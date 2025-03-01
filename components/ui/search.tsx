@@ -22,6 +22,7 @@ export const Search = () => {
     if (isOpen) {
       const timer = setTimeout(() => {
         inputRef.current?.focus();
+        inputRef.current?.click();
       }, 50);
       return () => clearTimeout(timer);
     }
@@ -36,7 +37,7 @@ export const Search = () => {
           <MagnifyingGlass />
         </IconButton>
       </Drawer.Trigger>
-      <Drawer.Content className="overflow-hidden">
+      <Drawer.Content className="z-[9999] overflow-hidden">
         <Drawer.Header>
           <VisuallyHidden>Search</VisuallyHidden>
           <Drawer.Title>
@@ -68,7 +69,7 @@ export const Search = () => {
                   key={product.id}
                   onClick={() => setIsOpen(false)}
                 >
-                  <div className="group rounded-md p-2 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900/50">
+                  <div className="group rounded-md p-2 transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-900/50 max-sm:hover:bg-transparent">
                     <div className="flex space-x-4">
                       <div className="aspect-[1/1.2] w-14 overflow-hidden rounded-md border">
                         <Image

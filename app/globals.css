@@ -354,3 +354,16 @@ input[type="search"] {
     0px 2px 2px 0px rgba(0, 0, 0, 0.24);
   background: rgba(33, 33, 36, 1);
 } */
+
+.fade-in {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

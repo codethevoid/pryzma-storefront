@@ -96,12 +96,13 @@ export const Cart = () => {
                       <Text size="small" className="text-subtle-foreground">
                         {formatCurrency("usd", item.unit_price)}
                       </Text>
+
                       {item.product?.variants?.length && (
-                        <div className="space-y-0.5">
+                        <div>
                           {item.product?.options?.map((option) => (
-                            <Text key={option.id} size="small" weight="plus">
+                            <Text key={option.id} size="xsmall" weight="plus">
                               {option.title}:{" "}
-                              <Text as="span" size="small" className="text-subtle-foreground">
+                              <Text as="span" size="xsmall" className="text-subtle-foreground">
                                 {
                                   item.variant?.options?.find((o) => o.option_id === option.id)
                                     ?.value

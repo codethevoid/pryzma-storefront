@@ -69,7 +69,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
         <StatusBadge color={getStatus().color}>{getStatus().label}</StatusBadge>
         <div className="flex items-center gap-2">
           {selectedVariant.calculated_price?.calculated_price?.price_list_type === "sale" && (
-            <Text size="large" weight="plus" className="text-rose-600 dark:text-rose-400">
+            <Text size="large" weight="plus" className="text-red-600 dark:text-red-400">
               {formatCurrency("usd", selectedVariant.calculated_price?.calculated_amount as number)}
             </Text>
           )}

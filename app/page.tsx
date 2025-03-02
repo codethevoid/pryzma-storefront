@@ -48,7 +48,7 @@ const Home = async () => {
   const [bestSellers, switches, accessories] = await Promise.all([
     getProducts({ handle: "best-sellers" }),
     getProducts({ handle: "switches" }),
-    getProducts({ handle: ["lubricants", "accessories"] }),
+    getProducts({ handle: "accessories" }),
   ]);
 
   return (

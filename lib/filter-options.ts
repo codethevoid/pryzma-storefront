@@ -19,7 +19,7 @@ export const SWITCH_FILTER_OPTIONS = {
 export const PRODUCT_FILTER_OPTIONS = {
   product_type: [
     { category: "product_type", label: "Switches", value: TAG_IDS.SWITCH },
-    { category: "product_type", label: "Lubricants", value: TAG_IDS.LUBRICANT },
+    // { category: "product_type", label: "Lubricants", value: TAG_IDS.LUBRICANT },
     { category: "product_type", label: "Accessories", value: TAG_IDS.ACCESSORY },
   ],
   brand: [
@@ -33,10 +33,20 @@ export const PRODUCT_FILTER_OPTIONS = {
   ],
 };
 
+export const ACCESSORY_FILTER_OPTIONS = {
+  product_type: [
+    { category: "product_type", label: "Lubricants", value: TAG_IDS.LUBRICANT },
+    { category: "product_type", label: "Switch Films", value: TAG_IDS.SWITCH_FILM },
+    { category: "product_type", label: "Tools", value: TAG_IDS.TOOL },
+    { category: "product_type", label: "Stabilizers", value: TAG_IDS.STABILIZER },
+  ],
+};
+
 export const FILTERS = {
   switches: SWITCH_FILTER_OPTIONS,
   samples: SWITCH_FILTER_OPTIONS,
   products: PRODUCT_FILTER_OPTIONS,
+  accessories: ACCESSORY_FILTER_OPTIONS,
   "gateron-switches": {
     type: [
       { category: "type", label: "linear", value: TAG_IDS.LINEAR },

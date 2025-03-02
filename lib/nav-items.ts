@@ -1,8 +1,16 @@
+import { cdnUrl } from "@/utils/s3";
+
 type NavItem = {
   label: string;
   value: string;
   href: string;
   dropdown?: Record<string, { label: string; href: string; description?: string }[]>;
+  highlight?: {
+    label: string;
+    href: string;
+    image: string;
+    description: string;
+  }[];
 };
 
 export const navItems: NavItem[] = [
@@ -41,22 +49,76 @@ export const navItems: NavItem[] = [
         { label: "Tecsee", href: "/collections/tecsee-switches" },
       ],
     },
+    highlight: [
+      {
+        label: "Gateron Melodic",
+        href: "/products/switches/gateron-melodic-switches",
+        image: `${cdnUrl}/uploads/gateron-melodic-clicky-switches-1-01JN6B3VJRW6HMC6MGQX5SAMKF.webp`,
+        description: "A clicky switch with a unique sound.",
+      },
+    ],
+  },
+  // {
+  //   label: "Lubricants",
+  //   value: "lubricants",
+  //   href: "/products/lubricants",
+  // },
+  {
+    label: "Accessories",
+    value: "accessories",
+    href: "/products/accessories",
+    dropdown: {
+      Accessories: [
+        {
+          label: "Lubricants",
+          href: "/collections/lubricants",
+          description: "For a smooth typing experience.",
+        },
+        {
+          label: "Stabilizers",
+          href: "/collections/stabilizers",
+          description: "Fasten your larger keycaps.",
+        },
+        // {
+        //   label: "Springs",
+        //   href: "/collections/springs",
+        //   description: "Customize your switch springs",
+        // },
+        {
+          label: "Switch films",
+          href: "/collections/switch-films",
+          description: "Tighten your switch housings.",
+        },
+        {
+          label: "Tools",
+          href: "/collections/tools",
+          description: "For your keyboard maintenance.",
+        },
+      ],
+    },
+    highlight: [
+      {
+        label: "Lubricants",
+        href: "/collections/lubricants",
+        image: `${cdnUrl}/uploads/IMG_2410-01JMQZQ8BXG7A2JFKSAFWC3Y4G.webp`,
+        description:
+          "Get your keyboard to perform at its best by lubing your switches, springs, and stabilizers.",
+      },
+      {
+        label: "Durock switch films",
+        href: "/products/accessories/durock-switch-films",
+        image: `${cdnUrl}/uploads/IMG_3291-01JMQZRTHKWXQZ46DSZJNREHP3.webp`,
+        description:
+          "Switch films help tighten your switch housings which can improve stem wobble and acoustics.",
+      },
+    ],
   },
   {
     label: "Samples",
     value: "samples",
     href: "/products/samples",
   },
-  {
-    label: "Lubricants",
-    value: "lubricants",
-    href: "/products/lubricants",
-  },
-  {
-    label: "Accessories",
-    value: "accessories",
-    href: "/products/accessories",
-  },
+
   {
     label: "Sale",
     value: "sale",

@@ -17,6 +17,25 @@ export default {
         border: "var(--border-base)",
         "border-interactive": "var(--border-interactive)",
       },
+      keyframes: {
+        "slide-from-left": {
+          "0%": { transform: "translateX(12px)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        "slide-from-right": {
+          "0%": { transform: "translateX(-12px)", opacity: "0" },
+          "100%": { transform: "translateX(0)", opacity: "1" },
+        },
+        "slide-from-top": {
+          "0%": { transform: "translateY(-12px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
+      },
+      animation: {
+        "slide-from-left": "slide-from-left 200ms ease-out",
+        "slide-from-right": "slide-from-right 200ms ease-out",
+        "slide-from-top": "slide-from-top 200ms ease-out",
+      },
     },
   },
 

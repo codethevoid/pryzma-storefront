@@ -68,7 +68,7 @@ export const ProductCard = ({
               {product.variants?.some(
                 (v) => v.calculated_price?.calculated_price?.price_list_type === "sale",
               ) && (
-                <Text as="span" size="xsmall" className="text-rose-600 dark:text-rose-400">
+                <Text as="span" size="xsmall" className="text-red-600 dark:text-red-400">
                   {formatCurrency(
                     "usd",
                     product.variants?.sort(

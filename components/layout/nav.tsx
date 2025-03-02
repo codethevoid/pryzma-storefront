@@ -23,20 +23,29 @@ export const Nav = () => {
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
   const [mobileDropdown, setMobileDropdown] = useState<string | null>(null);
   const [mobileSubDropdown, setMobileSubDropdown] = useState<string | null>(null);
+  const [lastDropdown, setLastDropdown] = useState<string | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const width = useWindowWidth();
 
-  const handleMouseEnter = (value: string, shouldShow: boolean) => {
+  const handleMouseEnter = (value: string | null, shouldShow: boolean) => {
     if (closeTimeoutRef.current) {
       clearTimeout(closeTimeoutRef.current);
     }
-    setOpenDropdown(value);
-    setShouldShowDropdown(shouldShow);
+
+    if (openDropdown !== value || shouldShowDropdown !== shouldShow) {
+      setOpenDropdown(value);
+      if (shouldShowDropdown) {
+        setLastDropdown(value);
+      }
+      setShouldShowDropdown(shouldShow);
+    }
   };
 
   const handleMouseLeave = () => {
     closeTimeoutRef.current = setTimeout(() => {
       setShouldShowDropdown(false);
+      setOpenDropdown(null);
+      setLastDropdown(null);
     }, 150);
   };
 
@@ -50,6 +59,9 @@ export const Nav = () => {
     <>
       <NavDropdown
         openDropdown={openDropdown}
+        setOpenDropdown={setOpenDropdown}
+        lastDropdown={lastDropdown}
+        setLastDropdown={setLastDropdown}
         handleMouseEnter={handleMouseEnter}
         handleMouseLeave={handleMouseLeave}
         shouldShowDropdown={shouldShowDropdown}
@@ -62,7 +74,7 @@ export const Nav = () => {
         )}
       >
         <div className="mx-auto flex max-w-screen-xl items-center justify-between">
-          <div className="relative flex items-center gap-6">
+          <div className="relative flex items-center gap-3">
             <div className="shrink-0 rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
               <NextLink href="/">
                 <Image
@@ -75,21 +87,26 @@ export const Nav = () => {
                 />
               </NextLink>
             </div>
-            <div className="flex items-center gap-6 max-md:hidden">
+            <div className="flex items-center max-md:hidden">
               {navItems.map((item) => (
                 <NextLink
                   key={item.value}
                   className="flex items-center"
                   href={item.href}
-                  onMouseEnter={() => handleMouseEnter(item.value, item.dropdown ? true : false)}
+                  onMouseEnter={() =>
+                    handleMouseEnter(
+                      item.dropdown ? item.value : null,
+                      item.dropdown ? true : false,
+                    )
+                  }
                   onMouseLeave={handleMouseLeave}
-                  onClick={() => setShouldShowDropdown(false)}
+                  onClick={handleMouseLeave}
                 >
                   <Text
                     // weight="plus"
                     size="small"
                     className={clx(
-                      "flex h-[44px] items-center gap-0.5 text-subtle-foreground transition-colors hover:text-foreground",
+                      "flex h-[44px] items-center gap-0.5 px-3 text-subtle-foreground transition-colors hover:text-foreground",
                       openDropdown === item.value && shouldShowDropdown && "text-foreground",
                     )}
                   >
@@ -180,7 +197,7 @@ export const Nav = () => {
             )}
             {!mobileDropdown &&
               navItems.map((item) =>
-                item.dropdown ? (
+                item.dropdown && Object.keys(item.dropdown).length > 1 ? (
                   <div
                     role="button"
                     key={item.href}
@@ -189,6 +206,68 @@ export const Nav = () => {
                   >
                     <Text size="small">{item.label}</Text>
                     <ChevronRight />
+                  </div>
+                ) : item.dropdown ? (
+                  <div key={item.href}>
+                    <div
+                      role="button"
+                      className="flex w-full items-center justify-between border-b px-6 py-2.5"
+                      onClick={() =>
+                        setMobileSubDropdown(mobileSubDropdown === item.value ? null : item.value)
+                      }
+                    >
+                      <Text size="small" className="capitalize">
+                        {item.label}
+                      </Text>
+                      <ChevronDown
+                        className={mobileSubDropdown === item.value ? "rotate-180" : ""}
+                      />
+                    </div>
+                    <div
+                      className={clx(
+                        "grid transition-all",
+                        mobileSubDropdown === item.value ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+                      )}
+                    >
+                      <div className="overflow-hidden">
+                        {item.dropdown[Object.keys(item.dropdown)[0]].map((value) => (
+                          <div
+                            key={value.href}
+                            className="group border-b bg-zinc-50 dark:bg-zinc-900/50"
+                            onClick={() => {
+                              setIsMobileNavOpen(false);
+                              setMobileDropdown(null);
+                              setMobileSubDropdown(null);
+                            }}
+                          >
+                            <NextLink
+                              href={value.href}
+                              className="flex items-center justify-between px-6 py-2.5"
+                            >
+                              <Text size="small">{value.label}</Text>
+                              <ChevronRight />
+                            </NextLink>
+                          </div>
+                        ))}
+                        <div
+                          key={`shop-all-${item.href}`}
+                          className="group border-b bg-zinc-50 dark:bg-zinc-900/50"
+                          onClick={() => {
+                            setIsMobileNavOpen(false);
+                            setMobileDropdown(null);
+                            setMobileSubDropdown(null);
+                          }}
+                        >
+                          <NextLink
+                            href={item.href}
+                            className="flex items-center justify-between px-6 py-2.5"
+                          >
+                            <Text size="small">Shop all</Text>
+                            <ChevronRight />
+                          </NextLink>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 ) : (
                   <div

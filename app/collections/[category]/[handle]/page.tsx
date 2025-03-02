@@ -69,26 +69,29 @@ const ProductPage = async ({ params }: { params: Params }) => {
   const relatedProducts = await medusa.store.product.list({
     limit: 100,
     fields: "*variants.calculated_price,+variants.inventory_quantity",
-    ...(data.products[0].type?.value !== "lubricant" &&
-      data.products[0]?.type?.value !== "accessory" && {
-        collection_id: data.products[0].collection?.id,
-      }),
-    ...((data.products[0]?.type?.value === "lubricant" ||
-      data.products[0]?.type?.value === "accessory") && {
-      collection_id: ["pcol_01JMXFFRX913AH8KQH9PF7K34P", "pcol_01JMXFGE959XSPYRAK22F987S4"], // lubricants and accessories, can eventually make this dynamic once we have more products in these collections
-    }),
+    type_id: data.products[0].type?.id,
+    // ...(data.products[0].type?.value !== "lubricant" &&
+    //   data.products[0]?.type?.value !== "accessory" && {
+    //     collection_id: data.products[0].collection?.id,
+    //   }),
+    // ...((data.products[0]?.type?.value === "lubricant" ||
+    //   data.products[0]?.type?.value === "accessory") && {
+    //   collection_id: ["pcol_01JMXFFRX913AH8KQH9PF7K34P", "pcol_01JMXFGE959XSPYRAK22F987S4"], // lubricants and accessories, can eventually make this dynamic once we have more products in these collections
+    // }),
   });
 
-  const shuffledRelatedProducts =
-    data.products[0]?.type?.value === "lubricant"
-      ? shuffle(relatedProducts.products.filter((p) => p.id !== data.products[0].id))
-          .sort((a, b) => {
-            if (a.type?.value === "lubricant" && b.type?.value !== "lubricant") return -1;
-            if (a.type?.value !== "lubricant" && b.type?.value === "lubricant") return 1;
-            return 0;
-          })
-          .slice(0, 10)
-      : shuffle(relatedProducts.products.filter((p) => p.id !== data.products[0].id)).slice(0, 10);
+  const shuffledRelatedProducts = shuffle(relatedProducts.products).slice(0, 10);
+
+  // const shuffledRelatedProducts =
+  //   data.products[0]?.type?.value === "lubricant"
+  //     ? shuffle(relatedProducts.products.filter((p) => p.id !== data.products[0].id))
+  //         .sort((a, b) => {
+  //           if (a.type?.value === "lubricant" && b.type?.value !== "lubricant") return -1;
+  //           if (a.type?.value !== "lubricant" && b.type?.value === "lubricant") return 1;
+  //           return 0;
+  //         })
+  //         .slice(0, 10)
+  //     : shuffle(relatedProducts.products.filter((p) => p.id !== data.products[0].id)).slice(0, 10);
 
   // replace all product images with cdn
   if (data.products[0]?.thumbnail) {

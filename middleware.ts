@@ -45,7 +45,8 @@ const redirectMap = {
   [`${switchPrefix}/tecsee-ruby-v2`]: `${switchPrefix}/tecsee-ruby-v2-switches`,
   [`${switchPrefix}/tecsee-sapphire-v2`]: `${switchPrefix}/tecsee-sapphire-v2-switches`,
   // LUBRICANTS
-  [`${lubricantPrefix}/205G0-lubricant`]: `${lubricantPrefix}/krytox-gpl-205-grade-0-lubricant`,
+  [`${lubricantPrefix}/205G0-lubricant`]: `${accessoryPrefix}/krytox-gpl-205-grade-0-lubricant`,
+  [`${lubricantPrefix}/gpl-105-oil-lubricant`]: `${accessoryPrefix}/krytox-gpl-105-oil-lubricant`,
   // ACCESSORIES
   [`${accessoryPrefix}/gateron-ink-stabilizers`]: `${accessoryPrefix}/gateron-ink-v2-stabilizers`,
   [`${accessoryPrefix}/lube-brushes`]: `${accessoryPrefix}/nylon-lube-brushes`,

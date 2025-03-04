@@ -63,7 +63,9 @@ const ProductPage = async ({ params }: { params: Params }) => {
     // }),
   });
 
-  const shuffledRelatedProducts = shuffle(relatedProducts.products).slice(0, 10);
+  const shuffledRelatedProducts = shuffle(
+    relatedProducts.products.filter((p) => p.id !== data.products[0].id),
+  ).slice(0, 10);
 
   // const shuffledRelatedProducts =
   //   data.products[0]?.type?.value === "lubricant"

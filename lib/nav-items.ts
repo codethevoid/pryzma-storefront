@@ -120,8 +120,8 @@ export const navItems: NavItem[] = [
   },
 
   {
-    label: "Sale",
-    value: "sale",
-    href: "/collections/clearance-sale",
+    label: "Bundle",
+    value: "bundle",
+    href: "/products/bundles/starter-bundle",
   },
 ];

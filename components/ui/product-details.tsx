@@ -1,7 +1,7 @@
 "use client";
 
 import { StoreProduct, StoreProductVariant } from "@medusajs/types";
-import { Heading, Text, StatusBadge, Button, Input, IconButton, clx } from "@medusajs/ui";
+import { Heading, Text, StatusBadge, Button, Input, IconButton, clx, Select } from "@medusajs/ui";
 import { Minus, Plus } from "@medusajs/icons";
 import { Suspense, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
@@ -22,6 +22,8 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
   const getStatus = (): { color: "green" | "orange" | "red"; label: string } => {
     const inventory = selectedVariant.inventory_quantity as number;
     if (inventory >= 20) return { color: "green", label: "In stock" };
+    if (inventory > 0 && inventory <= 5)
+      return { color: "orange", label: `Only ${inventory} remaining` };
     if (inventory > 0) return { color: "orange", label: "Limited stock" };
     return { color: "red", label: "Out of stock" };
   };
@@ -92,23 +94,57 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
                 .map((option) => (
                   <div key={option.id} className="space-y-2">
                     <Text size="small">{option.title}</Text>
-                    <div className="flex flex-wrap gap-2">
-                      {option.values!.map((value) => (
-                        <Button
-                          key={value.id}
-                          size="small"
-                          variant={
-                            selectedVariant.options?.find(
-                              (opt) => opt.value === value.value && opt.option_id === option.id,
-                            )
-                              ? "primary"
-                              : "secondary"
-                          }
-                        >
-                          {value.value}
-                        </Button>
-                      ))}
-                    </div>
+                    {option.values && option.values.length < 6 ? (
+                      <div className="flex flex-wrap gap-2">
+                        {option.values!.map((value) => (
+                          <Button
+                            key={value.id}
+                            size="small"
+                            variant={
+                              selectedVariant.options?.find(
+                                (opt) => opt.value === value.value && opt.option_id === option.id,
+                              )
+                                ? "primary"
+                                : "secondary"
+                            }
+                          >
+                            {value.value}
+                          </Button>
+                        ))}
+                      </div>
+                    ) : (
+                      <>
+                        {option.values?.map((value) => (
+                          <Select
+                            key={value.id}
+                            name={option.id}
+                            value={
+                              selectedVariant.options?.find(
+                                (opt) => opt.value === value.value && opt.option_id === option.id,
+                              )?.value
+                            }
+                          >
+                            <Select.Trigger>
+                              <Select.Value />
+                            </Select.Trigger>
+                            <Select.Content collisionPadding={16}>
+                              {option.values?.map((value) => (
+                                <Select.Item
+                                  key={value.id}
+                                  value={value.value}
+                                  // className={clx(
+                                  //   !isOptionAvailable(option.id, value.value) &&
+                                  //     "cursor-default text-subtle-foreground",
+                                  // )}
+                                >
+                                  {value.value}
+                                </Select.Item>
+                              ))}
+                            </Select.Content>
+                          </Select>
+                        ))}
+                      </>
+                    )}
                   </div>
                 ))}
             </>

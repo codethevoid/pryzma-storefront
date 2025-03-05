@@ -33,7 +33,7 @@ const Products = async () => {
     getProducts(),
     getTagCount({
       options: PRODUCT_FILTER_OPTIONS,
-      handle: ["switches", "lubricants", "accessories"],
+      handle: ["switches", "lubricants", "accessories", "bundles"],
     }),
   ]);
 

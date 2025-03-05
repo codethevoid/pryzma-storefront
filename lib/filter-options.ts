@@ -19,6 +19,7 @@ export const SWITCH_FILTER_OPTIONS = {
 export const PRODUCT_FILTER_OPTIONS = {
   product_type: [
     { category: "product_type", label: "Switches", value: TAG_IDS.SWITCH },
+    { category: "product_type", label: "Bundles", value: TAG_IDS.BUNDLE },
     // { category: "product_type", label: "Lubricants", value: TAG_IDS.LUBRICANT },
     { category: "product_type", label: "Accessories", value: TAG_IDS.ACCESSORY },
   ],

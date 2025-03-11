@@ -130,8 +130,8 @@ export const OptionSelector = ({
                     key={value.id}
                     size="small"
                     className={clx(
-                      !isOptionAvailable(option.id, value.value) &&
-                        "text-subtle-foreground line-through",
+                      "relative",
+                      !isOptionAvailable(option.id, value.value) && "text-subtle-foreground",
                       selectedOptions[option.id] === value.value && "text-ui-contrast-fg-primary",
                     )}
                     variant={selectedOptions[option.id] === value.value ? "primary" : "secondary"}
@@ -139,6 +139,21 @@ export const OptionSelector = ({
                     // disabled={!isOptionAvailable(option.id, value.value)}
                   >
                     {value.value}
+                    {!isOptionAvailable(option.id, value.value) && (
+                      <span
+                        ref={(el) => {
+                          if (!el) return;
+                          const parent = el.parentElement;
+                          if (!parent) return;
+                          const { width, height } = parent.getBoundingClientRect();
+                          const angle = Math.atan2(height, width) * (180 / Math.PI);
+                          const lineWidth = Math.sqrt(width * width + height * height);
+                          el.style.width = `${lineWidth}px`;
+                          el.style.transform = `translate(-50%, -50%) rotate(${angle}deg)`;
+                        }}
+                        className={clx("absolute left-1/2 top-1/2 border-b")}
+                      />
+                    )}
                   </Button>
                 ))}
               </div>

@@ -47,6 +47,7 @@ const getInitialData = async (
     category_id: categoryId,
     limit: 24,
     fields: "*variants.calculated_price",
+    order: "-created_at",
   });
 
   return response;

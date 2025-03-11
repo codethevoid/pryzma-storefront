@@ -17,7 +17,7 @@ const getCollectionRoutes = async (): Promise<MetadataRoute.Sitemap> => {
 };
 
 const getProductRoutes = async (): Promise<MetadataRoute.Sitemap> => {
-  const response = await medusa.store.product.list({ limit: 100 });
+  const response = await medusa.store.product.list({ limit: 200 });
   return response.products.map((product) => ({
     url: `https://pryzma.io/products/${product.collection?.handle}/${product.handle}`,
     lastModified: new Date(),

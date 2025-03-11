@@ -30,7 +30,7 @@ export const ProductCard = ({
   return (
     <div
       className={clx(
-        "group relative rounded-md bg-ui-bg-field p-2.5 shadow-borders-base transition-all hover:bg-ui-bg-field-hover",
+        "group relative rounded-md p-2.5 shadow-borders-base transition-all dark:bg-ui-bg-field max-sm:bg-transparent max-sm:dark:bg-transparent",
         className,
       )}
     >
@@ -43,13 +43,13 @@ export const ProductCard = ({
       >
         <div className="flex h-full flex-col justify-between space-y-1">
           <div className="space-y-2">
-            <div className="relative aspect-[3/2] w-full overflow-hidden rounded">
+            <div className="relative aspect-[4/3] w-full overflow-hidden rounded">
               <Image
                 src={product.thumbnail?.replace(s3Url, cdnUrl) || ""}
                 alt={product.title}
                 height={667}
                 width={1000}
-                className="h-full w-full object-cover"
+                className="h-full w-full object-cover transition-all duration-300 ease-in-out group-hover:scale-[104%] max-md:group-hover:scale-100"
                 loading={eager ? "eager" : "lazy"}
               />
             </div>

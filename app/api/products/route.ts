@@ -22,6 +22,7 @@ export const GET = async (req: NextRequest) => {
       offset: page === 1 ? 0 : (page - 1) * pageSize,
       ...buildTagFilters(JSON.parse(filters)),
       fields: "*variants.calculated_price",
+      order: "-created_at",
     });
 
     return NextResponse.json(response);

@@ -14,7 +14,7 @@ type Params = Promise<{ category: string; handle: string }>;
 
 export const generateStaticParams = async () => {
   const response = await medusa.store.product.list({
-    limit: 100,
+    limit: 200,
     fields: "*categories,+categories.parent_category_id",
   });
 
@@ -67,7 +67,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
   });
 
   const relatedProducts = await medusa.store.product.list({
-    limit: 100,
+    limit: 200,
     fields: "*variants.calculated_price,+variants.inventory_quantity",
     type_id: data.products[0].type?.id,
     // ...(data.products[0].type?.value !== "lubricant" &&
@@ -115,13 +115,13 @@ const ProductPage = async ({ params }: { params: Params }) => {
             <NextLink href={`/collections/${category}`}>
               <Text
                 size="small"
-                className="capitalize text-subtle-foreground transition-colors hover:text-foreground"
+                className="whitespace-nowrap capitalize text-subtle-foreground transition-colors hover:text-foreground"
               >
                 {data.products[0].categories?.find((c) => c.handle === category)?.name}
               </Text>
             </NextLink>
             <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
-            <Text size="small" className="cursor-default capitalize text-subtle-foreground">
+            <Text size="small" className="min-w-0 cursor-default truncate text-subtle-foreground">
               {data.products[0].title}
             </Text>
           </div>

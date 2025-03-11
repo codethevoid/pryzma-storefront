@@ -14,7 +14,7 @@ export const dynamicParams = false;
 type Params = Promise<{ category: string; handle: string }>;
 
 export const generateStaticParams = async () => {
-  const response = await medusa.store.product.list({ limit: 100 });
+  const response = await medusa.store.product.list({ limit: 200 });
   return response.products.map((product) => ({
     category: product.collection?.handle,
     handle: product.handle,
@@ -50,7 +50,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
   });
 
   const relatedProducts = await medusa.store.product.list({
-    limit: 100,
+    limit: 200,
     fields: "*variants.calculated_price,+variants.inventory_quantity",
     type_id: data.products[0].type?.id,
     // ...(data.products[0].type?.value !== "lubricant" &&

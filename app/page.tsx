@@ -39,6 +39,7 @@ const getProducts = async ({
     limit,
     fields: "*variants.calculated_price",
     category_id: ids,
+    order: "-created_at",
   });
 
   return response.products || [];

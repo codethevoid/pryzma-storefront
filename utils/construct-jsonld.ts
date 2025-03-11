@@ -45,7 +45,7 @@ export const constructProductPageJsonLd = (product: StoreProduct): WithContext<P
       priceCurrency: "USD",
       itemCondition: "https://schema.org/NewCondition",
       availability:
-        (product.variants?.[0]?.inventory_quantity || 0) > 0
+        (product.variants?.find((v) => v.inventory_quantity || 0 > 0)?.inventory_quantity || 0) > 0
           ? "https://schema.org/InStock"
           : "https://schema.org/OutOfStock",
     },

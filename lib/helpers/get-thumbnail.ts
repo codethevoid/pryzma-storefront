@@ -5,7 +5,7 @@ import { s3Url, cdnUrl } from "@/utils/s3";
 export const getThumbnail = cache(async (categoryId: string) => {
   const response = await medusa.store.product.list({
     category_id: categoryId,
-    limit: 100,
+    limit: 200,
   });
 
   return (

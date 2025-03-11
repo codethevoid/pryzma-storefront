@@ -15,13 +15,13 @@ export const Breadcrumbs = ({
       <NextLink href={`/products/${product.collection?.handle}`}>
         <Text
           size="small"
-          className="capitalize text-subtle-foreground transition-colors hover:text-foreground"
+          className="whitespace-nowrap capitalize text-subtle-foreground transition-colors hover:text-foreground"
         >
           {product.collection?.title}
         </Text>
       </NextLink>
       <TriangleRightMini className="relative top-[1px] text-subtle-foreground" />
-      <Text size="small" className="cursor-default capitalize text-subtle-foreground">
+      <Text size="small" className="min-w-0 cursor-default truncate text-subtle-foreground">
         {product.title.replace("Sample", "")}
       </Text>
     </div>

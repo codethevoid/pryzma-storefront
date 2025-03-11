@@ -23,6 +23,7 @@ const getProducts = async () => {
     category_id: ids,
     limit: 24,
     fields: "*variants.calculated_price",
+    order: "-created_at",
   });
 
   return { products, ids };

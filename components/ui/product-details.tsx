@@ -23,7 +23,7 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
     const inventory = selectedVariant.inventory_quantity as number;
     if (inventory >= 20) return { color: "green", label: "In stock" };
     if (inventory > 0 && inventory <= 5)
-      return { color: "orange", label: `Only ${inventory} remaining` };
+      return { color: "orange", label: `Only ${inventory} in stock` };
     if (inventory > 0) return { color: "orange", label: "Limited stock" };
     return { color: "red", label: "Out of stock" };
   };

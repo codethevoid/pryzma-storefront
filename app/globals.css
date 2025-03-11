@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+::selection {
+  background: oklch(0.984 0.014 180.72);
+  color: oklch(0.6 0.118 184.704);
+}
+
+.dark ::selection {
+  background: oklch(0.25 0.046 192.524);
+  color: oklch(0.777 0.152 181.912);
+}
+
 body {
   font-family: Arial, Helvetica, sans-serif;
 }

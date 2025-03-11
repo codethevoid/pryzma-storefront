@@ -31,7 +31,7 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
                 width={1500}
                 className="h-full w-full object-cover"
                 priority
-                quality={selectedImage === product.thumbnail ? 100 : 80}
+                quality={selectedImage === product.thumbnail ? 90 : 80}
               />
             </motion.div>
           </AnimatePresence>

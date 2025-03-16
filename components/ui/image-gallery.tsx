@@ -5,6 +5,7 @@ import { clx } from "@medusajs/ui";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
 import { useState } from "react";
+import { Lens } from "@/components/magicui/lens";
 
 export const ImageGallery = ({ product }: { product: StoreProduct }) => {
   const [selectedImage, setSelectedImage] = useState<string>(
@@ -24,15 +25,17 @@ export const ImageGallery = ({ product }: { product: StoreProduct }) => {
               transition={{ duration: 0.2 }}
               className="relative h-full w-full"
             >
-              <Image
-                src={selectedImage}
-                alt={product.title}
-                height={1000}
-                width={1500}
-                className="h-full w-full object-cover"
-                priority
-                quality={selectedImage === product.thumbnail ? 90 : 80}
-              />
+              <Lens zoomFactor={1.5} ariaLabel="Zoom in on the image">
+                <Image
+                  src={selectedImage}
+                  alt={product.title}
+                  height={1000}
+                  width={1500}
+                  className="h-full w-full object-cover"
+                  priority
+                  quality={selectedImage === product.thumbnail ? 90 : 80}
+                />
+              </Lens>
             </motion.div>
           </AnimatePresence>
         </div>

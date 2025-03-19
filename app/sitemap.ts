@@ -18,12 +18,14 @@ const getCollectionRoutes = async (): Promise<MetadataRoute.Sitemap> => {
 
 const getProductRoutes = async (): Promise<MetadataRoute.Sitemap> => {
   const response = await medusa.store.product.list({ limit: 200 });
-  return response.products.map((product) => ({
-    url: `https://pryzma.io/products/${product.collection?.handle}/${product.handle}`,
-    lastModified: new Date(),
-    changeFrequency: "weekly",
-    priority: 0.6,
-  }));
+  return response.products
+    .filter((product) => product.collection?.handle !== "samples")
+    .map((product) => ({
+      url: `https://pryzma.io/products/${product.collection?.handle}/${product.handle}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 0.6,
+    }));
 };
 
 const sitemap = async (): Promise<MetadataRoute.Sitemap> => {

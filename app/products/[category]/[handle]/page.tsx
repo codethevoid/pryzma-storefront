@@ -37,6 +37,7 @@ export const generateMetadata = async ({ params }: { params: Params }): Promise<
         ? product.title
         : ((product.description?.split("\n")[0] || "") as string),
     image: product.images?.[1]?.url || product.images?.[0]?.url,
+    noIndex: product.type?.value === "sample",
   });
 };
 
@@ -94,10 +95,12 @@ const ProductPage = async ({ params }: { params: Params }) => {
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
-      />
+      {data.products[0].type?.value !== "sample" && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
+        />
+      )}
       <main className="min-h-[calc(100vh-330.5px)] p-4 pb-12">
         <div className="mx-auto max-w-screen-xl space-y-4">
           <Breadcrumbs product={data.products[0]} />

@@ -9,6 +9,7 @@ type Props = {
   alternates?: {
     canonical?: string;
   };
+  noIndex?: boolean;
 };
 
 export const constructMetadata = ({
@@ -17,6 +18,7 @@ export const constructMetadata = ({
   image = `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
   other = {},
   alternates,
+  noIndex = false,
 }: Props): Metadata => {
   return {
     title,
@@ -63,6 +65,7 @@ export const constructMetadata = ({
       },
     ],
     ...(alternates && { alternates }),
+    ...(noIndex && { robots: { index: false } }),
     metadataBase: new URL("https://pryzma.io"),
   };
 };

@@ -10,6 +10,11 @@ const faqs = [
       "Our AI image generator uses advanced machine learning models to turn text prompts into high-quality images instantly.",
   },
   {
+    question: "What model does the AI image generator use?",
+    answer:
+      "Our AI image generator currently uses the Stable Diffusion XL 1.0 model, we plan to add more models in the future.",
+  },
+  {
     question: "Is this AI art generator really free?",
     answer:
       "Yes! You can generate AI images for free with no subscription required. We're committed to providing a fast and easy way to create stunning images.",

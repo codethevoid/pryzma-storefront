@@ -6,6 +6,7 @@ import type {
   Organization,
   WebSite,
   WebPage,
+  FAQPage,
 } from "schema-dts";
 import { s3Url, cdnUrl } from "./s3";
 
@@ -137,3 +138,20 @@ export const layoutJsonLd = {
 //     url: `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
 //   },
 // };
+
+export const constructFaqJsonLd = (
+  faqs: { question: string; answer: string }[],
+): WithContext<FAQPage> => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqs.map((faq) => ({
+      "@type": "Question",
+      name: faq.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: faq.answer,
+      },
+    })),
+  };
+};

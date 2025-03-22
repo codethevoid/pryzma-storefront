@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@ai-sdk/fireworks": "^0.2.0",
+    "@formkit/auto-animate": "^0.8.2",
     "@hookform/resolvers": "^4.0.0",
     "@medusajs/icons": "^2.4.0",
     "@medusajs/js-sdk": "^2.4.0",

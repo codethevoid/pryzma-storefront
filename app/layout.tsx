@@ -6,6 +6,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Viewport } from "next";
 import { layoutJsonLd } from "@/utils/construct-jsonld";
+import { validateEnv } from "@/utils/env";
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -13,6 +14,8 @@ export const viewport: Viewport = {
   maximumScale: 1,
   userScalable: false,
 };
+
+validateEnv();
 
 export default function RootLayout({
   children,

@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { setAddressValues } from "@/lib/helpers/set-address-values";
 import { useAddressAutocomplete } from "@/hooks/use-address-auto-complete";
 import { Google } from "@/lib/icons/google";
+
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK!);
 const StripePayment = () => {
   const { cart, isLoadingClientSecret } = useCart();

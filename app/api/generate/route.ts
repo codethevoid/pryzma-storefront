@@ -3,6 +3,11 @@ import { experimental_generateImage as generateImage } from "ai";
 import { fireworks } from "@ai-sdk/fireworks";
 import { ratelimiter } from "@/lib/upstash/rate-limit";
 import { ipAddress } from "@vercel/functions";
+import { z } from "zod";
+
+const schema = z.object({
+  prompt: z.string().min(1, { message: "Prompt is required" }),
+});
 
 export const maxDuration = 30;
 
@@ -12,13 +17,17 @@ export const POST = async (req: NextRequest) => {
     const { success } = await ratelimiter({ requests: 10, duration: "60 m" }).limit(identifier);
     if (!success) {
       return NextResponse.json(
-        { error: "You can only generate 10 images per hour, try again later" },
+        { error: "You can only generate 10 images per hour" },
         { status: 429 },
       );
     }
 
     const { prompt } = (await req.json()) as { prompt: string };
-    console.log("prompt", prompt);
+
+    const { success: validationSuccess } = schema.safeParse({ prompt });
+    if (!validationSuccess) {
+      return NextResponse.json({ error: "Invalid prompt" }, { status: 400 });
+    }
 
     const { images } = await generateImage({
       model: fireworks.image("accounts/fireworks/models/stable-diffusion-xl-1024-v1-0"),

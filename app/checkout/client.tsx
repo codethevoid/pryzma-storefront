@@ -70,7 +70,17 @@ export const CheckoutClient = () => {
             <ProgressTabs.Trigger
               value="shipping"
               status={cart?.shipping_methods?.length ? "completed" : "not-started"}
-              disabled={!cart || !cart?.email || !cart?.shipping_address}
+              disabled={
+                !cart ||
+                !cart?.email ||
+                !cart?.shipping_address ||
+                !cart?.shipping_address.address_1 ||
+                !cart?.shipping_address.first_name ||
+                !cart?.shipping_address.last_name ||
+                !cart?.shipping_address.province ||
+                !cart?.shipping_address.city ||
+                !cart.shipping_address.postal_code
+              }
             >
               Shipping
             </ProgressTabs.Trigger>
@@ -83,6 +93,14 @@ export const CheckoutClient = () => {
                 !cart?.email ||
                 !cart?.shipping_address ||
                 !cart?.shipping_methods?.length ||
+                !cart?.email ||
+                !cart?.shipping_address ||
+                !cart?.shipping_address.address_1 ||
+                !cart?.shipping_address.first_name ||
+                !cart?.shipping_address.last_name ||
+                !cart?.shipping_address.province ||
+                !cart?.shipping_address.city ||
+                !cart.shipping_address.postal_code ||
                 isLoadingShipping
               }
             >

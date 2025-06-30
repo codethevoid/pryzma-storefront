@@ -1,11 +1,13 @@
 "use client";
 
-import { OurShippingOption, shippingOptions } from "@/lib/shipping-options";
+import { shippingOptions } from "@/lib/shipping-options";
 import { loadStripe, StripeExpressCheckoutElementConfirmEvent } from "@stripe/stripe-js";
-import { useCart } from "@/components/context/cart";
-import { Elements, ExpressCheckoutElement, useElements } from "@stripe/react-stripe-js";
+import { useCart, ExtendedStoreCart } from "@/components/context/cart";
+import { Elements, ExpressCheckoutElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { medusa } from "@/utils/medusa";
+import { StoreCart } from "@medusajs/types";
 import { useState } from "react";
+import { toast } from "@medusajs/ui";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK!);
 
@@ -48,7 +50,7 @@ export const ExpressCheckout = () => {
       stripe={stripePromise}
       options={{
         mode: "payment",
-        amount: (cart.item_subtotal + shippingOptions[0].amount) * 100,
+        amount: Math.round(cart.total * 100),
         currency: "usd",
       }}
     >
@@ -58,16 +60,142 @@ export const ExpressCheckout = () => {
 };
 
 const ExpressButtons = () => {
-  const { cart } = useCart();
+  const { cart, setCart, fields } = useCart();
   const elements = useElements();
-  const [selectedShippingOption, setSelectedShippingOption] = useState<OurShippingOption>(
-    shippingOptions[0],
-  );
+  const stripe = useStripe();
+  const [isInitial, setIsInitial] = useState(true);
 
   if (!cart) return <></>;
 
+  const getAmount = (updatedCart: StoreCart) => {
+    return Math.round(updatedCart.total * 100);
+  };
+
+  const getLineItems = (updatedCart: StoreCart) => {
+    if (!updatedCart) return [];
+    const subtotal = Math.round(updatedCart.original_item_subtotal * 100);
+    const shipping = Math.round(updatedCart.original_shipping_subtotal * 100);
+    const tax = Math.round(updatedCart.original_tax_total * 100);
+    const discount = Math.round(updatedCart.discount_total * 100);
+    return [
+      { name: "Subtotal", amount: subtotal },
+      { name: "Shipping", amount: shipping },
+      ...(tax > 0 ? [{ name: "Taxes", amount: tax }] : []),
+      ...(discount > 0 ? [{ name: "Discount", amount: -discount }] : []),
+    ];
+  };
+
+  const updateShippingMethod = async (shippingMethodId: string): Promise<ExtendedStoreCart> => {
+    const response = await medusa.store.cart.addShippingMethod(
+      cart.id,
+      { option_id: shippingMethodId },
+      { fields },
+    );
+    setCart(response.cart as ExtendedStoreCart);
+    return response.cart as ExtendedStoreCart;
+  };
+
+  const getPaymentDetails = async (updatedCart: StoreCart) => {
+    const response = await medusa.store.payment.initiatePaymentSession(updatedCart, {
+      provider_id: "pp_stripe_stripe",
+    });
+
+    const clientSecret = response.payment_collection.payment_sessions?.[0]?.data
+      ?.client_secret as string;
+    const paymentIntentId = response.payment_collection.payment_sessions?.[0]?.data?.id as string;
+
+    return { clientSecret, paymentIntentId };
+  };
+
+  const getConfirmToken = async (paymentIntentId: string, cartId: string) => {
+    const response = await fetch("/api/checkout/token", {
+      method: "POST",
+      body: JSON.stringify({ paymentIntentId, cartId }),
+    });
+
+    if (!response.ok) return null;
+    const { token } = await response.json();
+    return token;
+  };
+
   const onConfirm = async (event: StripeExpressCheckoutElementConfirmEvent) => {
+    const { shippingAddress, billingDetails, paymentFailed } = event;
+    if (!stripe || !elements || !cart) {
+      return paymentFailed({ reason: "fail" });
+    }
+
+    // if no shipping address or billing details
+    if (!shippingAddress || !billingDetails) {
+      return paymentFailed({ reason: "fail" });
+    }
+
+    // if shipping is not the United States
+    if (shippingAddress.address.country.toLowerCase() !== "us") {
+      return paymentFailed({ reason: "invalid_shipping_address" });
+    }
     console.log(event);
+
+    // update address and billing details on medusa cart
+    const updatedCart = await medusa.store.cart.update(cart.id, {
+      ...(billingDetails.email && { email: billingDetails.email }),
+      billing_address: {
+        ...(billingDetails.phone && { phone: billingDetails.phone }),
+        first_name: billingDetails.name.split(" ")[0],
+        ...(billingDetails.name.split(" ").length > 1 && {
+          last_name: billingDetails.name.split(" ")[1],
+        }),
+        address_1: billingDetails.address.line1,
+        ...(billingDetails.address.line2 && { address_2: billingDetails.address.line2 }),
+        city: billingDetails.address.city,
+        province: billingDetails.address.state,
+        postal_code: billingDetails.address.postal_code,
+        country_code: "us",
+      },
+      shipping_address: {
+        ...(billingDetails.phone && { phone: billingDetails.phone }),
+        first_name: shippingAddress.name.split(" ")[0],
+        ...(shippingAddress.name.split(" ").length > 1 && {
+          last_name: shippingAddress.name.split(" ")[1],
+        }),
+        address_1: shippingAddress.address.line1,
+        ...(shippingAddress.address.line2 && { address_2: shippingAddress.address.line2 }),
+        city: shippingAddress.address.city,
+        province: shippingAddress.address.state,
+        postal_code: shippingAddress.address.postal_code,
+        country_code: "us",
+      },
+    });
+
+    console.log(updatedCart);
+    if (!updatedCart?.cart) return paymentFailed({ reason: "fail" });
+
+    // initialize a payment with medusa
+    const { clientSecret, paymentIntentId } = await getPaymentDetails(updatedCart.cart);
+
+    if (!clientSecret || !paymentIntentId) {
+      console.log("Failed to initialize payment");
+      return paymentFailed({ reason: "fail" });
+    }
+
+    // generate confirm token
+    // const token = await getConfirmToken(paymentIntentId, cart.id);
+    // if (!token) {
+    //   return paymentFailed({ reason: "fail" });
+    // }
+
+    // // capture payment with stripe
+    // const { error } = await stripe.confirmPayment({
+    //   elements,
+    //   clientSecret,
+    //   confirmParams: {
+    //     return_url: `https://pryzma.io/checkout/process?token=${token}}`,
+    //   },
+    //   redirect: "if_required",
+    // });
+    //
+    // if (error) {
+    //   return toast.error(error.message || "Failed to process payment");
+    // }
   };
 
   return (
@@ -77,7 +205,7 @@ const ExpressButtons = () => {
       // @ts-ignore
       options={expressOptions}
       onShippingAddressChange={async ({ resolve, address }) => {
-        // update the cart with the new shipping address so we can calculate tax
+        console.log("Shipping address changed");
         const response = await medusa.store.cart.update(cart.id, {
           shipping_address: {
             city: address.city,
@@ -86,33 +214,25 @@ const ExpressButtons = () => {
             country_code: "us",
           },
         });
-        const amount =
-          Math.round(selectedShippingOption.amount * 100) +
-          Math.round(response.cart.item_subtotal * 100) +
-          Math.round(response.cart.tax_total * 100);
-        console.log("New amount:", amount);
-        elements?.update({
-          amount,
-          currency: "usd",
-        });
-        resolve({});
+
+        let updatedCart = response.cart;
+        if (isInitial) {
+          console.log("Initial checkout");
+          updatedCart = await updateShippingMethod(shippingOptions[0].id);
+          setIsInitial(false);
+        }
+
+        elements?.update({ amount: getAmount(updatedCart), currency: "usd" });
+        resolve({ lineItems: getLineItems(updatedCart) });
       }}
       onShippingRateChange={async ({ resolve, shippingRate }) => {
-        elements?.update({
-          amount: Number(shippingRate.amount) + Math.round(cart?.item_subtotal * 100),
-          currency: "usd",
-        });
-        setSelectedShippingOption(
-          shippingOptions.find((option) => option.id === shippingRate.id) as OurShippingOption,
-        );
-        resolve({});
+        const updatedCart = await updateShippingMethod(shippingRate.id);
+        elements?.update({ amount: getAmount(updatedCart), currency: "usd" });
+        resolve({ lineItems: getLineItems(updatedCart) });
       }}
       onCancel={() => {
-        elements?.update({
-          amount: cart.item_subtotal + Math.round(shippingOptions[0].amount) * 100,
-          currency: "usd",
-        });
-        setSelectedShippingOption(shippingOptions[0]);
+        elements?.update({ amount: Math.round(cart.total * 100), currency: "usd" });
+        setIsInitial(true);
       }}
     />
   );

@@ -41,6 +41,7 @@ const StripePaymentForm = () => {
   const elements = useElements();
   const stripe = useStripe();
   const { resolvedTheme } = useTheme();
+
   useEffect(() => {
     if (stripe && elements) {
       initializeStripe(stripe, elements);

@@ -6,7 +6,8 @@ export const metadata = constructMetadata({
   title: "Checkout - Pryzma",
 });
 
-const Checkout = () => {
+const Checkout = async () => {
+
   return (
     <>
       <Script

@@ -1,6 +1,6 @@
 import { ThemeProvider } from "next-themes";
 import { CartProvider } from "@/components/context/cart";
-import { Toaster } from "@medusajs/ui";
+import { Toaster, TooltipProvider } from "@medusajs/ui";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -10,10 +10,12 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       attribute="class"
       enableSystem={false}
     >
-      <CartProvider>
-        {children}
-        <Toaster position="bottom-right" />
-      </CartProvider>
+      <TooltipProvider>
+        <CartProvider>
+          {children}
+          <Toaster position="bottom-right" />
+        </CartProvider>
+      </TooltipProvider>
     </ThemeProvider>
   );
 };

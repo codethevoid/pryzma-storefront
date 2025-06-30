@@ -1,8 +1,15 @@
+export type OurShippingOption = {
+  id: string;
+  name: string;
+  description: string;
+  amount: number; // Amount in dollars
+};
+
 export const shippingOptions = [
   {
     id: "so_01JM8CF0Q0X8G71SSQBH3MQ66S",
     name: "USPS Ground Advantage",
-    description: "3-5 business days",
+    description: "2-5 business days",
     amount: 6,
   },
   {

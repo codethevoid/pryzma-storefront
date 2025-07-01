@@ -26,6 +26,10 @@ const shopLinks = [
 
 const companyLinks = [
   {
+    title: "Blog",
+    href: "/blog",
+  },
+  {
     title: "Support",
     href: "mailto:support@pryzma.io",
   },
@@ -215,7 +219,10 @@ export const Footer = () => {
               {companyLinks.map((link) => (
                 <div key={link.href}>
                   {link.href.includes("http") || link.href.includes("mailto") ? (
-                    <a href={link.href} target="_blank">
+                    <a
+                      href={link.href}
+                      {...(!link.href.includes("mailto") && { target: "_blank" })}
+                    >
                       <Text
                         size="xsmall"
                         className="text-subtle-foreground hover:text-foreground hover:underline"

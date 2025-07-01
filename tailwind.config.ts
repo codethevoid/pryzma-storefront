@@ -6,6 +6,7 @@ export default {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./mdx-components.tsx",
     "./node_modules/@medusajs/ui/dist/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {

@@ -2,12 +2,13 @@
 
 import { shippingOptions } from "@/lib/shipping-options";
 import { loadStripe, StripeExpressCheckoutElementConfirmEvent } from "@stripe/stripe-js";
-import { useCart, ExtendedStoreCart } from "@/components/context/cart";
+import { ExtendedStoreCart, useCart } from "@/components/context/cart";
 import { Elements, ExpressCheckoutElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { medusa } from "@/utils/medusa";
 import { StoreCart } from "@medusajs/types";
 import { useState } from "react";
 import { toast } from "@medusajs/ui";
+import { useRouter } from "next/navigation";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK!);
 
@@ -60,9 +61,10 @@ export const ExpressCheckout = () => {
 };
 
 const ExpressButtons = () => {
-  const { cart, setCart, fields } = useCart();
+  const { cart, setCart, fields, refreshCart } = useCart();
   const elements = useElements();
   const stripe = useStripe();
+  const router = useRouter();
   const [isInitial, setIsInitial] = useState(true);
 
   if (!cart) return <></>;
@@ -178,24 +180,43 @@ const ExpressButtons = () => {
     }
 
     // generate confirm token
-    // const token = await getConfirmToken(paymentIntentId, cart.id);
-    // if (!token) {
-    //   return paymentFailed({ reason: "fail" });
-    // }
+    const token = await getConfirmToken(paymentIntentId, cart.id);
+    if (!token) {
+      return paymentFailed({ reason: "fail" });
+    }
 
-    // // capture payment with stripe
-    // const { error } = await stripe.confirmPayment({
-    //   elements,
-    //   clientSecret,
-    //   confirmParams: {
-    //     return_url: `https://pryzma.io/checkout/process?token=${token}}`,
-    //   },
-    //   redirect: "if_required",
-    // });
-    //
-    // if (error) {
-    //   return toast.error(error.message || "Failed to process payment");
-    // }
+    // capture payment with stripe
+    const { error } = await stripe.confirmPayment({
+      elements,
+      clientSecret,
+      confirmParams: {
+        return_url: `https://pryzma.io/checkout/process?token=${token}`,
+      },
+      redirect: "if_required",
+    });
+
+    if (error) {
+      return toast.error(error.message || "Failed to process payment");
+    }
+
+    try {
+      await fetch("/api/checkout/token/revoke", {
+        method: "POST",
+        body: JSON.stringify({ token }),
+      });
+    } catch {}
+
+    // complete order in medusa
+    const completed = await medusa.store.cart.complete(updatedCart.cart.id);
+    if (completed.type === "order" && completed.order) {
+      const { order } = completed;
+      router.push(`/orders/${order.id}`);
+      refreshCart();
+    } else if (completed.type === "cart") {
+      toast.error(completed.error.message || "Failed to complete order");
+    }
+
+    return toast.error("Failed to complete order");
   };
 
   return (
@@ -203,7 +224,7 @@ const ExpressButtons = () => {
       onConfirm={onConfirm}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      options={expressOptions}
+      options={{ ...expressOptions }}
       onShippingAddressChange={async ({ resolve, address }) => {
         console.log("Shipping address changed");
         const response = await medusa.store.cart.update(cart.id, {

@@ -1,4 +1,4 @@
-import { NextResponse, NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { redis } from "@/lib/upstash/redis";
 import { medusa } from "@/utils/medusa";
 import Stripe from "stripe";
@@ -36,15 +36,17 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ error: "Error processing request" }, { status: 400 });
   }
 
-  let cartMatchesPayment = false;
-  cart.payment_collection?.payment_sessions?.forEach((session) => {
-    const paymentAmount = session.data?.amount;
-    if (paymentAmount === paymentIntent.amount && paymentIntentId === paymentIntent.id) {
-      cartMatchesPayment = true;
-    }
-  });
-
-  if (!cartMatchesPayment) {
-    return NextResponse.json({ error: "Error processing request" }, { status: 400 });
+  if (paymentIntent.status !== "succeeded") {
+    return NextResponse.json({ error: "Payment not completed" }, { status: 400 });
   }
+
+  // process order in medusa
+  const completed = await medusa.store.cart.complete(cartId);
+  if (completed.type === "order" && completed.order) {
+    const { order } = completed;
+    await redis.del(`checkout:${token}`);
+    return NextResponse.json({ order: { id: order.id } });
+  }
+
+  return NextResponse.json({ error: "Error completing order" }, { status: 400 });
 };

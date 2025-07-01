@@ -1,16 +1,37 @@
 "use client";
 
 import { IconBadge, Text } from "@medusajs/ui";
-import { Check, Loader } from "@medusajs/icons";
-import { medusa } from "@/utils/medusa";
-import { StoreCart } from "@medusajs/types";
+import { Loader } from "@medusajs/icons";
 import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useCart } from "@/components/context/cart";
 
-const processOrder = async (token: string) => {};
+const processOrder = async (token: string) => {
+  const response = await fetch("/api/checkout/process", {
+    method: "POST",
+    body: JSON.stringify({ token }),
+  });
+
+  if (!response.ok) return null;
+  return (await response.json()) as { order: { id: string } };
+};
 
 export const ProcessOrderClient = ({ token }: { token: string }) => {
+  const router = useRouter();
+  const { refreshCart } = useCart();
+
   useEffect(() => {
-    processOrder(token).then(() => {});
+    processOrder(token)
+      .then((data) => {
+        if (!data) {
+          router.push("/checkout");
+          return;
+        }
+
+        router.push(`/orders/${data.order.id}`);
+        refreshCart();
+      })
+      .catch(() => router.push("/checkout"));
   }, []);
 
   return (

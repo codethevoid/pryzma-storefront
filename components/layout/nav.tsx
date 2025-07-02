@@ -2,11 +2,10 @@
 
 import Image from "next/image";
 import NextLink from "next/link";
-import { Text, IconButton, clx } from "@medusajs/ui";
-import { ShoppingBag, BarsThree } from "@medusajs/icons";
+import { clx, Drawer, IconButton, Text } from "@medusajs/ui";
+import { BarsThree, ShoppingBag } from "@medusajs/icons";
 import { useCart } from "../context/cart";
 import { Cart } from "../ui/cart";
-import { Drawer } from "@medusajs/ui";
 import { useEffect, useRef, useState } from "react";
 import { useWindowWidth } from "@react-hook/window-size";
 import { ThemeToggle } from "../ui/theme-toggle";
@@ -17,7 +16,7 @@ import { navItems } from "@/lib/nav-items";
 import { Search } from "../ui/search";
 
 export const Nav = () => {
-  const { setIsOpen } = useCart();
+  const { setIsOpen, cart } = useCart();
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [shouldShowDropdown, setShouldShowDropdown] = useState(false);
@@ -57,22 +56,22 @@ export const Nav = () => {
 
   return (
     <>
-      <NavDropdown
-        openDropdown={openDropdown}
-        setOpenDropdown={setOpenDropdown}
-        lastDropdown={lastDropdown}
-        setLastDropdown={setLastDropdown}
-        handleMouseEnter={handleMouseEnter}
-        handleMouseLeave={handleMouseLeave}
-        shouldShowDropdown={shouldShowDropdown}
-        setShouldShowDropdown={setShouldShowDropdown}
-      />
       <div
         className={clx(
-          "z-10 border-b px-4 py-0 transition-colors duration-200 max-md:py-2",
+          "sticky top-0 z-[90] border-b bg-background px-4 py-0 transition-colors duration-200 max-md:py-2",
           shouldShowDropdown && "bg-background dark:bg-black",
         )}
       >
+        <NavDropdown
+          openDropdown={openDropdown}
+          setOpenDropdown={setOpenDropdown}
+          lastDropdown={lastDropdown}
+          setLastDropdown={setLastDropdown}
+          handleMouseEnter={handleMouseEnter}
+          handleMouseLeave={handleMouseLeave}
+          shouldShowDropdown={shouldShowDropdown}
+          setShouldShowDropdown={setShouldShowDropdown}
+        />
         <div className="mx-auto flex max-w-screen-xl items-center justify-between">
           <div className="relative flex items-center gap-3">
             <div className="shrink-0 rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
@@ -137,14 +136,19 @@ export const Nav = () => {
               <User />
             </IconButton> */}
             <Search />
-            <IconButton
-              size="small"
-              variant="transparent"
-              onClick={() => setIsOpen(true)}
-              aria-label="Open shopping cart"
-            >
-              <ShoppingBag />
-            </IconButton>
+            <div className="relative">
+              <IconButton
+                size="small"
+                variant="transparent"
+                onClick={() => setIsOpen(true)}
+                aria-label="Open shopping cart"
+              >
+                <ShoppingBag />
+              </IconButton>
+              {(cart?.items?.length || 0) > 0 && (
+                <span className="absolute right-0.5 top-0.5 size-[5px] rounded-full bg-[rgba(59,130,246,1)] ring-[2px] ring-[rgba(59,130,246,0.2)] dark:bg-[rgba(96,165,250,1)] dark:ring-[rgba(59,130,246,0.25)]"></span>
+              )}
+            </div>
             <IconButton
               size="small"
               variant="transparent"

@@ -66,7 +66,6 @@ const ExpressButtons = () => {
   const stripe = useStripe();
   const router = useRouter();
   const [isInitial, setIsInitial] = useState(true);
-  const [ready, setReady] = useState(false);
 
   if (!cart) return <></>;
 
@@ -226,7 +225,7 @@ const ExpressButtons = () => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       options={expressOptions}
-      onReady={() => setReady(true)}
+      onReady={() => console.log("ready")}
       onShippingAddressChange={async ({ resolve, address }) => {
         console.log("Shipping address changed");
         const response = await medusa.store.cart.update(cart.id, {

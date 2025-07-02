@@ -146,7 +146,7 @@ export const Nav = () => {
                 <ShoppingBag />
               </IconButton>
               {(cart?.items?.length || 0) > 0 && (
-                <span className="absolute right-0.5 top-0.5 size-[5px] rounded-full bg-[rgba(59,130,246,1)] ring ring-[rgba(59,130,246,0.2)] dark:bg-[rgba(96,165,250,1)] dark:ring-[rgba(59,130,246,0.25)]"></span>
+                <span className="absolute right-0.5 top-0.5 size-[5px] rounded-full bg-[rgba(59,130,246,1)] ring-[2px] ring-[rgba(59,130,246,0.2)] dark:bg-[rgba(96,165,250,1)] dark:ring-[rgba(59,130,246,0.25)]"></span>
               )}
             </div>
             <IconButton

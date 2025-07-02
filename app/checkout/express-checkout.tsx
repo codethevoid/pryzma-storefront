@@ -215,8 +215,6 @@ const ExpressButtons = () => {
     } else if (completed.type === "cart") {
       toast.error(completed.error.message || "Failed to complete order");
     }
-
-    return toast.error("Failed to complete order");
   };
 
   return (

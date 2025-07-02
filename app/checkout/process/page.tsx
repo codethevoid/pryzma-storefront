@@ -1,9 +1,5 @@
-import { Button, IconBadge, Text } from "@medusajs/ui";
-import { Check, FlyingBox, ShoppingBag } from "@medusajs/icons";
-import NextLink from "next/link";
 import { redirect } from "next/navigation";
 import { ProcessOrderClient } from "@/app/checkout/process/client";
-import { medusa } from "@/utils/medusa";
 import { redis } from "@/lib/upstash/redis";
 
 type SearchParams = Promise<{ token: string }>;

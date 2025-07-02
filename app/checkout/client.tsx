@@ -108,7 +108,7 @@ export const CheckoutClient = () => {
             </ProgressTabs.Trigger>
           </ProgressTabs.List>
           <ProgressTabs.Content value="general">
-            <div className="space-y-4 pr-8 pt-8">
+            <div className="space-y-4 pl-4 pr-4 pt-8 md:pl-0 md:pr-8">
               <Text className="text-center font-medium">Express checkout</Text>
               <ExpressCheckout />
               <div className="flex items-center space-x-2">

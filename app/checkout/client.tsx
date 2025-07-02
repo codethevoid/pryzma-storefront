@@ -1,9 +1,9 @@
 "use client";
 
+import type { ExtendedStoreCart } from "@/components/context/cart";
 import { useCart } from "@/components/context/cart";
-import { clx, Input } from "@medusajs/ui";
+import { Badge, Button, clx, IconBadge, Input, ProgressTabs, Text, toast } from "@medusajs/ui";
 import NextLink from "next/link";
-import { Text, Button, Badge, ProgressTabs, toast, IconBadge } from "@medusajs/ui";
 import { formatCurrency } from "@/utils/format-currency";
 import Image from "next/image";
 import { GeneralForm } from "./forms/general";
@@ -11,12 +11,12 @@ import { useState } from "react";
 import { CheckoutDetails } from "./details";
 import { ShippingForm } from "./forms/shipping";
 import { medusa } from "@/utils/medusa";
-import type { ExtendedStoreCart } from "@/components/context/cart";
-import { XMark, Loader, ShoppingBag } from "@medusajs/icons";
+import { Loader, ShoppingBag, XMark } from "@medusajs/icons";
 import { PaymentForm } from "./forms/payment";
 import { StoreCart } from "@medusajs/types";
 import { SummaryAccordion } from "./summary-accordion";
 import { cdnUrl, s3Url } from "@/utils/s3";
+import { ExpressCheckout } from "@/app/checkout/express-checkout";
 
 export const CheckoutClient = () => {
   const { cart, setCart, fields, setIsLoadingClientSecret, isLoadingShipping } = useCart();
@@ -70,7 +70,17 @@ export const CheckoutClient = () => {
             <ProgressTabs.Trigger
               value="shipping"
               status={cart?.shipping_methods?.length ? "completed" : "not-started"}
-              disabled={!cart || !cart?.email || !cart?.shipping_address}
+              disabled={
+                !cart ||
+                !cart?.email ||
+                !cart?.shipping_address ||
+                !cart?.shipping_address.address_1 ||
+                !cart?.shipping_address.first_name ||
+                !cart?.shipping_address.last_name ||
+                !cart?.shipping_address.province ||
+                !cart?.shipping_address.city ||
+                !cart.shipping_address.postal_code
+              }
             >
               Shipping
             </ProgressTabs.Trigger>
@@ -83,6 +93,14 @@ export const CheckoutClient = () => {
                 !cart?.email ||
                 !cart?.shipping_address ||
                 !cart?.shipping_methods?.length ||
+                !cart?.email ||
+                !cart?.shipping_address ||
+                !cart?.shipping_address.address_1 ||
+                !cart?.shipping_address.first_name ||
+                !cart?.shipping_address.last_name ||
+                !cart?.shipping_address.province ||
+                !cart?.shipping_address.city ||
+                !cart.shipping_address.postal_code ||
                 isLoadingShipping
               }
             >
@@ -90,6 +108,15 @@ export const CheckoutClient = () => {
             </ProgressTabs.Trigger>
           </ProgressTabs.List>
           <ProgressTabs.Content value="general">
+            <div className="space-y-4 pr-8 pt-8">
+              <Text className="text-center font-medium">Express checkout</Text>
+              <ExpressCheckout />
+              <div className="flex items-center space-x-2">
+                <span className="w-full border-b"></span>
+                <Text as="span">OR</Text>
+                <span className="w-full border-b"></span>
+              </div>
+            </div>
             <GeneralForm setStep={setStep} step={step} />
           </ProgressTabs.Content>
           <ProgressTabs.Content value="shipping">

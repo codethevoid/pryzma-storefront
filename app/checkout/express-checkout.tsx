@@ -1,13 +1,17 @@
 "use client";
 
 import { shippingOptions } from "@/lib/shipping-options";
-import { loadStripe, StripeExpressCheckoutElementConfirmEvent } from "@stripe/stripe-js";
+import {
+  loadStripe,
+  StripeExpressCheckoutElementConfirmEvent,
+  StripeExpressCheckoutElementReadyEvent,
+} from "@stripe/stripe-js";
 import { ExtendedStoreCart, useCart } from "@/components/context/cart";
 import { Elements, ExpressCheckoutElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import { medusa } from "@/utils/medusa";
 import { StoreCart } from "@medusajs/types";
 import { useState } from "react";
-import { toast } from "@medusajs/ui";
+import { clx, Skeleton, Text, toast } from "@medusajs/ui";
 import { useRouter } from "next/navigation";
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PK!);
@@ -66,6 +70,8 @@ const ExpressButtons = () => {
   const stripe = useStripe();
   const router = useRouter();
   const [isInitial, setIsInitial] = useState(true);
+  const [isLoadingExpress, setIsLoadingExpress] = useState(true);
+  const [hasPaymentMethods, setHasPaymentMethods] = useState(true);
 
   if (!cart) return <></>;
 
@@ -218,42 +224,95 @@ const ExpressButtons = () => {
   };
 
   return (
-    <ExpressCheckoutElement
-      onConfirm={onConfirm}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      options={expressOptions}
-      onReady={() => console.log("ready")}
-      onShippingAddressChange={async ({ resolve, address }) => {
-        console.log("Shipping address changed");
-        const response = await medusa.store.cart.update(cart.id, {
-          shipping_address: {
-            city: address.city,
-            province: address.state,
-            postal_code: address.postal_code,
-            country_code: "us",
-          },
-        });
+    <>
+      {hasPaymentMethods ? (
+        <div className="space-y-4 pl-4 pr-4 pt-8 md:pl-0 md:pr-8">
+          {isLoadingExpress ? (
+            <div className="space-y-4">
+              <Skeleton className={"mx-auto h-[21px] w-[116px]"} />
+              <div className="flex gap-2">
+                <Skeleton className={"h-[44px] w-full"} />
+                <Skeleton className={"h-[44px] w-full"} />
+              </div>
+              <div className="flex h-[21px] w-full items-center">
+                <div className="w-full border-b"></div>
+              </div>
+            </div>
+          ) : (
+            <Text className="text-center font-medium">Express checkout</Text>
+          )}
+          <div className={clx(isLoadingExpress ? "absolute" : "min-h-[44px]")}>
+            <ExpressCheckoutElement
+              onConfirm={onConfirm}
+              // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+              // @ts-ignore
+              options={{ ...expressOptions, layout: { overflow: "never" } }}
+              onReady={(e: StripeExpressCheckoutElementReadyEvent) => {
+                console.log("express checkout ready");
+                if (!e.availablePaymentMethods) {
+                  setHasPaymentMethods(false);
+                  setIsLoadingExpress(false);
+                  return;
+                }
 
-        let updatedCart = response.cart;
-        if (isInitial) {
-          console.log("Initial checkout");
-          updatedCart = await updateShippingMethod(shippingOptions[0].id);
-          setIsInitial(false);
-        }
+                const pms = Object.values(e.availablePaymentMethods);
+                if (!pms.length) {
+                  setHasPaymentMethods(false);
+                  setIsLoadingExpress(false);
+                  return;
+                }
 
-        elements?.update({ amount: getAmount(updatedCart), currency: "usd" });
-        resolve({ lineItems: getLineItems(updatedCart) });
-      }}
-      onShippingRateChange={async ({ resolve, shippingRate }) => {
-        const updatedCart = await updateShippingMethod(shippingRate.id);
-        elements?.update({ amount: getAmount(updatedCart), currency: "usd" });
-        resolve({ lineItems: getLineItems(updatedCart) });
-      }}
-      onCancel={() => {
-        elements?.update({ amount: Math.round(cart.total * 100), currency: "usd" });
-        setIsInitial(true);
-      }}
-    />
+                for (let i = 0; i < pms.length; i++) {
+                  if (pms[i]) {
+                    setHasPaymentMethods(true);
+                    setIsLoadingExpress(false);
+                    break;
+                  }
+                }
+              }}
+              onShippingAddressChange={async ({ resolve, address }) => {
+                console.log("Shipping address changed");
+                const response = await medusa.store.cart.update(cart.id, {
+                  shipping_address: {
+                    city: address.city,
+                    province: address.state,
+                    postal_code: address.postal_code,
+                    country_code: "us",
+                  },
+                });
+
+                let updatedCart = response.cart;
+                if (isInitial) {
+                  console.log("Initial checkout");
+                  updatedCart = await updateShippingMethod(shippingOptions[0].id);
+                  setIsInitial(false);
+                }
+
+                elements?.update({ amount: getAmount(updatedCart), currency: "usd" });
+                resolve({ lineItems: getLineItems(updatedCart) });
+              }}
+              onShippingRateChange={async ({ resolve, shippingRate }) => {
+                const updatedCart = await updateShippingMethod(shippingRate.id);
+                elements?.update({ amount: getAmount(updatedCart), currency: "usd" });
+                resolve({ lineItems: getLineItems(updatedCart) });
+              }}
+              onCancel={() => {
+                elements?.update({ amount: Math.round(cart.total * 100), currency: "usd" });
+                setIsInitial(true);
+              }}
+            />
+          </div>
+          {!isLoadingExpress && (
+            <div className="flex items-center space-x-2">
+              <span className="w-full border-b"></span>
+              <Text as="span">OR</Text>
+              <span className="w-full border-b"></span>
+            </div>
+          )}
+        </div>
+      ) : (
+        ""
+      )}
+    </>
   );
 };

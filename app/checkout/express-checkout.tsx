@@ -226,22 +226,28 @@ const ExpressButtons = () => {
   return (
     <>
       {hasPaymentMethods ? (
-        <div className="space-y-4 pl-4 pr-4 pt-8 md:pl-0 md:pr-8">
+        <div className="mx-auto max-w-xl space-y-4 pl-4 pr-4 pt-8 lg:max-w-none lg:pl-0 lg:pr-8">
           {isLoadingExpress ? (
             <div className="space-y-4">
-              <Skeleton className={"mx-auto h-[21px] w-[116px]"} />
+              <Skeleton className={"mx-auto h-[21px] w-[116px] bg-zinc-200/80 dark:bg-zinc-800"} />
               <div className="flex gap-2">
-                <Skeleton className={"h-[44px] w-full"} />
-                <Skeleton className={"h-[44px] w-full"} />
+                <Skeleton className={"h-[44px] w-full bg-zinc-200/80 dark:bg-zinc-800"} />
+                <Skeleton className={"h-[44px] w-full bg-zinc-200/80 dark:bg-zinc-800"} />
               </div>
               <div className="flex h-[21px] w-full items-center">
                 <div className="w-full border-b"></div>
               </div>
             </div>
           ) : (
-            <Text className="text-center font-medium">Express checkout</Text>
+            <Text className="text-center font-medium fade-in">Express checkout</Text>
           )}
-          <div className={clx(isLoadingExpress ? "absolute" : "min-h-[44px]")}>
+          <div
+            className={clx(
+              isLoadingExpress
+                ? "pointer-event-none pointer-events-none absolute opacity-0"
+                : "fade-in",
+            )}
+          >
             <ExpressCheckoutElement
               onConfirm={onConfirm}
               // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -250,13 +256,15 @@ const ExpressButtons = () => {
               onReady={(e: StripeExpressCheckoutElementReadyEvent) => {
                 console.log("express checkout ready");
                 if (!e.availablePaymentMethods) {
+                  console.log("setting loading to false from no available payment methods");
                   setHasPaymentMethods(false);
                   setIsLoadingExpress(false);
                   return;
                 }
 
                 const pms = Object.values(e.availablePaymentMethods);
-                if (!pms.length) {
+                if (!pms?.length) {
+                  console.log("setting loading to false from no object values");
                   setHasPaymentMethods(false);
                   setIsLoadingExpress(false);
                   return;
@@ -264,8 +272,11 @@ const ExpressButtons = () => {
 
                 for (let i = 0; i < pms.length; i++) {
                   if (pms[i]) {
-                    setHasPaymentMethods(true);
-                    setIsLoadingExpress(false);
+                    setTimeout(() => {
+                      console.log("setting loading to false from timeout");
+                      setHasPaymentMethods(true);
+                      setIsLoadingExpress(false);
+                    }, 500);
                     break;
                   }
                 }
@@ -305,7 +316,9 @@ const ExpressButtons = () => {
           {!isLoadingExpress && (
             <div className="flex items-center space-x-2">
               <span className="w-full border-b"></span>
-              <Text as="span">OR</Text>
+              <Text as="span" className="fade-in">
+                OR
+              </Text>
               <span className="w-full border-b"></span>
             </div>
           )}

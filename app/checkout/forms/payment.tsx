@@ -1,12 +1,11 @@
 "use client";
 
 import { ExtendedStoreCart, useCart } from "@/components/context/cart";
-import { Text, RadioGroup, clx, Button, Select, toast, Popover } from "@medusajs/ui";
+import { Button, clx, Popover, RadioGroup, Select, Text, toast } from "@medusajs/ui";
 import { useEffect, useState } from "react";
 import { medusa } from "@/utils/medusa";
-import { CardElement, Elements, useStripe, useElements } from "@stripe/react-stripe-js";
+import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
-import { formatCurrency } from "@/utils/format-currency";
 import type { StoreCart } from "@medusajs/types";
 import { z } from "zod";
 import { FloatingLabelInput } from "@/components/ui/custom/floating-label-input";
@@ -341,15 +340,17 @@ export const PaymentForm = () => {
                   >
                     <div className="space-y-2">
                       <Text weight="plus">Billing address</Text>
-                      <div className="grid grid-cols-2 grid-rows-3 gap-3 max-[900px]:grid-cols-1">
+                      <div className="grid grid-cols-6 gap-3">
                         <FloatingLabelInput
                           label="First name"
                           {...register("first_name")}
                           isRequired
                           aria-invalid={!!errors.first_name}
                           formValue={watch("first_name")}
+                          className="col-span-6 sm:col-span-3"
                         />
                         <FloatingLabelInput
+                          className="col-span-6 sm:col-span-3"
                           label="Last name"
                           {...register("last_name")}
                           isRequired
@@ -357,7 +358,7 @@ export const PaymentForm = () => {
                           formValue={watch("last_name")}
                         />
                         <Popover open={isSuggestionsOpen} modal={false}>
-                          <Popover.Trigger asChild>
+                          <Popover.Trigger asChild className="col-span-6">
                             <div>
                               <FloatingLabelInput
                                 id="address-input"
@@ -458,6 +459,7 @@ export const PaymentForm = () => {
                           label="Apartment, suite, etc."
                           {...register("address_2")}
                           formValue={watch("address_2")}
+                          className="col-span-6"
                         />
                         <FloatingLabelInput
                           label="City"
@@ -465,8 +467,12 @@ export const PaymentForm = () => {
                           isRequired
                           aria-invalid={!!errors.city}
                           formValue={watch("city")}
+                          className="col-span-6 sm:col-span-2"
                         />
-                        <div className="group relative" data-empty={!watch("province")}>
+                        <div
+                          className="group relative col-span-6 sm:col-span-2"
+                          data-empty={!watch("province")}
+                        >
                           <Select
                             value={watch("province")}
                             onValueChange={(value) => {
@@ -503,13 +509,14 @@ export const PaymentForm = () => {
                           </Text>
                         </div>
                         <FloatingLabelInput
-                          label="Postal code"
+                          label="Zip code"
+                          className="col-span-6 sm:col-span-2"
                           {...register("postal_code")}
                           isRequired
                           aria-invalid={!!errors.postal_code}
                           formValue={watch("postal_code")}
                         />
-                        <div className="relative" aria-invalid={!!errors.country_code}>
+                        <div className="relative hidden" aria-invalid={!!errors.country_code}>
                           <Select value="us">
                             <Select.Trigger className="h-[42px] px-3 pb-1 pt-4 [&>svg]:relative [&>svg]:top-[-5px]">
                               <Select.Value placeholder="Country" />
@@ -538,14 +545,13 @@ export const PaymentForm = () => {
       </div>
       <Button
         isLoading={isSubmitting}
-        disabled={!cart || paymentMethod !== "credit_card"}
+        disabled={!cart}
         form="billing-address-form"
         type="submit"
+        size="xlarge"
+        className="w-full"
       >
-        Place order{" "}
-        {cart?.payment_collection?.payment_sessions?.[0]?.data?.client_secret
-          ? `and pay ${formatCurrency("usd", cart.payment_collection.payment_sessions[0].amount)}`
-          : ""}
+        Complete order
       </Button>
     </div>
   );

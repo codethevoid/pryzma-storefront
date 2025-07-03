@@ -1,16 +1,15 @@
 "use client";
 
 import { FloatingLabelInput } from "@/components/ui/custom/floating-label-input";
-import { Text, Select, Button, clx, Popover } from "@medusajs/ui";
+import { Button, clx, Popover, Select, Text, toast } from "@medusajs/ui";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { ExtendedStoreCart } from "@/components/context/cart";
 import { useCart } from "@/components/context/cart";
 import { usStates } from "@/lib/states";
 import { medusa } from "@/utils/medusa";
-import { toast } from "@medusajs/ui";
 import { useEffect, useState } from "react";
-import type { ExtendedStoreCart } from "@/components/context/cart";
 import { shippingOptions } from "@/lib/shipping-options";
 import { useAddressAutocomplete } from "@/hooks/use-address-auto-complete";
 import { setAddressValues } from "@/lib/helpers/set-address-values";
@@ -210,7 +209,7 @@ export const GeneralForm = ({
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="space-y-6 p-8 pl-0 max-md:p-4 max-md:pb-12"
+      className="mx-auto max-w-xl space-y-6 p-4 pb-12 pt-8 lg:mx-0 lg:max-w-none lg:p-8 lg:pl-0"
       autoComplete="off"
       onKeyDown={(e) => {
         if (e.key === "Enter") {
@@ -220,7 +219,7 @@ export const GeneralForm = ({
     >
       <div className="space-y-2">
         <Text weight="plus">Contact info</Text>
-        <div className="flex gap-3 max-[900px]:flex-col">
+        <div className="flex flex-col gap-3 lg:flex-row">
           <FloatingLabelInput
             label="Email"
             {...register("email")}
@@ -241,22 +240,26 @@ export const GeneralForm = ({
       </div>
       <div className="space-y-2">
         <Text weight="plus">Shipping address</Text>
-        <div className="grid grid-cols-2 grid-rows-3 gap-3 max-[900px]:grid-cols-1">
-          <FloatingLabelInput
-            label="First name"
-            {...register("first_name")}
-            isRequired
-            aria-invalid={!!errors.first_name}
-            formValue={watch("first_name")}
-          />
+        <div className="space-y-3">
+          <div className="flex w-full flex-col gap-3 lg:flex-row">
+            <FloatingLabelInput
+              label="First name"
+              {...register("first_name")}
+              isRequired
+              className="w-full"
+              aria-invalid={!!errors.first_name}
+              formValue={watch("first_name")}
+            />
 
-          <FloatingLabelInput
-            label="Last name"
-            {...register("last_name")}
-            isRequired
-            aria-invalid={!!errors.last_name}
-            formValue={watch("last_name")}
-          />
+            <FloatingLabelInput
+              label="Last name"
+              {...register("last_name")}
+              isRequired
+              className="w-full"
+              aria-invalid={!!errors.last_name}
+              formValue={watch("last_name")}
+            />
+          </div>
           <Popover open={isSuggestionsOpen} modal={false}>
             <Popover.Trigger asChild>
               <div>
@@ -356,56 +359,60 @@ export const GeneralForm = ({
             {...register("address_2")}
             formValue={watch("address_2")}
           />
-          <FloatingLabelInput
-            label="City"
-            {...register("city")}
-            isRequired
-            aria-invalid={!!errors.city}
-            formValue={watch("city")}
-          />
-          <div className="group relative" data-empty={!watch("province")}>
-            <Select
-              name="state"
-              // open={true}
-              value={watch("province")}
-              onValueChange={(value) =>
-                value ? setValue("province", value, { shouldValidate: true }) : ""
-              }
-            >
-              <Select.Trigger
-                className={clx(
-                  "h-[42px] px-3 pb-1 pt-4 [&>svg]:relative [&>svg]:top-[-5px]",
-                  errors.province && "shadow-borders-error",
-                )}
+          <div className="grid gap-3 sm:grid-cols-3">
+            <FloatingLabelInput
+              label="City"
+              {...register("city")}
+              isRequired
+              aria-invalid={!!errors.city}
+              formValue={watch("city")}
+            />
+            <div className="group relative" data-empty={!watch("province")}>
+              <Select
+                name="state"
+                // open={true}
+                value={watch("province")}
+                onValueChange={(value) =>
+                  value ? setValue("province", value, { shouldValidate: true }) : ""
+                }
               >
-                <Select.Value />
-              </Select.Trigger>
-              <Select.Content collisionPadding={16}>
-                {usStates.map((state) => (
-                  <Select.Item key={state.abbreviation} value={state.abbreviation}>
-                    {state.name}
-                  </Select.Item>
-                ))}
-              </Select.Content>
-            </Select>
-            <Text
-              size="small"
-              className={
-                "pointer-events-none absolute left-3 top-3 origin-top-left text-ui-fg-muted transition-all group-data-[empty=false]:top-1 group-data-[empty=false]:scale-[0.77] group-data-[empty=false]:text-subtle-foreground"
-              }
-            >
-              State
-              <span className="relative -top-0.5 left-[1px] text-red-600 dark:text-red-400">*</span>
-            </Text>
+                <Select.Trigger
+                  className={clx(
+                    "h-[42px] px-3 pb-1 pt-4 [&>svg]:relative [&>svg]:top-[-5px]",
+                    errors.province && "shadow-borders-error",
+                  )}
+                >
+                  <Select.Value />
+                </Select.Trigger>
+                <Select.Content collisionPadding={16}>
+                  {usStates.map((state) => (
+                    <Select.Item key={state.abbreviation} value={state.abbreviation}>
+                      {state.name}
+                    </Select.Item>
+                  ))}
+                </Select.Content>
+              </Select>
+              <Text
+                size="small"
+                className={
+                  "pointer-events-none absolute left-3 top-3 origin-top-left text-ui-fg-muted transition-all group-data-[empty=false]:top-1 group-data-[empty=false]:scale-[0.77] group-data-[empty=false]:text-subtle-foreground"
+                }
+              >
+                State
+                <span className="relative -top-0.5 left-[1px] text-red-600 dark:text-red-400">
+                  *
+                </span>
+              </Text>
+            </div>
+            <FloatingLabelInput
+              label="Zip code"
+              {...register("postal_code")}
+              isRequired
+              aria-invalid={!!errors.postal_code}
+              formValue={watch("postal_code")}
+            />
           </div>
-          <FloatingLabelInput
-            label="Postal code"
-            {...register("postal_code")}
-            isRequired
-            aria-invalid={!!errors.postal_code}
-            formValue={watch("postal_code")}
-          />
-          <div className="relative" aria-invalid={!!errors.country_code}>
+          <div className="relative hidden" aria-invalid={!!errors.country_code}>
             <Select value="us">
               <Select.Trigger className="h-[42px] px-3 pb-1 pt-4 [&>svg]:relative [&>svg]:top-[-5px]">
                 <Select.Value placeholder="Country" />
@@ -426,7 +433,9 @@ export const GeneralForm = ({
         </div>
       </div>
 
-      <Button isLoading={isLoading}>Continue to shipping</Button>
+      <Button isLoading={isLoading} size="large">
+        Continue to shipping
+      </Button>
     </form>
   );
 };

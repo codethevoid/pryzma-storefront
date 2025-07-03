@@ -12,7 +12,6 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { medusa } from "@/utils/medusa";
 import { useDebounceCallback } from "@/hooks/utils/use-debounce-callback";
-import { ExpressCheckout } from "@/app/checkout/express-checkout";
 
 export const Cart = () => {
   const { cart, setCart, isOpen, setIsOpen, updateItem, removeItem, fields } = useCart();
@@ -227,7 +226,6 @@ export const Cart = () => {
                   <ShoppingBag /> Checkout - {formatCurrency("usd", cart?.item_subtotal || 0)}
                 </NextLink>
               </Button>
-              <ExpressCheckout />
             </div>
           </Drawer.Footer>
         )}

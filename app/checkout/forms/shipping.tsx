@@ -1,11 +1,10 @@
 "use client";
 
 import { shippingOptions } from "@/lib/shipping-options";
-import { Text, RadioGroup, Button } from "@medusajs/ui";
+import { Button, RadioGroup, Text } from "@medusajs/ui";
 import { ExtendedStoreCart, useCart } from "@/components/context/cart";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { medusa } from "@/utils/medusa";
-import { useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
 
 export const ShippingForm = ({
@@ -60,6 +59,7 @@ export const ShippingForm = ({
         </RadioGroup>
       </div>
       <Button
+        size="large"
         onClick={() => {
           setStep("payment");
           window.scrollTo({ top: 0 });

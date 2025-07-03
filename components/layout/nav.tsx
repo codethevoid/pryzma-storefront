@@ -14,6 +14,7 @@ import { cdnUrl } from "@/utils/s3";
 import { NavDropdown } from "./nav-dropdown";
 import { navItems } from "@/lib/nav-items";
 import { Search } from "../ui/search";
+import { usePathname } from "next/navigation";
 
 export const Nav = () => {
   const { setIsOpen, cart } = useCart();
@@ -25,6 +26,7 @@ export const Nav = () => {
   const [lastDropdown, setLastDropdown] = useState<string | null>(null);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const width = useWindowWidth();
+  const path = usePathname();
 
   const handleMouseEnter = (value: string | null, shouldShow: boolean) => {
     if (closeTimeoutRef.current) {
@@ -54,6 +56,8 @@ export const Nav = () => {
     }
   }, [width]);
 
+  if (path.includes("checkout")) return null;
+
   return (
     <>
       <div
@@ -82,7 +86,7 @@ export const Nav = () => {
                   width={500}
                   height={500}
                   quality={100}
-                  className="size-5 rounded"
+                  className="size-6 rounded"
                 />
               </NextLink>
             </div>
@@ -185,7 +189,7 @@ export const Nav = () => {
                   width={500}
                   height={500}
                   quality={100}
-                  className="size-5 rounded"
+                  className="size-6 rounded"
                 />
               </NextLink>
             </div>

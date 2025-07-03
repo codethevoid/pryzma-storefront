@@ -1,9 +1,12 @@
+"use client";
+
 import NextLink from "next/link";
 import Image from "next/image";
-import { Text, IconButton, Button } from "@medusajs/ui";
+import { Button, IconButton, Text } from "@medusajs/ui";
 import { ThemeToggle } from "../ui/theme-toggle";
 import { cdnUrl } from "@/utils/s3";
 import { ClimateBadge } from "@/lib/icons/climate";
+import { usePathname } from "next/navigation";
 
 const shopLinks = [
   {
@@ -67,6 +70,10 @@ const legalLinks = [
 ];
 
 export const Footer = () => {
+  const path = usePathname();
+
+  if (path.includes("checkout")) return null;
+
   return (
     <div className="border-t bg-zinc-50 px-4 py-8 dark:bg-zinc-900/50">
       <div className="mx-auto max-w-screen-xl space-y-8">
@@ -80,7 +87,7 @@ export const Footer = () => {
                   width={500}
                   height={500}
                   quality={100}
-                  className="size-5 rounded"
+                  className="size-6 rounded"
                 />
               </NextLink>
             </div>

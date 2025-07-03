@@ -2,21 +2,22 @@
 
 import type { ExtendedStoreCart } from "@/components/context/cart";
 import { useCart } from "@/components/context/cart";
-import { Badge, Button, clx, IconBadge, Input, ProgressTabs, Text, toast } from "@medusajs/ui";
+import { Badge, Button, clx, IconBadge, Input, Text, toast } from "@medusajs/ui";
 import NextLink from "next/link";
 import { formatCurrency } from "@/utils/format-currency";
 import Image from "next/image";
-import { GeneralForm } from "./forms/general";
 import { useState } from "react";
-import { CheckoutDetails } from "./details";
-import { ShippingForm } from "./forms/shipping";
 import { medusa } from "@/utils/medusa";
 import { Loader, ShoppingBag, XMark } from "@medusajs/icons";
-import { PaymentForm } from "./forms/payment";
 import { StoreCart } from "@medusajs/types";
 import { SummaryAccordion } from "./summary-accordion";
 import { cdnUrl, s3Url } from "@/utils/s3";
+import { GeneralForm } from "@/app/checkout/forms/general";
 import { ExpressCheckout } from "@/app/checkout/express-checkout";
+import { ChevronRight, Lock } from "lucide-react";
+import { ShippingForm } from "@/app/checkout/forms/shipping";
+import { CheckoutDetails } from "@/app/checkout/details";
+import { PaymentForm } from "@/app/checkout/forms/payment";
 
 export const CheckoutClient = () => {
   const { cart, setCart, fields, setIsLoadingClientSecret, isLoadingShipping } = useCart();
@@ -27,7 +28,7 @@ export const CheckoutClient = () => {
 
   if (!cart) {
     return (
-      <div className="flex h-[calc(100vh-330.5px)] min-h-[250px] items-center justify-center">
+      <div className="flex h-screen min-h-[250px] items-center justify-center">
         <Loader className="animate-spin" />
       </div>
     );
@@ -35,7 +36,7 @@ export const CheckoutClient = () => {
 
   if (cart.items?.length === 0) {
     return (
-      <div className="flex h-[calc(100vh-330.5px)] min-h-[250px] items-center justify-center">
+      <div className="flex h-screen min-h-[250px] items-center justify-center">
         <div className="flex flex-col items-center space-y-3">
           <IconBadge size="large" className="mx-auto">
             <ShoppingBag />
@@ -51,90 +52,132 @@ export const CheckoutClient = () => {
     );
   }
 
+  const isNavBtnDisabled = (btn: "shipping" | "payment") => {
+    switch (btn) {
+      case "shipping":
+        return (
+          !cart?.email ||
+          !cart?.shipping_address ||
+          !cart?.shipping_address.address_1 ||
+          !cart?.shipping_address.first_name ||
+          !cart?.shipping_address.last_name ||
+          !cart?.shipping_address.province ||
+          !cart?.shipping_address.city ||
+          !cart?.shipping_address.postal_code
+        );
+      case "payment":
+        return (
+          !cart?.email ||
+          !cart?.shipping_address ||
+          !cart?.shipping_methods?.length ||
+          !cart?.email ||
+          !cart?.shipping_address ||
+          !cart?.shipping_address.address_1 ||
+          !cart?.shipping_address.first_name ||
+          !cart?.shipping_address.last_name ||
+          !cart?.shipping_address.province ||
+          !cart?.shipping_address.city ||
+          !cart?.shipping_address.postal_code ||
+          isLoadingShipping
+        );
+      default:
+        return false;
+    }
+  };
+
   return (
-    <div className="grid grid-cols-3 max-lg:grid-cols-[1fr_1fr_340px] max-md:flex max-md:flex-col-reverse md:min-h-[calc(100vh-330.5px)]">
-      <div className="col-span-2 items-end">
-        <ProgressTabs
-          defaultValue="general"
-          value={step}
-          onValueChange={(value) => setStep(value as "general" | "shipping" | "payment")}
-          activationMode="manual"
-        >
-          <ProgressTabs.List className="">
-            <ProgressTabs.Trigger
-              value="general"
-              status={cart?.email && cart?.shipping_address ? "completed" : "not-started"}
+    <div className="mx-auto min-h-screen fade-in lg:grid lg:max-w-screen-lg lg:grid-cols-5">
+      <div className="col-span-3 w-full">
+        <nav className="space-y-4 pt-2 lg:pt-8">
+          <div className="mx-auto -mb-2 flex w-full max-w-xl items-center justify-between px-4 lg:mx-0 lg:-mb-0 lg:max-w-none lg:px-0">
+            <div className="w-fit shrink-0 rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
+              <NextLink href="/">
+                <Image
+                  src={`${cdnUrl}/logos/pryzma.png`}
+                  alt="pryzma logo"
+                  width={500}
+                  height={500}
+                  quality={100}
+                  className="size-6 rounded lg:size-8"
+                />
+              </NextLink>
+            </div>
+            {/*<Badge color="green" className="flex h-6 items-center gap-1 px-1.5 opacity-90 lg:mr-8">*/}
+            {/*  <Lock className="size-3.5" />*/}
+            {/*  <span>Secure checkout</span>*/}
+            {/*</Badge>*/}
+            {/*<StatusBadge color="blue" className="h-6">*/}
+            {/*  /!*<Lock className="-ml-1 size-3" />*!/*/}
+            {/*  <span>Secure checkout</span>*/}
+            {/*</StatusBadge>*/}
+            <div className="txt-compact-xsmall-plus flex h-6 items-center gap-1.5 rounded-md border border-ui-border-base bg-ui-bg-subtle px-2 text-ui-fg-subtle lg:mr-8">
+              <Lock className="size-3" />
+              <span>Secure checkout</span>
+            </div>
+          </div>
+          <SummaryAccordion
+            promoCode={promoCode}
+            setPromoCode={setPromoCode}
+            isApplyingPromoCode={isApplyingPromoCode}
+            setIsApplyingPromoCode={setIsApplyingPromoCode}
+            isRemovingPromoCode={isRemovingPromoCode}
+            setIsRemovingPromoCode={setIsRemovingPromoCode}
+            step={step}
+          />
+          <div className="mx-auto flex max-w-xl items-center gap-1.5 px-4 lg:mx-0 lg:max-w-none lg:px-0">
+            <button
+              onClick={() => setStep("general")}
+              className={clx(
+                "text-[0.825rem]",
+                step !== "general" && "text-blue-500 hover:underline dark:text-blue-400",
+              )}
             >
-              General
-            </ProgressTabs.Trigger>
-            <ProgressTabs.Trigger
-              value="shipping"
-              status={cart?.shipping_methods?.length ? "completed" : "not-started"}
-              disabled={
-                !cart ||
-                !cart?.email ||
-                !cart?.shipping_address ||
-                !cart?.shipping_address.address_1 ||
-                !cart?.shipping_address.first_name ||
-                !cart?.shipping_address.last_name ||
-                !cart?.shipping_address.province ||
-                !cart?.shipping_address.city ||
-                !cart.shipping_address.postal_code
-              }
+              Information
+            </button>
+            <ChevronRight className="size-3.5 text-subtle-foreground" />
+            <button
+              onClick={() => setStep("shipping")}
+              className={clx(
+                "text-[0.825rem]",
+                isNavBtnDisabled("shipping") && "text-subtle-foreground",
+                step === "general" && "text-subtle-foreground",
+                step === "payment" && "text-blue-500 hover:underline dark:text-blue-400",
+              )}
+              disabled={isNavBtnDisabled("shipping")}
             >
               Shipping
-            </ProgressTabs.Trigger>
-            <ProgressTabs.Trigger
-              value="payment"
-              status="not-started"
-              className="border-r-0"
-              disabled={
-                !cart ||
-                !cart?.email ||
-                !cart?.shipping_address ||
-                !cart?.shipping_methods?.length ||
-                !cart?.email ||
-                !cart?.shipping_address ||
-                !cart?.shipping_address.address_1 ||
-                !cart?.shipping_address.first_name ||
-                !cart?.shipping_address.last_name ||
-                !cart?.shipping_address.province ||
-                !cart?.shipping_address.city ||
-                !cart.shipping_address.postal_code ||
-                isLoadingShipping
-              }
+            </button>
+            <ChevronRight className="size-3.5 text-subtle-foreground" />
+            <button
+              onClick={() => setStep("payment")}
+              className={clx("text-[0.825rem]", step !== "payment" && "text-subtle-foreground")}
+              disabled={isNavBtnDisabled("payment")}
             >
               Payment
-            </ProgressTabs.Trigger>
-          </ProgressTabs.List>
-          <ProgressTabs.Content value="general">
+            </button>
+          </div>
+        </nav>
+        {step === "general" && (
+          <div className="fade-in">
             <ExpressCheckout />
             <GeneralForm setStep={setStep} step={step} />
-          </ProgressTabs.Content>
-          <ProgressTabs.Content value="shipping">
-            <div className="space-y-6 p-8 pl-0 max-md:p-4 max-md:pb-12">
-              <CheckoutDetails setStep={setStep} step={step} />
-              <ShippingForm setStep={setStep} />
-            </div>
-          </ProgressTabs.Content>
-          <ProgressTabs.Content value="payment">
-            <div className="space-y-6 p-8 pl-0 max-md:p-4 max-md:pb-12">
-              <CheckoutDetails setStep={setStep} step={step} />
-              <PaymentForm />
-            </div>
-          </ProgressTabs.Content>
-        </ProgressTabs>
+          </div>
+        )}
+        {step === "shipping" && (
+          <div className="mx-auto max-w-xl space-y-6 px-4 pb-12 pt-8 fade-in lg:mx-0 lg:max-w-none lg:p-8 lg:pb-8 lg:pl-0">
+            <CheckoutDetails setStep={setStep} step={step} />
+            <ShippingForm setStep={setStep} />
+          </div>
+        )}
+        {step === "payment" && (
+          <div className="mx-auto max-w-xl space-y-6 px-4 pb-12 pt-8 fade-in lg:mx-0 lg:max-w-none lg:p-8 lg:pb-8 lg:pl-0">
+            <CheckoutDetails setStep={setStep} step={step} />
+            <PaymentForm />
+          </div>
+        )}
       </div>
-      <SummaryAccordion
-        promoCode={promoCode}
-        setPromoCode={setPromoCode}
-        isApplyingPromoCode={isApplyingPromoCode}
-        setIsApplyingPromoCode={setIsApplyingPromoCode}
-        isRemovingPromoCode={isRemovingPromoCode}
-        setIsRemovingPromoCode={setIsRemovingPromoCode}
-        step={step}
-      />
-      <div className="col-span-1 space-y-4 border-l p-8 pr-0 max-md:hidden">
+      <div className="relative col-span-2 border-l p-8 pr-0 max-lg:hidden">
+        <div className="absolute inset-0 z-[-1] w-screen bg-zinc-50 dark:bg-zinc-900"></div>
         <div className="space-y-5">
           <div className="space-y-3">
             {cart?.items?.map((item) => (

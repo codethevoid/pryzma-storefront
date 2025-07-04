@@ -5,8 +5,8 @@ import Image from "next/image";
 import { Button, IconButton, Text } from "@medusajs/ui";
 import { ThemeToggle } from "../ui/theme-toggle";
 import { cdnUrl } from "@/utils/s3";
-import { ClimateBadge } from "@/lib/icons/climate";
 import { usePathname } from "next/navigation";
+import { ClimateBadge } from "@/lib/icons/climate";
 
 const shopLinks = [
   {
@@ -28,10 +28,6 @@ const shopLinks = [
 ];
 
 const companyLinks = [
-  {
-    title: "Blog",
-    href: "/blog",
-  },
   {
     title: "Support",
     href: "mailto:support@pryzma.io",
@@ -73,6 +69,17 @@ const legalLinks = [
   // },
 ];
 
+const labsLinks = [
+  {
+    title: "Blog",
+    href: "/blog",
+  },
+  {
+    title: "Generate",
+    href: "/generate",
+  },
+];
+
 export const Footer = () => {
   const path = usePathname();
 
@@ -81,7 +88,7 @@ export const Footer = () => {
   return (
     <div className="border-t bg-zinc-50 px-4 py-8 dark:bg-zinc-900/50">
       <div className="mx-auto max-w-screen-xl space-y-8">
-        <div className="grid grid-cols-[auto_auto_auto_auto_auto_auto] justify-between max-md:auto-rows-min max-md:grid-cols-1 max-md:grid-rows-[auto_auto_auto_auto] max-md:gap-8">
+        <div className="grid grid-cols-[auto_auto_auto_auto_auto_auto_auto] justify-between gap-4 max-md:auto-rows-min max-md:grid-cols-1 max-md:grid-rows-[auto_auto_auto_auto] max-md:gap-8">
           <div className="col-span-3 space-y-4">
             <div className="w-fit rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
               <NextLink href="/">
@@ -173,12 +180,11 @@ export const Footer = () => {
                 href="https://climate.stripe.com/JXf5a9"
                 target="_blank"
                 rel="noreferrer"
-                className="flex items-center space-x-0.5 font-normal"
+                className="flex items-center space-x-0.5 font-medium"
               >
+                1% of every order goes to{" "}
+                <span className="text-[#15be53] dark:text-[#15be53]">Stripe Climate</span>
                 <ClimateBadge />
-                {/* <Text size="xsmall" className="text-subtle-foreground"> */}
-                Stripe Climate member
-                {/* </Text> */}
               </a>
             </Button>
           </div>
@@ -224,6 +230,39 @@ export const Footer = () => {
             </Text>
             <div className="space-y-[1px]">
               {companyLinks.map((link) => (
+                <div key={link.href}>
+                  {link.href.includes("http") || link.href.includes("mailto") ? (
+                    <a
+                      href={link.href}
+                      {...(!link.href.includes("mailto") && { target: "_blank" })}
+                    >
+                      <Text
+                        size="xsmall"
+                        className="text-subtle-foreground hover:text-foreground hover:underline"
+                      >
+                        {link.title}
+                      </Text>
+                    </a>
+                  ) : (
+                    <NextLink href={link.href}>
+                      <Text
+                        size="xsmall"
+                        className="text-subtle-foreground hover:text-foreground hover:underline"
+                      >
+                        {link.title}
+                      </Text>
+                    </NextLink>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-2 max-md:col-span-3">
+            <Text size="small" weight="plus">
+              Pryzma Labs
+            </Text>
+            <div className="space-y-[1px]">
+              {labsLinks.map((link) => (
                 <div key={link.href}>
                   {link.href.includes("http") || link.href.includes("mailto") ? (
                     <a

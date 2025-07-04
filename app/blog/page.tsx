@@ -37,7 +37,7 @@ const BlogHome = async () => {
   console.log(jsonLd);
   return (
     <div className="min-h-[calc(100vh-375px)] px-4 pb-24">
-      <div className="mx-auto grid max-w-screen-lg grid-cols-3 gap-4">
+      <div className="mx-auto grid max-w-screen-lg grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
         {posts.map((post) => (
           <BlogCard key={post.slug} meta={post} />
         ))}

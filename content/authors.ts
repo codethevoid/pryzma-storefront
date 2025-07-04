@@ -5,9 +5,9 @@ export type Author = {
 };
 
 export const authors: Record<string, Author> = {
-  "@ryan": {
-    name: "Ryan Thomas",
-    image: "https://cdn.pryzma.io/authors/ryan.jpg",
-    position: "Founder & CEO",
+  "@pryzma": {
+    name: "The Pryzma Team",
+    image: "https://cdn.pryzma.io/logos/pryzma.png",
+    position: "Pryzma Labs",
   },
 };

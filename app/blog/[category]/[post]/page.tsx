@@ -126,18 +126,20 @@ const BlogPost = async ({ params }: { params: Params }) => {
                 <Post />
               </div>
             </article>
-            <aside className="sticky top-0 col-span-1 h-fit space-y-8 pt-6 max-md:hidden">
+            <aside className="sticky top-[44px] col-span-1 h-fit space-y-8 pt-6 max-md:hidden">
               <section className="space-y-2">
                 <Text className="text-subtle-foreground">Written by</Text>
                 <div className="flex items-center gap-2.5">
-                  <Image
-                    src={authors[metadata.author].image}
-                    alt={metadata.author}
-                    height={1000}
-                    width={1000}
-                    className="size-9 rounded-full"
-                    quality={100}
-                  />
+                  <div className="shrink-0 rounded-full border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
+                    <Image
+                      src={authors[metadata.author].image}
+                      alt={metadata.author}
+                      height={1000}
+                      width={1000}
+                      className="size-8 rounded-full"
+                      quality={100}
+                    />
+                  </div>
                   <div>
                     <Text>{authors[metadata.author].name}</Text>
                     <Text size="small" className="text-subtle-foreground">

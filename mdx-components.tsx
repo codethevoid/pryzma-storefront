@@ -1,4 +1,3 @@
-import { Heading, Text } from "@medusajs/ui";
 import type { MDXComponents } from "mdx/types";
 
 const slugify = (text: string) => {
@@ -17,6 +16,7 @@ export const useMDXComponents = (components: MDXComponents): MDXComponents => {
         {children}
       </h2>
     ),
+    h3: ({ children }) => <h3 className="text-base !font-medium">{children}</h3>,
     // h2: ({ children }) => (
     //   <Heading
     //     level="h2"

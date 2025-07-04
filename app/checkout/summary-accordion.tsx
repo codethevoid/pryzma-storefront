@@ -65,11 +65,16 @@ export const SummaryAccordion = ({
       <div
         className={clx(
           "ease grid border-b transition-[grid-template-rows_opacity] duration-300",
-          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] border-transparent opacity-0",
+          isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr] border-transparent",
         )}
       >
         <div className="overflow-hidden bg-zinc-50 dark:bg-zinc-900">
-          <div className="mx-auto max-w-xl space-y-5 p-4">
+          <div
+            className={clx(
+              "ease mx-auto max-w-xl space-y-5 p-4 transition-opacity duration-300",
+              isOpen ? "opacity-100" : "opacity-0",
+            )}
+          >
             <div className="space-y-3">
               {cart?.items?.map((item) => (
                 <div key={item.id} className={clx("flex gap-4")}>

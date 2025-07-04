@@ -1,7 +1,7 @@
 "use client";
 
 import { StoreProduct, StoreProductVariant } from "@medusajs/types";
-import { Heading, Text, StatusBadge, Button, Input, IconButton, clx, Select } from "@medusajs/ui";
+import { Button, clx, Heading, IconButton, Input, Select, StatusBadge, Text } from "@medusajs/ui";
 import { Minus, Plus } from "@medusajs/icons";
 import { Suspense, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";

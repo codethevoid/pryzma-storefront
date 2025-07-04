@@ -6,15 +6,15 @@ export const metadata = constructMetadata({
   title: "Checkout - Pryzma",
 });
 
-const Checkout = () => {
+const Checkout = async () => {
   return (
     <>
       <Script
         id="google-places-api"
         src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY}&libraries=places&callback=initGooglePlaces`}
       />
-      <div className="px-4 max-md:px-0">
-        <div className="mx-auto max-w-screen-xl">
+      <div className="overflow-x-hidden lg:px-4">
+        <div className="">
           <CheckoutClient />
         </div>
       </div>

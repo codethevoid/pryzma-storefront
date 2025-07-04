@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { clx, Badge, Text, Button, Input, toast } from "@medusajs/ui";
+import { Badge, Button, clx, Input, Text, toast } from "@medusajs/ui";
+import type { ExtendedStoreCart } from "@/components/context/cart";
 import { useCart } from "@/components/context/cart";
 import { formatCurrency } from "@/utils/format-currency";
 import { medusa } from "@/utils/medusa";
-import type { ExtendedStoreCart } from "@/components/context/cart";
 import { StoreCart } from "@medusajs/types";
 import { XMark } from "@medusajs/icons";
 import { cdnUrl, s3Url } from "@/utils/s3";
@@ -34,40 +34,42 @@ export const SummaryAccordion = ({
   const { cart, setCart, fields, setIsLoadingClientSecret } = useCart();
 
   return (
-    <div className="hidden max-md:block">
+    <div className="block lg:hidden">
       {/* Trigger */}
       <div
         role="button"
-        className={clx("flex items-center justify-between border-b p-4")}
+        className="select-none border-y bg-zinc-50 dark:bg-zinc-900"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <Text size="small" weight="plus" className="flex items-center gap-1.5">
-          Order summary{" "}
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className={clx(
-              "relative top-[1px] size-4 text-subtle-foreground transition-transform",
-              isOpen && "rotate-180",
-            )}
-          >
-            <path d="M11.9999 13.1714L16.9497 8.22168L18.3639 9.63589L11.9999 15.9999L5.63599 9.63589L7.0502 8.22168L11.9999 13.1714Z"></path>
-          </svg>
-        </Text>
-        <Text size="small" weight="plus">
-          {formatCurrency("usd", cart?.total || 0)}
-        </Text>
+        <div className={clx("mx-auto flex max-w-xl items-center justify-between p-4")}>
+          <Text size="small" weight="plus" className="flex items-center gap-1.5">
+            Order summary{" "}
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              className={clx(
+                "relative top-[1px] size-4 text-subtle-foreground transition-transform",
+                isOpen && "rotate-180",
+              )}
+            >
+              <path d="M11.9999 13.1714L16.9497 8.22168L18.3639 9.63589L11.9999 15.9999L5.63599 9.63589L7.0502 8.22168L11.9999 13.1714Z"></path>
+            </svg>
+          </Text>
+          <Text size="small" weight="plus">
+            {formatCurrency("usd", cart?.total || 0)}
+          </Text>
+        </div>
       </div>
       {/* Content */}
       <div
         className={clx(
-          "grid transition-[grid-template-rows]",
-          isOpen ? "grid-rows-[1fr] border-b" : "grid-rows-[0fr]",
+          "ease grid border-b transition-[grid-template-rows_opacity] duration-300",
+          isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] border-transparent opacity-0",
         )}
       >
-        <div className="overflow-hidden">
-          <div className="space-y-5 p-4">
+        <div className="overflow-hidden bg-zinc-50 dark:bg-zinc-900">
+          <div className="mx-auto max-w-xl space-y-5 p-4">
             <div className="space-y-3">
               {cart?.items?.map((item) => (
                 <div key={item.id} className={clx("flex gap-4")}>

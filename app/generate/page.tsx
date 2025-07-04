@@ -7,7 +7,7 @@ const faqs = [
   {
     question: "How does the AI image generator work?",
     answer:
-      "Our AI image generator uses advanced machine learning models to turn text prompts into high-quality images instantly.",
+      "Our free AI image generator uses advanced machine learning models to turn text prompts into high-quality images instantly.",
   },
   {
     question: "What model does the AI image generator use?",

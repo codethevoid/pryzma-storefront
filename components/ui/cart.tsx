@@ -1,6 +1,7 @@
 "use client";
 
-import { Drawer, Text, Button, clx, IconButton, Input, IconBadge } from "@medusajs/ui";
+import { Button, clx, Drawer, IconBadge, IconButton, Input, Text } from "@medusajs/ui";
+import type { ExtendedStoreCart } from "../context/cart";
 import { useCart } from "../context/cart";
 import { Minus, Plus, ShoppingBag, Spinner, Trash } from "@medusajs/icons";
 import { formatCurrency } from "@/utils/format-currency";
@@ -10,7 +11,6 @@ import { useEffect, useState } from "react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { medusa } from "@/utils/medusa";
-import type { ExtendedStoreCart } from "../context/cart";
 import { useDebounceCallback } from "@/hooks/utils/use-debounce-callback";
 
 export const Cart = () => {
@@ -216,7 +216,12 @@ export const Cart = () => {
               <Text className="text-center text-subtle-foreground" size="small">
                 Shipping and taxes calculated at checkout.
               </Text>
-              <Button className="w-full" size="large" asChild onClick={() => setIsOpen(false)}>
+              <Button
+                className="w-full text-white"
+                size="large"
+                asChild
+                onClick={() => setIsOpen(false)}
+              >
                 <NextLink href="/checkout">
                   <ShoppingBag /> Checkout - {formatCurrency("usd", cart?.item_subtotal || 0)}
                 </NextLink>

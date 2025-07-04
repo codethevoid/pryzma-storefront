@@ -7,6 +7,13 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { Viewport } from "next";
 import { layoutJsonLd } from "@/utils/construct-jsonld";
 import { validateEnv } from "@/utils/env";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { Geist } from "next/font/google";
+
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
 
 export const viewport: Viewport = {
   width: "device-width",
@@ -24,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`antialiased`}>
+      <body className={`${geistSans.variable} antialiased`}>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(layoutJsonLd) }}
@@ -36,6 +43,7 @@ export default function RootLayout({
         </Providers>
         <Analytics />
         <SpeedInsights />
+        {process.env.NODE_ENV === "production" && <GoogleAnalytics gaId="G-FLWT5LZXY7" />}
       </body>
     </html>
   );

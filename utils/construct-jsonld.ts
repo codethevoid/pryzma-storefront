@@ -7,8 +7,12 @@ import type {
   WebSite,
   WebPage,
   FAQPage,
+  Article,
+  BlogPosting,
 } from "schema-dts";
 import { s3Url, cdnUrl } from "./s3";
+import { BlogPostMeta } from "@/types";
+import { authors } from "@/content/authors";
 
 const sortImages = (product: StoreProduct) => {
   const images =
@@ -123,22 +127,6 @@ export const layoutJsonLd = {
   ],
 };
 
-// export const homePageJsonLd: WithContext<Omit<WebPage, "@context">> = {
-//   "@context": "https://schema.org",
-//   "@type": "WebPage",
-//   "@id": "https://pryzma.io/#homepage",
-//   url: "https://pryzma.io",
-//   name: "Pryzma - Home",
-//   description:
-//     "Discover high quality mechanical keyboard switches, lubricants, and accessories at Pryzma.",
-//   isPartOf: { "@id": "https://pryzma.io/#website" },
-//   about: { "@id": "https://pryzma.io/#organization" },
-//   primaryImageOfPage: {
-//     "@type": "ImageObject",
-//     url: `${cdnUrl}/uploads/IMG_3607-01JMQYA154E01PG23XQDT66RGW.webp`,
-//   },
-// };
-
 export const constructFaqJsonLd = (
   faqs: { question: string; answer: string }[],
 ): WithContext<FAQPage> => {
@@ -153,5 +141,85 @@ export const constructFaqJsonLd = (
         text: faq.answer,
       },
     })),
+  };
+};
+
+export const constructBlogPostJsonLd = (post: BlogPostMeta): WithContext<BlogPosting> => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: post.title,
+    description: post.description,
+    image: post.image,
+    datePublished: new Date(post.published).toISOString(),
+    ...(post.lastModified && {
+      dateModified: new Date(post.lastModified).toISOString(),
+    }),
+    author: {
+      "@type": "Person",
+      name: authors[post.author].name,
+      image: authors[post.author].image,
+      jobTitle: authors[post.author].position,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "Pryzma",
+      url: "https://pryzma.io",
+      logo: {
+        "@type": "ImageObject",
+        url: `${cdnUrl}/logos/pryzma.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://pryzma.io/blog/${post.slug}`,
+    },
+    url: `https://pryzma.io/blog/${post.slug}`,
+    inLanguage: "en-US",
+  };
+};
+
+export const constructBlogCategoryJsonLd = (
+  category: string | undefined,
+  posts: BlogPostMeta[],
+): WithContext<CollectionPage> => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    headline: category
+      ? `${category.charAt(0).toUpperCase() + category.slice(1).split("-").join(" ")} blog posts - Pryzma`
+      : "Blog posts - Pryzma",
+    description: `${category ? `${category.charAt(0).toUpperCase() + category.slice(1).split("-").join(" ")} b` : "B"}log posts from the Pryzma team and community. Discover the latest in the keyboard industry.`,
+    url: `https://pryzma.io/blog${category ? `/${category}` : ""}`,
+    publisher: {
+      "@type": "Organization",
+      name: "Pryzma",
+      url: "https://pryzma.io",
+      logo: {
+        "@type": "ImageObject",
+        url: `${cdnUrl}/logos/pryzma.png`,
+      },
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `https://pryzma.io/blog${category ? `/${category}` : ""}`,
+    },
+    hasPart: posts.map((post) => ({
+      "@type": "BlogPosting",
+      headline: post.title,
+      description: post.description,
+      datePublished: new Date(post.published).toISOString(),
+      ...(post.lastModified && {
+        dateModified: new Date(post.lastModified).toISOString(),
+      }),
+      author: {
+        "@type": "Person",
+        name: authors[post.author].name,
+        image: authors[post.author].image,
+        jobTitle: authors[post.author].position,
+      },
+      url: `https://pryzma.io${post.slug}`,
+    })),
+    inLanguage: "en-US",
   };
 };

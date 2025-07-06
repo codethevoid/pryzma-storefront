@@ -1,14 +1,78 @@
 "use client";
 
 import { StoreProduct, StoreProductVariant } from "@medusajs/types";
-import { Button, clx, Heading, IconButton, Input, Select, StatusBadge, Text } from "@medusajs/ui";
+import {
+  Button,
+  clx,
+  Heading,
+  IconBadge,
+  IconButton,
+  Input,
+  Select,
+  StatusBadge,
+  Text,
+} from "@medusajs/ui";
 import { Minus, Plus } from "@medusajs/icons";
-import { Suspense, useMemo, useState } from "react";
+import { Suspense, useEffect, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
 import { useCart } from "../context/cart";
 import ReactMarkdown from "react-markdown";
 import { OptionSelector } from "./option-selector";
 import { Video } from "./video";
+import { BadgeCheck, Leaf, Package } from "lucide-react";
+import { toZonedTime } from "date-fns-tz";
+import { addBusinessDays, addDays, differenceInMinutes, format } from "date-fns";
+import Holidays from "date-holidays";
+
+const hd = new Holidays("US");
+
+const isHoliday = (date: Date) => {
+  return Boolean(hd.isHoliday(date));
+};
+
+const getNextBusinessDay = (date: Date) => {
+  let nextBusinessDay = addBusinessDays(date, 2); // we add 2 days to skip the immediate next business day to allow time for processing
+  while (isHoliday(nextBusinessDay)) {
+    nextBusinessDay = addBusinessDays(nextBusinessDay, 1);
+  }
+  return nextBusinessDay;
+};
+
+const calculateShippingCutoff = () => {
+  const timezone = "America/New_York";
+  const now = new Date();
+  const estNow = toZonedTime(now, timezone);
+  const isWeekend = estNow.getDay() === 0 || estNow.getDay() === 6;
+  const isTomorrowHoliday = isHoliday(addDays(estNow, 1));
+
+  if (isWeekend || isTomorrowHoliday) {
+    const nextBusinessDay = getNextBusinessDay(estNow);
+    return { text: `Orders placed now will ship ${format(nextBusinessDay, "EEEE")}` };
+  }
+
+  const cutoffString = `${format(estNow, "yyyy-MM-dd")}T16:00:00`; // 4 PM EST cutoff
+  const cutoff = toZonedTime(cutoffString, timezone);
+
+  if (estNow < cutoff) {
+    const minutesLeft = differenceInMinutes(cutoff, estNow);
+    const minutes = minutesLeft % 60;
+    const hours = Math.floor(minutesLeft / 60);
+    if (hours) {
+      return {
+        text: "Ships tomorrow. Order within ",
+        timeFrame: `${hours} hr${hours > 1 ? "s" : ""}${minutes > 0 ? ` ${minutes} min${minutes > 1 ? "s" : ""}` : ""}`,
+      };
+    } else {
+      return {
+        text: "Ships tomorrow. Order within ",
+        timeFrame: `${minutes} min${minutes > 1 ? "s" : ""}`,
+      };
+    }
+  } else {
+    const nextBusinessDay = getNextBusinessDay(estNow);
+    return { text: `Orders placed now will ship ${format(nextBusinessDay, "EEEE")}` };
+  }
+};
 
 export const ProductDetails = ({ product }: { product: StoreProduct }) => {
   const [selectedVariant, setSelectedVariant] = useState<StoreProductVariant>(
@@ -18,6 +82,19 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
   const [quantity, setQuantity] = useState<number | "">(1);
   const [isLoading, setIsLoading] = useState(false);
   const { addItem } = useCart();
+  const [shippingCutoff, setShippingCutoff] = useState<{ text: string; timeFrame?: string }>({
+    text: "",
+  });
+
+  useEffect(() => {
+    setShippingCutoff(calculateShippingCutoff());
+
+    const interval = setInterval(() => {
+      setShippingCutoff(calculateShippingCutoff());
+    }, 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const getStatus = (): { color: "green" | "orange" | "red"; label: string } => {
     const inventory = selectedVariant.inventory_quantity as number;
@@ -242,6 +319,39 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
             >
               Add to cart
             </Button>
+          </div>
+        </div>
+        <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <IconBadge color="purple">
+              <BadgeCheck className="size-4" />
+            </IconBadge>
+            <Text size="small" as="span">
+              30 day return policy - no questions asked
+            </Text>
+          </div>
+          <div className="flex items-center gap-2">
+            <IconBadge color="blue">
+              <Package className="size-4" />
+            </IconBadge>
+            <Text size="small" as="span">
+              {shippingCutoff.text}
+              {shippingCutoff?.timeFrame ? (
+                <span className="text-blue-600 dark:text-blue-400">{shippingCutoff.timeFrame}</span>
+              ) : (
+                ""
+              )}
+            </Text>
+          </div>
+          <div className="flex items-center gap-2">
+            <IconBadge color="green">
+              <Leaf className="size-4" />
+            </IconBadge>
+            <a href="https://climate.stripe.com/JXf5a9" target="_blank" rel="noreferrer">
+              <Text size="small" as="span">
+                Your order helps protect the planet
+              </Text>
+            </a>
           </div>
         </div>
       </div>

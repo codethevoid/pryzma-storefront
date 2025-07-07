@@ -15,6 +15,7 @@ import { NavDropdown } from "./nav-dropdown";
 import { navItems } from "@/lib/nav-items";
 import { Search } from "../ui/search";
 import { usePathname } from "next/navigation";
+import { track } from "@vercel/analytics";
 
 export const Nav = () => {
   const { setIsOpen, cart } = useCart();
@@ -103,7 +104,13 @@ export const Nav = () => {
                     )
                   }
                   onMouseLeave={handleMouseLeave}
-                  onClick={handleMouseLeave}
+                  onClick={() => {
+                    handleMouseLeave();
+                    track("nav-item-click", {
+                      label: item.label,
+                      href: item.href,
+                    });
+                  }}
                 >
                   <Text
                     // weight="plus"

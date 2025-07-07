@@ -12,6 +12,7 @@ import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { medusa } from "@/utils/medusa";
 import { useDebounceCallback } from "@/hooks/utils/use-debounce-callback";
+import { track } from "@vercel/analytics";
 
 export const Cart = () => {
   const { cart, setCart, isOpen, setIsOpen, updateItem, removeItem, fields } = useCart();
@@ -220,7 +221,17 @@ export const Cart = () => {
                 className="w-full text-white"
                 size="large"
                 asChild
-                onClick={() => setIsOpen(false)}
+                onClick={() => {
+                  setIsOpen(false);
+                  track("Checkout", {
+                    cartId: cart?.id || "",
+                    itemCount: cart?.items?.length || 0,
+                    total: cart?.total || 0,
+                    timestamp: new Date().toISOString(),
+                    currency: "usd",
+                    userAgent: navigator.userAgent,
+                  });
+                }}
               >
                 <NextLink href="/checkout">
                   <ShoppingBag /> Checkout - {formatCurrency("usd", cart?.item_subtotal || 0)}

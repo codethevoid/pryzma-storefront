@@ -23,6 +23,7 @@ import { BadgeCheck, Leaf, Package } from "lucide-react";
 import { toZonedTime } from "date-fns-tz";
 import { addBusinessDays, addDays, differenceInMinutes, format } from "date-fns";
 import Holidays from "date-holidays";
+import { track } from "@vercel/analytics";
 
 const hd = new Holidays("US");
 
@@ -315,6 +316,26 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
                   quantity: quantity === "" ? 1 : quantity,
                 });
                 setIsLoading(false);
+
+                // track event in vercel analytics
+                track("Add to cart", {
+                  productId: product.id,
+                  variantId: selectedVariant.id,
+                  product: product.title,
+                  variant: selectedVariant.title,
+                  ...(product.collection && { collection: product.collection?.title }),
+                  quantity: quantity === "" ? 1 : quantity,
+                  amount:
+                    ((selectedVariant?.calculated_price?.calculated_amount as number) || 0) *
+                    (quantity === "" ? 1 : quantity),
+                  referrer: document.referrer,
+                  timestamp: new Date().toISOString(),
+                  url: window.location.href,
+                  shippingCutoff: `${shippingCutoff.text}${shippingCutoff.timeFrame || ""}`,
+                  inventoryStatus: getStatus().label,
+                  userAgent: navigator.userAgent,
+                  currency: "usd",
+                });
               }}
             >
               Add to cart

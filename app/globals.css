@@ -2,20 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-::selection {
-    background: oklch(0.984 0.014 180.72);
-    color: oklch(0.6 0.118 184.704);
-}
-
-.dark ::selection {
-    background: oklch(0.25 0.046 192.524);
-    color: oklch(0.777 0.152 181.912);
-}
-
 * {
     font-family: var(--font-geist-sans) !important;
 }
-
 
 @layer base {
     :root {
@@ -315,7 +304,7 @@ input[type="search"] {
 
 /*
 .dark .pac-container {
-  margin-top: 8px !important; 
+  margin-top: 8px !important;
   border-radius: 8px;
   filter: grayscale(100%);
   padding: 12px;
@@ -342,5 +331,18 @@ input[type="search"] {
 }
 
 .bg-ui-bg-overlay {
-    z-index: 9999;
+    z-index: 500;
+}
+
+::selection {
+    background: #000;
+    color: #fff;
+}
+
+.dark {
+
+    ::selection {
+        background: #fff;
+        color: #000;
+    }
 }

@@ -9,8 +9,6 @@ const schema = z.object({
   prompt: z.string().min(1, { message: "Prompt is required" }),
 });
 
-export const maxDuration = 30;
-
 export const POST = async (req: NextRequest) => {
   try {
     const identifier = `generate:${ipAddress(req) || "127.0.0.1"}`;

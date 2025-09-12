@@ -2,15 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { StoreOrder } from "@medusajs/types";
-import { Text } from "@medusajs/ui";
+import { Button, IconBadge, ProgressAccordion, Text } from "@medusajs/ui";
 import { formatCurrency } from "@/utils/format-currency";
 import { OrderSummary } from "./summary";
-import { ProgressAccordion } from "@medusajs/ui";
-import { IconBadge } from "@medusajs/ui";
-import { TruckFast, XCircle, Loader, ExclamationCircle } from "@medusajs/icons";
+import { ExclamationCircle, Loader, TruckFast, XCircle } from "@medusajs/icons";
 import type { Card } from "@stripe/stripe-js";
 import NextLink from "next/link";
-import { Button } from "@medusajs/ui";
+import { useSearchParams } from "next/navigation";
+import { confettiFireworks } from "@/components/magicui/confetti-fireworks";
 
 const statusMap = {
   not_fulfilled: "confirmed",
@@ -36,6 +35,8 @@ export const OrderClient = ({ id }: { id: string }) => {
   const [order, setOrder] = useState<StoreOrder | null>(null);
   const [tracking, setTracking] = useState<string | null>(null);
   const [card, setCard] = useState<Card | null>(null);
+
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     getOrder(id).then((data) => {
@@ -88,6 +89,10 @@ export const OrderClient = ({ id }: { id: string }) => {
       order.billing_address?.country_code === order.shipping_address?.country_code
     );
   };
+
+  if (searchParams.get("initial")) {
+    confettiFireworks();
+  }
 
   return (
     <div className="mx-auto max-w-screen-xl">

@@ -86,7 +86,7 @@ export const Footer = () => {
   if (path.includes("checkout")) return null;
 
   return (
-    <div className="border-t bg-zinc-50 px-4 py-8 dark:bg-zinc-900/50">
+    <div className="border-t bg-zinc-50 px-4 pb-14 pt-8 dark:bg-zinc-900/50">
       <div className="mx-auto max-w-screen-xl space-y-8">
         <div className="grid grid-cols-[auto_auto_auto_auto_auto_auto_auto] justify-between gap-4 max-md:auto-rows-min max-md:grid-cols-1 max-md:grid-rows-[auto_auto_auto_auto] max-md:gap-8">
           <div className="col-span-3 space-y-4">

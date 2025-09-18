@@ -31,11 +31,16 @@ export default {
           "0%": { transform: "translateY(-12px)", opacity: "0" },
           "100%": { transform: "translateY(0)", opacity: "1" },
         },
+        rainbow: {
+          "0%": { "background-position": "0%" },
+          "100%": { "background-position": "200%" },
+        },
       },
       animation: {
         "slide-from-left": "slide-from-left 200ms ease-out",
         "slide-from-right": "slide-from-right 200ms ease-out",
         "slide-from-top": "slide-from-top 200ms ease-out",
+        rainbow: "rainbow 2s infinite linear",
       },
     },
   },

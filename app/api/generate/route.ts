@@ -1,9 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { experimental_generateImage as generateImage } from "ai";
 import { fireworks } from "@ai-sdk/fireworks";
 import { ratelimiter } from "@/lib/upstash/rate-limit";
 import { ipAddress } from "@vercel/functions";
 import { z } from "zod";
+import { sendEmail } from "@/utils/send-email";
 
 const schema = z.object({
   prompt: z.string().min(1, { message: "Prompt is required" }),
@@ -37,6 +38,15 @@ export const POST = async (req: NextRequest) => {
     const base64Images = images?.map((image) => {
       const base64 = Buffer.from(image.uint8Array).toString("base64");
       return `data:${image.mimeType};base64,${base64}`;
+    });
+
+    after(async () => {
+      await sendEmail({
+        from: "Pryzma <notifs@mailer.pryzma.io>",
+        to: process.env.NOTIFICATION_RECEIVING_EMAIL!,
+        subject: "New image generated",
+        text: `New image generated with prompt: ${prompt}`,
+      });
     });
 
     return NextResponse.json({ images: base64Images || [] });

@@ -35,7 +35,7 @@ export const ScrollSpy = ({ headings }: { headings: { id: string; text: string }
           <div className="relative h-full w-0.5 rounded-full bg-border" ref={containerRef}>
             <span
               className={clx(
-                "delay-[50ms] absolute left-0 w-0.5 rounded-full bg-foreground transition-all duration-300 ease-in-out",
+                "absolute left-0 w-0.5 rounded-full bg-foreground transition-all delay-75 duration-300 ease-in-out",
               )}
               style={indicatorStyle}
             />

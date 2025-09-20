@@ -29,3 +29,19 @@ model ImageGeneration {
   url       String?
   model     String
 }
+
+model Link {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  slug      String   @unique
+  url       String
+}
+
+model QrCode {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  value     String
+  template  String
+}

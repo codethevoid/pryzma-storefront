@@ -3,6 +3,7 @@
 import { useParams, usePathname } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@medusajs/ui";
+import { Text, Heading } from "@medusajs/ui";
 
 export const BlogNav = ({ categories }: { categories: string[] }) => {
   const pathname = usePathname();
@@ -11,30 +12,42 @@ export const BlogNav = ({ categories }: { categories: string[] }) => {
   if (post) return null;
 
   return (
-    <nav className="px-4">
-      <div className="mx-auto flex max-w-screen-lg items-center gap-2">
-        <Button
-          asChild
-          size="small"
-          className="rounded-full px-2.5"
-          variant={pathname === "/blog" ? "primary" : "transparent"}
-        >
-          <Link href="/blog">All posts</Link>
-        </Button>
-        {categories.map((category) => (
+    <>
+      <div className="border-b bg-zinc-50 px-4 py-10 dark:bg-zinc-900/50 max-md:py-6">
+        <div className="mx-auto max-w-screen-lg">
+          <div className="flex items-baseline gap-1">
+            <Heading>Blog</Heading>
+          </div>
+          <Text size="small" className="text-subtle-foreground">
+            Latest news and updates from Pryzma
+          </Text>
+        </div>
+      </div>
+      <nav className="px-4">
+        <div className="mx-auto flex max-w-screen-lg items-center gap-2">
           <Button
-            key={category}
             asChild
             size="small"
             className="rounded-full px-2.5"
-            variant={pathname === `/blog/${category}` ? "primary" : "transparent"}
+            variant={pathname === "/blog" ? "primary" : "transparent"}
           >
-            <Link href={`/blog/${category}`}>
-              {category.charAt(0).toUpperCase() + category.slice(1).split("-").join(" ")}
-            </Link>
+            <Link href="/blog">All posts</Link>
           </Button>
-        ))}
-      </div>
-    </nav>
+          {categories.map((category) => (
+            <Button
+              key={category}
+              asChild
+              size="small"
+              className="rounded-full px-2.5"
+              variant={pathname === `/blog/${category}` ? "primary" : "transparent"}
+            >
+              <Link href={`/blog/${category}`}>
+                {category.charAt(0).toUpperCase() + category.slice(1).split("-").join(" ")}
+              </Link>
+            </Button>
+          ))}
+        </div>
+      </nav>
+    </>
   );
 };

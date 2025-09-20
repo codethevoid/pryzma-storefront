@@ -75,8 +75,12 @@ const labsLinks = [
     href: "/blog",
   },
   {
-    title: "Generate",
+    title: "Image generator",
     href: "/generate",
+  },
+  {
+    title: "QR code generator",
+    href: "/qr",
   },
 ];
 

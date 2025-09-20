@@ -16,15 +16,12 @@ import { navItems } from "@/lib/nav-items";
 import { Search } from "../ui/search";
 import { usePathname } from "next/navigation";
 import { track } from "@vercel/analytics";
-import FlickeringGrid from "../magicui/flickering-grid";
 import { RainbowButton } from "../magicui/rainbow-button";
 
 const CalloutBanner = () => {
-  const width = useWindowWidth();
-
   return (
-    <div className="sticky top-[47px] z-50 h-9 w-full border-b bg-zinc-50 dark:border-white/15 dark:bg-zinc-950 md:top-[45px]">
-      <div className="relative size-full overflow-hidden">
+    <div className="sticky top-[47px] z-50 h-9 w-full border-b bg-zinc-50 dark:border-white/15 dark:bg-zinc-900 md:top-[45px]">
+      {/*<div className="relative size-full overflow-hidden">
         <FlickeringGrid
           className="absolute inset-0 hidden size-full dark:block"
           color="#fff"
@@ -44,7 +41,7 @@ const CalloutBanner = () => {
           squareSize={1.5}
           maxOpacity={0.1}
         />
-      </div>
+      </div>*/}
       <div className="absolute inset-0 flex items-center justify-center gap-3">
         <Text size="small" weight="plus">
           Boring QR codes? Never again!
@@ -224,7 +221,7 @@ export const Nav = () => {
           </div>
         </div>
       </div>
-      {path.includes("generate") && <CalloutBanner />}
+      {(path.includes("generate") || path === "/qr") && <CalloutBanner />}
       <Cart />
       <Drawer
         open={isMobileNavOpen}

@@ -344,14 +344,14 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
         </div>
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
-            <IconBadge color="purple">
+            <IconBadge color="blue">
               <BadgeCheck className="size-4" />
             </IconBadge>
             <Text size="small" as="span">
               30 day return policy - no questions asked
             </Text>
           </div>
-          <div className="flex items-center gap-2">
+          {/*<div className="flex items-center gap-2">
             <IconBadge color="blue">
               <Package className="size-4" />
             </IconBadge>
@@ -363,16 +363,23 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
                 ""
               )}
             </Text>
-          </div>
+          </div>*/}
           <div className="flex items-center gap-2">
             <IconBadge color="green">
               <Leaf className="size-4" />
             </IconBadge>
-            <a href="https://climate.stripe.com/JXf5a9" target="_blank" rel="noreferrer">
-              <Text size="small" as="span">
-                Your order helps protect the planet
-              </Text>
-            </a>
+            <Text size="small" as="span">
+              Your order helps protect the{" "}
+              <a
+                href="https://climate.stripe.com/JXf5a9"
+                target="_blank"
+                rel="noreferrer"
+                className="underline"
+              >
+                {" "}
+                planet
+              </a>
+            </Text>
           </div>
         </div>
       </div>

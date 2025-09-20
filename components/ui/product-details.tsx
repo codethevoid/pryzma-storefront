@@ -19,7 +19,7 @@ import { useCart } from "../context/cart";
 import ReactMarkdown from "react-markdown";
 import { OptionSelector } from "./option-selector";
 import { Video } from "./video";
-import { BadgeCheck, Leaf, Package } from "lucide-react";
+import { BadgeCheck, Leaf } from "lucide-react";
 import { toZonedTime } from "date-fns-tz";
 import { addBusinessDays, addDays, differenceInMinutes, format } from "date-fns";
 import Holidays from "date-holidays";

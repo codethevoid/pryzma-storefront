@@ -4,7 +4,7 @@ import { fireworks } from "@ai-sdk/fireworks";
 import { ratelimiter } from "@/lib/upstash/rate-limit";
 import { ipAddress } from "@vercel/functions";
 import { z } from "zod";
-import { sendEmail } from "@/utils/send-email";
+import prisma from "@/db/prisma";
 
 const schema = z.object({
   prompt: z.string().min(1, { message: "Prompt is required" }),
@@ -40,12 +40,21 @@ export const POST = async (req: NextRequest) => {
       return `data:${image.mimeType};base64,${base64}`;
     });
 
+    // after(async () => {
+    //   await sendEmail({
+    //     from: "Pryzma <notifs@mailer.pryzma.io>",
+    //     to: process.env.NOTIFICATION_RECEIVING_EMAIL!,
+    //     subject: "New image generated",
+    //     text: `New image generated with prompt: ${prompt}`,
+    //   });
+    // });
+
     after(async () => {
-      await sendEmail({
-        from: "Pryzma <notifs@mailer.pryzma.io>",
-        to: process.env.NOTIFICATION_RECEIVING_EMAIL!,
-        subject: "New image generated",
-        text: `New image generated with prompt: ${prompt}`,
+      await prisma.imageGeneration.create({
+        data: {
+          prompt,
+          model: "stable-diffusion-xl-1024-v1-0",
+        },
       });
     });
 

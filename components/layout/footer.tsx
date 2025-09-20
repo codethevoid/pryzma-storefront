@@ -78,6 +78,10 @@ const labsLinks = [
     title: "Image generator",
     href: "/generate",
   },
+  {
+    title: "QR code generator",
+    href: "/qr",
+  },
 ];
 
 export const Footer = () => {

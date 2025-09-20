@@ -68,10 +68,10 @@ export const GenerateClient = ({ faqs }: { faqs: { question: string; answer: str
   };
 
   return (
-    <div className="space-y-24 pb-24 pt-32 max-md:space-y-20 max-md:pb-12 max-md:pt-20">
+    <div className="space-y-24 pb-24 pt-10 max-md:space-y-20 max-md:pb-12 md:pt-20">
       <section aria-label="Image generator prompt">
         <div className="space-y-8 max-md:space-y-6">
-          <Heading className="text-center text-4xl font-bold max-md:text-2xl max-md:font-semibold">
+          <Heading className="text-center text-4xl font-semibold max-md:text-2xl">
             What can I help you create?
           </Heading>
           <div className="mx-auto max-w-3xl space-y-1.5">

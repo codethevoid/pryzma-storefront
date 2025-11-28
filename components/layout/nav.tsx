@@ -43,7 +43,7 @@ const CalloutBanner = () => {
       </div>*/}
       <div className="absolute inset-0 flex items-center justify-center gap-3">
         <Text size="small" weight="plus">
-          Enjoy 50% off sitewide through Nov 30th!
+          Black Friday 50% off through Dec 1st!
         </Text>
         {/* <RainbowButton
           className="h-[26px] rounded-full px-2 text-[0.825rem] shadow-lg"

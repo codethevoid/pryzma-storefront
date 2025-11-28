@@ -12,7 +12,7 @@ import {
   StatusBadge,
   Text,
 } from "@medusajs/ui";
-import { Minus, Plus } from "@medusajs/icons";
+import { Minus, Plus, Tag } from "@medusajs/icons";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
 import { useCart } from "../context/cart";
@@ -343,6 +343,14 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
           </div>
         </div>
         <div className="space-y-1.5">
+          <div className="flex items-center gap-2">
+            <IconBadge color="orange">
+              <Tag className="size-4" />
+            </IconBadge>
+            <Text size="small" as="span">
+              Black Friday 50% off through Dec 1st!
+            </Text>
+          </div>
           <div className="flex items-center gap-2">
             <IconBadge color="blue">
               <BadgeCheck className="size-4" />

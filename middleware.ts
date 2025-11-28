@@ -120,6 +120,12 @@ export const middleware = async (req: NextRequest) => {
     });
   }
 
+  if (path.includes("/qr") || path.includes("/generate")) {
+    return NextResponse.redirect(new URL("/", req.url), {
+      headers: PRYZMA_HEADERS,
+    });
+  }
+
   // otherwise, continue like normal
   return NextResponse.next({ headers: PRYZMA_HEADERS });
 };

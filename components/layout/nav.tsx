@@ -41,7 +41,13 @@ const CalloutBanner = () => {
           maxOpacity={0.1}
         />
       </div>*/}
-      <div className="absolute inset-0 flex items-center justify-center gap-3">
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          role="presentation"
+          className="[&amp;_div]:w-2 [&amp;_div]:h-2 [&amp;_div]:rounded-sm [&amp;_div]:bg-ui-tag-orange-icon flex h-[18px] w-5 items-center justify-center"
+        >
+          <div></div>
+        </div>
         <Text size="small" weight="plus">
           Black Friday 50% off through Dec 1st!
         </Text>

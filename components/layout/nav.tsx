@@ -16,7 +16,6 @@ import { navItems } from "@/lib/nav-items";
 import { Search } from "../ui/search";
 import { usePathname } from "next/navigation";
 import { track } from "@vercel/analytics";
-import { RainbowButton } from "../magicui/rainbow-button";
 
 const CalloutBanner = () => {
   return (
@@ -221,7 +220,7 @@ export const Nav = () => {
           </div>
         </div>
       </div>
-      {(path.includes("generate") || path === "/qr") && <CalloutBanner />}
+      <CalloutBanner />
       <Cart />
       <Drawer
         open={isMobileNavOpen}

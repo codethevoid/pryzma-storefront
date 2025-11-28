@@ -44,9 +44,9 @@ const CalloutBanner = () => {
       </div>*/}
       <div className="absolute inset-0 flex items-center justify-center gap-3">
         <Text size="small" weight="plus">
-          Boring QR codes? Never again!
+          Enjoy 50% off sitewide through Nov 30th!
         </Text>
-        <RainbowButton
+        {/* <RainbowButton
           className="h-[26px] rounded-full px-2 text-[0.825rem] shadow-lg"
           variant="outline"
           asChild
@@ -60,7 +60,7 @@ const CalloutBanner = () => {
           <a href="https://qryptic.io" target="_blank">
             Try now
           </a>
-        </RainbowButton>
+        </RainbowButton> */}
       </div>
     </div>
   );

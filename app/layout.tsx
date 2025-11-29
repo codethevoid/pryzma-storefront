@@ -9,7 +9,6 @@ import { layoutJsonLd } from "@/utils/construct-jsonld";
 import { validateEnv } from "@/utils/env";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Geist } from "next/font/google";
-import { EmailDiscountDialog } from "@/components/ui/dialogs/email-discount";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,7 +39,6 @@ export default function RootLayout({
         <Providers>
           <Nav />
           {children}
-          <EmailDiscountDialog />
           <Footer />
         </Providers>
         <Analytics />

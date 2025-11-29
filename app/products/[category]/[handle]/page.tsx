@@ -1,14 +1,14 @@
 import { medusa } from "@/utils/medusa";
-import { Breadcrumbs } from "@/components/ui/breadcrumbs";
+// import { Breadcrumbs } from "@/components/ui/breadcrumbs";
 import { ProductShell } from "@/components/layout/product-shell";
 import { Metadata } from "next";
-import { Carousel } from "@/components/ui/carousel";
+// import { Carousel } from "@/components/ui/carousel";
 import { constructMetadata } from "@/utils/metadata";
-import { shuffle } from "@/lib/helpers/shuffle";
+// import { shuffle } from "@/lib/helpers/shuffle";
 import { cdnUrl, s3Url } from "@/utils/s3";
 import { constructProductPageJsonLd } from "@/utils/construct-jsonld";
-import { Button } from "@medusajs/ui";
-import NextLink from "next/link";
+// import { Button } from "@medusajs/ui";
+// import NextLink from "next/link";
 
 export const dynamicParams = false;
 type Params = Promise<{ category: string; handle: string }>;
@@ -50,23 +50,23 @@ const ProductPage = async ({ params }: { params: Params }) => {
     fields: "*variants.calculated_price,+variants.inventory_quantity",
   });
 
-  const relatedProducts = await medusa.store.product.list({
-    limit: 200,
-    fields: "*variants.calculated_price,+variants.inventory_quantity",
-    type_id: data.products[0].type?.id,
-    // ...(data.products[0].type?.value !== "lubricant" &&
-    //   data.products[0]?.type?.value !== "accessory" && {
-    //     collection_id: data.products[0].collection?.id,
-    //   }),
-    // ...((data.products[0]?.type?.value === "lubricant" ||
-    //   data.products[0]?.type?.value === "accessory") && {
-    //   collection_id: ["pcol_01JMXFFRX913AH8KQH9PF7K34P", "pcol_01JMXFGE959XSPYRAK22F987S4"], // lubricants and accessories, can eventually make this dynamic once we have more products in these collections
-    // }),
-  });
+  // const relatedProducts = await medusa.store.product.list({
+  //   limit: 200,
+  //   fields: "*variants.calculated_price,+variants.inventory_quantity",
+  //   type_id: data.products[0].type?.id,
+  // // ...(data.products[0].type?.value !== "lubricant" &&
+  // //   data.products[0]?.type?.value !== "accessory" && {
+  // //     collection_id: data.products[0].collection?.id,
+  // //   }),
+  // // ...((data.products[0]?.type?.value === "lubricant" ||
+  // //   data.products[0]?.type?.value === "accessory") && {
+  // //   collection_id: ["pcol_01JMXFFRX913AH8KQH9PF7K34P", "pcol_01JMXFGE959XSPYRAK22F987S4"], // lubricants and accessories, can eventually make this dynamic once we have more products in these collections
+  // // }),
+  // });
 
-  const shuffledRelatedProducts = shuffle(
-    relatedProducts.products.filter((p) => p.id !== data.products[0].id),
-  ).slice(0, 10);
+  // const shuffledRelatedProducts = shuffle(
+  //   relatedProducts.products.filter((p) => p.id !== data.products[0].id),
+  // ).slice(0, 10);
 
   // const shuffledRelatedProducts =
   //   data.products[0]?.type?.value === "lubricant"
@@ -100,15 +100,15 @@ const ProductPage = async ({ params }: { params: Params }) => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLD) }}
       />
 
-      <main className="min-h-[calc(100vh-330.5px)] p-4 pb-12">
+      <main className="min-h-[calc(100vh-330.5px)] p-4 pb-12 pt-6">
         <div className="mx-auto max-w-screen-xl space-y-4">
-          <Breadcrumbs product={data.products[0]} />
+          {/*<Breadcrumbs product={data.products[0]} />*/}
           <div className="space-y-16">
             <section aria-label="Product details">
               <ProductShell product={data.products[0]} />
             </section>
 
-            <section aria-label="Related products">
+            {/*<section aria-label="Related products">
               <Carousel
                 title="You may also like"
                 data={shuffledRelatedProducts}
@@ -122,7 +122,7 @@ const ProductPage = async ({ params }: { params: Params }) => {
                   </Button>
                 }
               />
-            </section>
+            </section>*/}
           </div>
         </div>
       </main>

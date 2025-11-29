@@ -1,64 +1,92 @@
-import { Hero } from "@/components/landing/hero";
-import { Featured } from "@/components/landing/featured";
-import { Spotlight } from "@/components/ui/spotlight";
-import { cdnUrl } from "@/utils/s3";
-import { Carousel } from "@/components/ui/carousel";
-import { StoreProduct } from "@medusajs/types";
-import { medusa } from "@/utils/medusa";
+// import { Hero } from "@/components/landing/hero";
+// import { Featured } from "@/components/landing/featured";
+// import { Spotlight } from "@/components/ui/spotlight";
+// import { cdnUrl } from "@/utils/s3";
+// import { Carousel } from "@/components/ui/carousel";
+// import { StoreProduct } from "@medusajs/types";
+// import { medusa } from "@/utils/medusa";
 import { constructMetadata } from "@/utils/metadata";
 // import { homePageJsonLd } from "@/utils/construct-jsonld";
-import { Button } from "@medusajs/ui";
+import { Button, Heading } from "@medusajs/ui";
 import NextLink from "next/link";
 
 export const metadata = constructMetadata({});
 
-const getProducts = async ({
-  handle,
-  limit = 10,
-}: {
-  handle: string | string[];
-  limit?: number;
-}): Promise<StoreProduct[]> => {
-  const ids: string[] = [];
-  if (typeof handle === "string") {
-    const categoryResponse = await medusa.store.category.list({
-      handle,
-      limit: 1,
-    });
-    ids.push(categoryResponse.product_categories[0].id);
-  } else {
-    for (const i of handle) {
-      const categoryResponse = await medusa.store.category.list({
-        handle: i,
-        limit: 1,
-      });
-      ids.push(categoryResponse.product_categories[0].id);
-    }
-  }
-  const response = await medusa.store.product.list({
-    limit,
-    fields: "*variants.calculated_price",
-    category_id: ids,
-    order: "-created_at",
-  });
+// const getProducts = async ({
+//   handle,
+//   limit = 10,
+// }: {
+//   handle: string | string[];
+//   limit?: number;
+// }): Promise<StoreProduct[]> => {
+//   const ids: string[] = [];
+//   if (typeof handle === "string") {
+//     const categoryResponse = await medusa.store.category.list({
+//       handle,
+//       limit: 1,
+//     });
+//     ids.push(categoryResponse.product_categories[0].id);
+//   } else {
+//     for (const i of handle) {
+//       const categoryResponse = await medusa.store.category.list({
+//         handle: i,
+//         limit: 1,
+//       });
+//       ids.push(categoryResponse.product_categories[0].id);
+//     }
+//   }
+//   const response = await medusa.store.product.list({
+//     limit,
+//     fields: "*variants.calculated_price",
+//     category_id: ids,
+//     order: "-created_at",
+//   });
 
-  return response.products || [];
-};
+//   return response.products || [];
+// };
 
 const Home = async () => {
-  const [bestSellers, switches, accessories] = await Promise.all([
-    getProducts({ handle: "best-sellers" }),
-    getProducts({ handle: "switches" }),
-    getProducts({ handle: "accessories" }),
-  ]);
+  // const [bestSellers, switches, accessories] = await Promise.all([
+  //   getProducts({ handle: "best-sellers" }),
+  //   getProducts({ handle: "switches" }),
+  //   getProducts({ handle: "accessories" }),
+  // ]);
 
   return (
     <>
+      <main>
+        <NextLink href="/products/switches/pryzma-java-switches">
+          <div className="relative mx-auto flex h-[calc(100dvh-79px)] w-full items-end justify-center bg-[url(https://cdn.pryzma.io/uploads/IMG_1086-01JMQWGM81N9PDGZ09VX2C0WDC.webp)] bg-cover bg-center p-6 pb-12">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent"></div>
+            <div className="z-5 relative grid gap-4">
+              <Heading className="text-center text-3xl text-white md:text-4xl">
+                Java Switches
+              </Heading>
+              <Button className="mx-auto block w-40 bg-white text-black hover:bg-white">
+                Shop Now
+              </Button>
+            </div>
+          </div>
+        </NextLink>
+        <NextLink href="/products/switches/pryzma-seafoam-switches">
+          <div className="relative mx-auto flex h-[calc(100dvh-79px)] w-full items-end justify-center bg-[url(https://cdn.pryzma.io/uploads/IMG_3070-01JMQWSABANWX3GJNAFH3MP296.webp)] bg-cover bg-center p-6 pb-12">
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent"></div>
+            <div className="z-5 relative grid gap-4">
+              <Heading className="text-center text-3xl text-white md:text-4xl">
+                Seafoam Switches
+              </Heading>
+              <Button className="mx-auto block w-40 bg-white text-black hover:bg-white">
+                Shop Now
+              </Button>
+            </div>
+          </div>
+        </NextLink>
+      </main>
       {/* <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(homePageJsonLd) }}
       /> */}
-      <main className="space-y-12 pb-20 max-md:space-y-8">
+      {/*<main className="space-y-12 pb-20 max-md:space-y-8">
         <section aria-label="Hero">
           <Hero
             image={`${cdnUrl}/uploads/gateron-melodic-clicky-switches-01JN6B3VJQAE2DSXBW3VD27P3S.webp`}
@@ -120,7 +148,7 @@ const Home = async () => {
             image={`${cdnUrl}/uploads/IMG_3405-01JMQZ73D13NYF9FMMXCD9WWMM.webp`}
           />
         </section>
-      </main>
+      </main>*/}
     </>
   );
 };

@@ -9,21 +9,29 @@ import { usePathname } from "next/navigation";
 import { ClimateBadge } from "@/lib/icons/climate";
 
 const shopLinks = [
-  {
-    title: "Switches",
-    href: "/products/switches",
-  },
-  {
-    title: "Samples",
-    href: "/products/samples",
-  },
+  // {
+  //   title: "Switches",
+  //   href: "/products/switches",
+  // },
+  // {
+  //   title: "Samples",
+  //   href: "/products/samples",
+  // },
   // {
   //   title: "Lubricants",
   //   href: "/products/lubricants",
   // },
+  // {
+  //   title: "Accessories",
+  //   href: "/prod{ucts/accessories",
+  // },
   {
-    title: "Accessories",
-    href: "/products/accessories",
+    title: "Java",
+    href: "/products/switches/pryzma-java-switches",
+  },
+  {
+    title: "Seafoam",
+    href: "/products/switches/pryzma-seafoam-switches",
   },
 ];
 
@@ -69,20 +77,20 @@ const legalLinks = [
   // },
 ];
 
-const labsLinks = [
-  {
-    title: "Blog",
-    href: "/blog",
-  },
-  // {
-  //   title: "Image generator",
-  //   href: "/generate",
-  // },
-  // {
-  //   title: "QR code generator",
-  //   href: "/qr",
-  // },
-];
+// const labsLinks = [
+//   {
+//     title: "Blog",
+//     href: "/blog",
+//   },
+//   // {
+//   //   title: "Image generator",
+//   //   href: "/generate",
+//   // },
+//   // {
+//   //   title: "QR code generator",
+//   //   href: "/qr",
+//   // },
+// ];
 
 export const Footer = () => {
   const path = usePathname();
@@ -92,7 +100,7 @@ export const Footer = () => {
   return (
     <div className="border-t bg-zinc-50 px-4 pb-14 pt-8 dark:bg-zinc-900/50">
       <div className="mx-auto max-w-screen-xl space-y-8">
-        <div className="grid grid-cols-[auto_auto_auto_auto_auto_auto_auto] justify-between gap-4 max-md:auto-rows-min max-md:grid-cols-1 max-md:grid-rows-[auto_auto_auto_auto] max-md:gap-8">
+        <div className="grid grid-cols-[auto_auto_auto_auto_auto_auto] justify-between gap-4 max-md:auto-rows-min max-md:grid-cols-1 max-md:grid-rows-[auto_auto_auto_auto] max-md:gap-8">
           <div className="col-span-3 space-y-4">
             <div className="w-fit rounded-md border bg-zinc-100 p-0.5 shadow-sm dark:bg-zinc-800">
               <NextLink href="/">
@@ -261,7 +269,7 @@ export const Footer = () => {
               ))}
             </div>
           </div>
-          <div className="space-y-2 max-md:col-span-3">
+          {/*<div className="space-y-2 max-md:col-span-3">
             <Text size="small" weight="plus">
               Pryzma Labs
             </Text>
@@ -293,7 +301,7 @@ export const Footer = () => {
                 </div>
               ))}
             </div>
-          </div>
+          {/*</div>*/}
         </div>
         <div className="flex items-center justify-between">
           <Text size="xsmall" className="text-subtle-foreground">

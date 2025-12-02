@@ -56,7 +56,7 @@ const Home = async () => {
     <>
       <main>
         <NextLink href="/products/switches/pryzma-java-switches">
-          <div className="relative mx-auto flex h-[calc(100dvh-79px)] w-full items-end justify-center bg-[url(https://cdn.pryzma.io/uploads/IMG_1086-01JMQWGM81N9PDGZ09VX2C0WDC.webp)] bg-cover bg-center p-6 pb-12">
+          <div className="relative mx-auto flex h-[calc(100dvh-45px)] w-full items-end justify-center bg-[url(https://cdn.pryzma.io/uploads/IMG_1086-01JMQWGM81N9PDGZ09VX2C0WDC.webp)] bg-cover bg-center p-6 pb-12">
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent"></div>
             <div className="z-5 relative grid gap-4">
               <Heading className="text-center text-3xl text-white md:text-4xl">
@@ -69,7 +69,7 @@ const Home = async () => {
           </div>
         </NextLink>
         <NextLink href="/products/switches/pryzma-seafoam-switches">
-          <div className="relative mx-auto flex h-[calc(100dvh-79px)] w-full items-end justify-center bg-[url(https://cdn.pryzma.io/uploads/IMG_3070-01JMQWSABANWX3GJNAFH3MP296.webp)] bg-cover bg-center p-6 pb-12">
+          <div className="relative mx-auto flex h-[calc(100dvh-45px)] w-full items-end justify-center bg-[url(https://cdn.pryzma.io/uploads/IMG_3070-01JMQWSABANWX3GJNAFH3MP296.webp)] bg-cover bg-center p-6 pb-12">
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 to-transparent"></div>
             <div className="z-5 relative grid gap-4">
               <Heading className="text-center text-3xl text-white md:text-4xl">

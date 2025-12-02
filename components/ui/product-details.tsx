@@ -12,7 +12,7 @@ import {
   StatusBadge,
   Text,
 } from "@medusajs/ui";
-import { Minus, Plus, Tag } from "@medusajs/icons";
+import { Minus, Plus } from "@medusajs/icons";
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { formatCurrency } from "@/utils/format-currency";
 import { useCart } from "../context/cart";

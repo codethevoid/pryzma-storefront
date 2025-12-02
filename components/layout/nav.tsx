@@ -17,59 +17,59 @@ import { Search } from "../ui/search";
 import { usePathname } from "next/navigation";
 import { track } from "@vercel/analytics";
 
-const CalloutBanner = () => {
-  return (
-    <div className="sticky top-[47px] z-50 h-9 w-full border-b bg-zinc-50 dark:border-white/15 dark:bg-zinc-900 md:top-[45px]">
-      {/*<div className="relative size-full overflow-hidden">
-        <FlickeringGrid
-          className="absolute inset-0 hidden size-full dark:block"
-          color="#fff"
-          height={38}
-          width={width + 6}
-          gridGap={1.5}
-          squareSize={1.5}
-          maxOpacity={0.1}
-        />
+// const CalloutBanner = () => {
+//   return (
+//     <div className="sticky top-[47px] z-50 h-9 w-full border-b bg-zinc-50 dark:border-white/15 dark:bg-zinc-900 md:top-[45px]">
+//       {/*<div className="relative size-full overflow-hidden">
+//         <FlickeringGrid
+//           className="absolute inset-0 hidden size-full dark:block"
+//           color="#fff"
+//           height={38}
+//           width={width + 6}
+//           gridGap={1.5}
+//           squareSize={1.5}
+//           maxOpacity={0.1}
+//         />
 
-        <FlickeringGrid
-          className="absolute inset-0 size-full dark:hidden"
-          color="#000"
-          height={38}
-          width={width + 6}
-          gridGap={1.5}
-          squareSize={1.5}
-          maxOpacity={0.1}
-        />
-      </div>*/}
-      <div className="absolute inset-0 flex items-center justify-center">
-        <div
-          role="presentation"
-          className="[&amp;_div]:w-2 [&amp;_div]:h-2 [&amp;_div]:rounded-sm [&amp;_div]:bg-ui-tag-orange-icon flex h-[18px] w-5 items-center justify-center"
-        >
-          <div></div>
-        </div>
-        <Text size="small" weight="plus">
-          Black Friday 50% off through Dec 1st!
-        </Text>
-        {/* <RainbowButton
-          className="h-[26px] rounded-full px-2 text-[0.825rem] shadow-lg"
-          variant="outline"
-          asChild
-          onClick={() => {
-            track("Try Qryptic", {
-              label: "Try now",
-              timestamp: new Date().toISOString(),
-            });
-          }}
-        >
-          <a href="https://qryptic.io" target="_blank">
-            Try now
-          </a>
-        </RainbowButton> */}
-      </div>
-    </div>
-  );
-};
+//         <FlickeringGrid
+//           className="absolute inset-0 size-full dark:hidden"
+//           color="#000"
+//           height={38}
+//           width={width + 6}
+//           gridGap={1.5}
+//           squareSize={1.5}
+//           maxOpacity={0.1}
+//         />
+//       </div>*/}
+//       <div className="absolute inset-0 flex items-center justify-center">
+//         <div
+//           role="presentation"
+//           className="[&amp;_div]:w-2 [&amp;_div]:h-2 [&amp;_div]:rounded-sm [&amp;_div]:bg-ui-tag-orange-icon flex h-[18px] w-5 items-center justify-center"
+//         >
+//           <div></div>
+//         </div>
+//         <Text size="small" weight="plus">
+//           Black Friday 50% off through Dec 1st!
+//         </Text>
+//         {/* <RainbowButton
+//           className="h-[26px] rounded-full px-2 text-[0.825rem] shadow-lg"
+//           variant="outline"
+//           asChild
+//           onClick={() => {
+//             track("Try Qryptic", {
+//               label: "Try now",
+//               timestamp: new Date().toISOString(),
+//             });
+//           }}
+//         >
+//           <a href="https://qryptic.io" target="_blank">
+//             Try now
+//           </a>
+//         </RainbowButton> */}
+//       </div>
+//     </div>
+//   );
+// };
 
 export const Nav = () => {
   const { setIsOpen, cart } = useCart();

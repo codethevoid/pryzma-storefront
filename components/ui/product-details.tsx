@@ -343,14 +343,14 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
           </div>
         </div>
         <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
+          {/* <div className="flex items-center gap-2">
             <IconBadge color="orange">
               <Tag className="size-4" />
             </IconBadge>
             <Text size="small" as="span">
               Black Friday 50% off through Dec 1st!
             </Text>
-          </div>
+          </div> */}
           <div className="flex items-center gap-2">
             <IconBadge color="blue">
               <BadgeCheck className="size-4" />

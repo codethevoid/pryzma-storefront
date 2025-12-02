@@ -226,7 +226,7 @@ export const Nav = () => {
           </div>
         </div>
       </div>
-      <CalloutBanner />
+      {/* <CalloutBanner /> */}
       <Cart />
       <Drawer
         open={isMobileNavOpen}

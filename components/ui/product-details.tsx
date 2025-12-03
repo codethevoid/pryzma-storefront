@@ -1,5 +1,7 @@
 "use client";
 
+import { formatCurrency } from "@/utils/format-currency";
+import { Minus, Plus } from "@medusajs/icons";
 import { StoreProduct, StoreProductVariant } from "@medusajs/types";
 import {
   Button,
@@ -12,18 +14,16 @@ import {
   StatusBadge,
   Text,
 } from "@medusajs/ui";
-import { Minus, Plus } from "@medusajs/icons";
+import { track } from "@vercel/analytics";
+import { addBusinessDays, addDays, differenceInMinutes, format } from "date-fns";
+import { toZonedTime } from "date-fns-tz";
+import Holidays from "date-holidays";
+import { BadgeCheck, Leaf } from "lucide-react";
 import { Suspense, useEffect, useMemo, useState } from "react";
-import { formatCurrency } from "@/utils/format-currency";
-import { useCart } from "../context/cart";
 import ReactMarkdown from "react-markdown";
+import { useCart } from "../context/cart";
 import { OptionSelector } from "./option-selector";
 import { Video } from "./video";
-import { BadgeCheck, Leaf } from "lucide-react";
-import { toZonedTime } from "date-fns-tz";
-import { addBusinessDays, addDays, differenceInMinutes, format } from "date-fns";
-import Holidays from "date-holidays";
-import { track } from "@vercel/analytics";
 
 const hd = new Holidays("US");
 
@@ -343,14 +343,14 @@ export const ProductDetails = ({ product }: { product: StoreProduct }) => {
           </div>
         </div>
         <div className="space-y-1.5">
-          {/* <div className="flex items-center gap-2">
-            <IconBadge color="orange">
-              <Tag className="size-4" />
+          {/*<div className="flex items-center gap-2">
+            <IconBadge className="border border-sky-700 bg-sky-900">
+              <Snowflake className="text-white" color="white" />
             </IconBadge>
             <Text size="small" as="span">
               Black Friday 50% off through Dec 1st!
             </Text>
-          </div> */}
+          </div>*/}
           <div className="flex items-center gap-2">
             <IconBadge color="blue">
               <BadgeCheck className="size-4" />

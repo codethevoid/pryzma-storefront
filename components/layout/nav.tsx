@@ -1,75 +1,75 @@
 "use client";
 
+import { navItems } from "@/lib/nav-items";
+import { cdnUrl } from "@/utils/s3";
+import { BarsThree, ShoppingBag } from "@medusajs/icons";
+import { clx, Drawer, IconButton, Text } from "@medusajs/ui";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useWindowWidth } from "@react-hook/window-size";
+import { track } from "@vercel/analytics";
 import Image from "next/image";
 import NextLink from "next/link";
-import { clx, Drawer, IconButton, Text } from "@medusajs/ui";
-import { BarsThree, ShoppingBag } from "@medusajs/icons";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "../context/cart";
 import { Cart } from "../ui/cart";
-import { useEffect, useRef, useState } from "react";
-import { useWindowWidth } from "@react-hook/window-size";
-import { ThemeToggle } from "../ui/theme-toggle";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { cdnUrl } from "@/utils/s3";
-import { NavDropdown } from "./nav-dropdown";
-import { navItems } from "@/lib/nav-items";
 import { Search } from "../ui/search";
-import { usePathname } from "next/navigation";
-import { track } from "@vercel/analytics";
+import { ThemeToggle } from "../ui/theme-toggle";
+import { NavDropdown } from "./nav-dropdown";
 
-// const CalloutBanner = () => {
-//   return (
-//     <div className="sticky top-[47px] z-50 h-9 w-full border-b bg-zinc-50 dark:border-white/15 dark:bg-zinc-900 md:top-[45px]">
-//       {/*<div className="relative size-full overflow-hidden">
-//         <FlickeringGrid
-//           className="absolute inset-0 hidden size-full dark:block"
-//           color="#fff"
-//           height={38}
-//           width={width + 6}
-//           gridGap={1.5}
-//           squareSize={1.5}
-//           maxOpacity={0.1}
-//         />
+const CalloutBanner = () => {
+  return (
+    <div className="sticky top-[46px] z-50 h-9 w-full border-y border-[#BFDBFE] bg-[#EFF6FF] dark:border-[#1E3A5F] dark:bg-[#020817] md:top-[44px]">
+      {/*<div className="relative size-full overflow-hidden">
+        <FlickeringGrid
+          className="absolute inset-0 hidden size-full dark:block"
+          color="#fff"
+          height={38}
+          width={width + 6}
+          gridGap={1.5}
+          squareSize={1.5}
+          maxOpacity={0.1}
+        />
 
-//         <FlickeringGrid
-//           className="absolute inset-0 size-full dark:hidden"
-//           color="#000"
-//           height={38}
-//           width={width + 6}
-//           gridGap={1.5}
-//           squareSize={1.5}
-//           maxOpacity={0.1}
-//         />
-//       </div>*/}
-//       <div className="absolute inset-0 flex items-center justify-center">
-//         <div
-//           role="presentation"
-//           className="[&amp;_div]:w-2 [&amp;_div]:h-2 [&amp;_div]:rounded-sm [&amp;_div]:bg-ui-tag-orange-icon flex h-[18px] w-5 items-center justify-center"
-//         >
-//           <div></div>
-//         </div>
-//         <Text size="small" weight="plus">
-//           Black Friday 50% off through Dec 1st!
-//         </Text>
-//         {/* <RainbowButton
-//           className="h-[26px] rounded-full px-2 text-[0.825rem] shadow-lg"
-//           variant="outline"
-//           asChild
-//           onClick={() => {
-//             track("Try Qryptic", {
-//               label: "Try now",
-//               timestamp: new Date().toISOString(),
-//             });
-//           }}
-//         >
-//           <a href="https://qryptic.io" target="_blank">
-//             Try now
-//           </a>
-//         </RainbowButton> */}
-//       </div>
-//     </div>
-//   );
-// };
+        <FlickeringGrid
+          className="absolute inset-0 size-full dark:hidden"
+          color="#000"
+          height={38}
+          width={width + 6}
+          gridGap={1.5}
+          squareSize={1.5}
+          maxOpacity={0.1}
+        />
+      </div>*/}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <div
+          role="presentation"
+          className="[&amp;_div]:w-2 [&amp;_div]:h-2 [&amp;_div]:rounded-sm flex h-[18px] w-5 items-center justify-center"
+        >
+          <div className="bg-[#0EA5E9]"></div>
+        </div>
+        <Text size="small" weight="plus">
+          Holiday sale - 25% off through New Year!
+        </Text>
+        {/* <RainbowButton
+          className="h-[26px] rounded-full px-2 text-[0.825rem] shadow-lg"
+          variant="outline"
+          asChild
+          onClick={() => {
+            track("Try Qryptic", {
+              label: "Try now",
+              timestamp: new Date().toISOString(),
+            });
+          }}
+        >
+          <a href="https://qryptic.io" target="_blank">
+            Try now
+          </a>
+        </RainbowButton> */}
+      </div>
+    </div>
+  );
+};
 
 export const Nav = () => {
   const { setIsOpen, cart } = useCart();
@@ -117,7 +117,7 @@ export const Nav = () => {
     <>
       <div
         className={clx(
-          "sticky top-0 z-[90] border-b bg-background px-4 py-0 transition-colors duration-200 max-md:py-2",
+          "sticky top-0 z-[90] bg-background px-4 py-0 transition-colors duration-200 max-md:py-2",
           shouldShowDropdown && "bg-background dark:bg-black",
         )}
       >
@@ -226,7 +226,7 @@ export const Nav = () => {
           </div>
         </div>
       </div>
-      {/* <CalloutBanner /> */}
+      <CalloutBanner />
       <Cart />
       <Drawer
         open={isMobileNavOpen}

@@ -1,66 +1,57 @@
-import { CategoryHeader } from "@/components/ui/category-header";
-import { medusa } from "@/utils/medusa";
-import { ProductGridShell } from "@/components/layout/product-grid-shell";
-import { PRODUCT_FILTER_OPTIONS } from "@/lib/filter-options";
-import { getTagCount } from "@/lib/helpers/get-tag-count";
 import { constructMetadata } from "@/utils/metadata";
-import { Suspense } from "react";
-import { ProductGridFallback } from "@/components/ui/product-grid-fallback";
-import { constructCategoryPageJsonLd } from "@/utils/construct-jsonld";
-import { cdnUrl } from "@/utils/s3";
 
 export const metadata = constructMetadata({
   title: "Products - Pryzma",
   description: "Shop our collection of keyboard switches, lubricants, and accessories.",
 });
 
-const getProducts = async () => {
-  const categories = await medusa.store.category.list({});
-  const ids = categories.product_categories
-    .filter((cat) => !cat.parent_category_id && cat.handle !== "samples")
-    .map((category) => category.id);
-  const products = await medusa.store.product.list({
-    category_id: ids,
-    limit: 24,
-    fields: "*variants.calculated_price",
-    order: "-created_at",
-  });
+// const getProducts = async () => {
+//   const categories = await medusa.store.category.list({});
+//   const ids = categories.product_categories
+//     .filter((cat) => !cat.parent_category_id && cat.handle !== "samples")
+//     .map((category) => category.id);
+//   const products = await medusa.store.product.list({
+//     category_id: ids,
+//     limit: 24,
+//     fields: "*variants.calculated_price",
+//     order: "-created_at",
+//   });
 
-  return { products, ids };
-};
+//   return { products, ids };
+// };
 
 const Products = async () => {
-  const [data, tagCounts] = await Promise.all([
-    getProducts(),
-    getTagCount({
-      options: PRODUCT_FILTER_OPTIONS,
-      handle: ["switches", "lubricants", "accessories", "bundles"],
-    }),
-  ]);
+  // const [data, tagCounts] = await Promise.all([
+  //   getProducts(),
+  //   getTagCount({
+  //     options: PRODUCT_FILTER_OPTIONS,
+  //     handle: ["switches", "lubricants", "accessories", "bundles"],
+  //   }),
+  // ]);
 
-  const jsonLd = constructCategoryPageJsonLd({
-    products: data.products.products,
-    name: "Products",
-    description: metadata.description as string,
-    url: "https://pryzma.io/products",
-    image: `${cdnUrl}/uploads/IMG_3607-01JMG08DXZ1EH8C6PCECABGKCK.JPG`,
-  });
+  // const jsonLd = constructCategoryPageJsonLd({
+  //   products: data.products.products,
+  //   name: "Products",
+  //   description: metadata.description as string,
+  //   url: "https://pryzma.io/products",
+  //   image: `${cdnUrl}/uploads/IMG_3607-01JMG08DXZ1EH8C6PCECABGKCK.JPG`,
+  // });
 
   return (
     <>
-      <script
+      {/*<script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      />*/}
       <main className="min-h-[calc(100vh-330.5px)]">
-        <section aria-label="Category header">
+        {/*<section aria-label="Category header">
           <CategoryHeader
             title="Products"
             count={data.products.count}
             description="Browse switches, lubricants and accessories."
           />
-        </section>
-        <section
+        </section>*/}
+        {/*<section
           aria-label="Product grid"
           className="p-4 pb-12 max-sm:px-0 max-sm:pb-0 max-sm:pt-2"
         >
@@ -84,7 +75,7 @@ const Products = async () => {
               />
             </Suspense>
           </div>
-        </section>
+        </section>*/}
       </main>
     </>
   );
